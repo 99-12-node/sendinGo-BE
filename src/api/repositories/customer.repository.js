@@ -1,5 +1,5 @@
-const { Customers } = require('../../db/models');
+const { User } = require('../../db/models');
 
-class customerRepository {}
+class userRepository {}
 
-module.exports = customerRepository;
+module.exports = userRepository;
