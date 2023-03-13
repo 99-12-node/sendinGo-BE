@@ -43,5 +43,3 @@ module.exports = class userController {
     }
   };
 };
-
-module.exports = userController;
