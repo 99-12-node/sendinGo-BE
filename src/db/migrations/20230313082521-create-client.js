@@ -20,13 +20,19 @@ module.exports = {
       },
       // userId: {
       //   type: Sequelize.INTEGER,
-      //   unique: true,
       //   allowNull: false,
+      //   references: {
+      //     model: 'User',
+      //     key: 'userId',
+      //   },
       // },
       groupId: {
         type: Sequelize.INTEGER,
-        unique: true,
         allowNull: false,
+        references: {
+          model: 'ClientGroup',
+          key: 'groupId',
+        },
       },
     });
   },
