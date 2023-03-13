@@ -3,23 +3,24 @@ const router = express.Router();
 
 const axios = require('axios');
 
+const instance = axios.create({
+  baseURL: process.env.ALIGO_BASE_URL,
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+});
+
 // API 호출을 위한 토큰 생성
 router.get('/talk/auth', async (req, res) => {
-  const aligoRes = await axios.post(
+  const params = new URLSearchParams({ apikey: process.env.ALIGO_APIKEY });
+  params.append('userid', String(process.env.ALIGO_USERID));
+  const aligoRes = await instance.post(
     process.env.ALIGO_BASE_URL +
       '/akv10/token/create/' +
       process.env.ALIGO_AUTH_MIN +
       '/i/',
-    {
-      apikey: process.env.ALIGO_APIKEY,
-      userid: process.env.ALIGO_USERID,
-    }
+    params
   );
-  console.log('/akv10/token/create/ >>>', aligoRes);
-  res.status(201).json(aligoRes);
+  console.log(aligoRes);
+  return res.status(201).json({ data: aligoRes.data });
 });
-
-// API 호출을 위한 토큰 생성
-router.get('/talk/auth', async (req, res) => {});
 
 module.exports = router;
