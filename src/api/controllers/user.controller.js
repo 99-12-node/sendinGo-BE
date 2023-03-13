@@ -16,7 +16,7 @@ module.exports = class userController {
         phondNumber,
       });
 
-      return res.status(201).json({ message: '유저가 등록되었습니다.' });
+      return res.status(201).json({ message: '등록이 완료되었습니다.' });
     } catch (error) {
       next(error);
     }
@@ -34,5 +34,15 @@ module.exports = class userController {
   };
 
   //유저 삭제
-  deleteUser = async (req, res, next) => {};
+  deleteUser = async (req, res, next) => {
+    try {
+      await this.userService.deleteUser();
+
+      return res.status(200).json({ message: '삭제가 완료되었습니다.' });
+    } catch (error) {
+      next(error);
+    }
+  };
 };
+
+module.exports = userController;
