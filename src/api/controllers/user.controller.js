@@ -23,7 +23,16 @@ module.exports = class userController {
   };
 
   //유저 전체 조회
-  checkUser = async (req, res, next) => {};
+  checkUser = async (req, res, next) => {
+    try {
+      const allData = await this.userService.checkUser();
+
+      return res.status(200).json({ allData });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   //유저 삭제
   deleteUser = async (req, res, next) => {};
 };
