@@ -9,14 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-
-      this.hasMany(models.User, {
-        sourceKey: 'userId',
-        foreignKey: 'userId',
-      });
-
-      this.hasMany(models.UserGroup, {
-        sourceKey: 'groupId',
+      // this.belongsTo(models.User, {
+      //   targetKey: "userId",
+      //   foreignKey: "userId",
+      // });
+      this.belongsTo(models.ClientGroup, {
+        targetKey: 'groupId',
         foreignKey: 'groupId',
       });
     }
@@ -29,28 +27,30 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      email: {
-        type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
-      },
-      password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       clientName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
       phoneNumber: {
-        type: DataTypes.INTEGER,
-        unique: true,
-        allowNull: true,
-      },
-      company: {
         type: DataTypes.STRING,
         unique: true,
-        allowNull: true,
+        allowNull: false,
+      },
+      // userId: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'User',
+      //     key: 'userId',
+      //   },
+      // },
+      groupId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'ClientGroup',
+          key: 'groupId',
+        },
       },
     },
     {
