@@ -1,4 +1,3 @@
-const { logger } = require('../middlewares/logger');
 const UserService = require('../services/user.service');
 
 module.exports = class userController {
