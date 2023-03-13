@@ -24,6 +24,7 @@ app.use(
 );
 
 app.use('/api', router);
+app.get('/', (_req, res) => res.send('루트 경로에 연결되었습니다.'));
 app.use(errorMiddleware);
 
 app.listen(port);
