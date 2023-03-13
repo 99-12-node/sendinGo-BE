@@ -36,7 +36,17 @@ module.exports = (sequelize, DataTypes) => {
       },
       clientGroupName: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       },
     },
     {

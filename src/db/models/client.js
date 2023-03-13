@@ -36,6 +36,11 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
         allowNull: false,
       },
+      company: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false,
+      },
       // userId: {
       //   type: DataTypes.INTEGER,
       //   allowNull: false,
@@ -51,6 +56,16 @@ module.exports = (sequelize, DataTypes) => {
           model: 'ClientGroup',
           key: 'groupId',
         },
+      },
+      createdAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
+      updatedAt: {
+        allowNull: false,
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       },
     },
     {

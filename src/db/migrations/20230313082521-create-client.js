@@ -18,6 +18,11 @@ module.exports = {
         unique: true,
         allowNull: false,
       },
+      company: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+      },
       // userId: {
       //   type: Sequelize.INTEGER,
       //   allowNull: false,
@@ -33,6 +38,16 @@ module.exports = {
           model: 'ClientGroup',
           key: 'groupId',
         },
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
       },
     });
   },
