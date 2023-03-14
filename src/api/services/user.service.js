@@ -6,28 +6,32 @@ class userService {
     this.userRepository = new userRepository();
   }
 
-  signupService = async ({
+  createUser = async ({
     email,
     password,
     company,
     phoneNumber,
+    provider,
     name,
     role,
+    status,
   }) => {
-    await this.userRepository.signupRepo({
+    await this.userRepository.createUser({
       email,
       password,
       company,
       phoneNumber,
+      provider,
       name,
       role,
+      status,
     });
 
     return;
   };
 
-  loginService = async ({ email, password }) => {
-    const user = await this.userRepository.loginRepo({ email });
+  loginUser = async ({ email, password }) => {
+    const user = await this.userRepository.loginUser({ email });
 
     if (!user) {
       throw new BadRequestError({ message: '이메일이 존재하지 않습니다.' });
