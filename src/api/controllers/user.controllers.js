@@ -5,24 +5,35 @@ class userCotroller {
     this.userService = new userService();
   }
 
-  signupController = async (res, res, next) => {
-    const { email, password, company, phoneNumber, name, role } = req.body;
-    await this.userService.signupService({
+  createUser = async (res, res, next) => {
+    const {
       email,
       password,
       company,
       phoneNumber,
+      provider,
       name,
       role,
+      status,
+    } = req.body;
+    await this.userService.createUser({
+      email,
+      password,
+      company,
+      phoneNumber,
+      provider,
+      name,
+      role,
+      status,
     });
 
     res.status(201).json({ message: '회원가입이 완료 되었습니다.' });
   };
 
-  loginController = async (req, res, next) => {
+  loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
-    const user = await this.userService.loginService({ email, password });
+    const user = await this.userService.loginUser({ email, password });
 
     let expires = new Date();
     expires.setMinutes(expires.getMinutes() + 60);
@@ -33,6 +44,44 @@ class userCotroller {
       expires: expires,
     });
     res.status(200).json({ message: '로그인이 정상적으로 처리되었습니다.' });
+  };
+
+  editUser = async (req, res, next) => {
+    const { userId } = res.locals.user;
+    const {
+      email,
+      password,
+      company,
+      phoneNumber,
+      provider,
+      name,
+      role,
+      status,
+    } = req.body;
+
+    await this.userService.editUser({
+      email,
+      password,
+      company,
+      phoneNumber,
+      provider,
+      name,
+      role,
+      status,
+      userId,
+    });
+
+    res.status(200).json({ message: '회원정보 수정이 완료되었습니다.' });
+  };
+
+  deleteUser = async (req, res, next) => {
+    editUser = async (req, res, next) => {
+      const { userId } = res.locals.user;
+
+      await this.userService.deleteUser({ userId });
+
+      res.status(200).json({ message: '회원정보 수정이 완료되었습니다.' });
+    };
   };
 }
 
