@@ -1,4 +1,6 @@
-const userService = require('../services/user.repository');
+const userService = require('../services/user.service');
+require('dotenv').config();
+const { KEY } = process.env;
 
 class userCotroller {
   constructor() {
@@ -10,6 +12,7 @@ class userCotroller {
       email,
       password,
       company,
+      companyNumber,
       phoneNumber,
       provider,
       name,
@@ -20,6 +23,7 @@ class userCotroller {
       email,
       password,
       company,
+      companyNumber,
       phoneNumber,
       provider,
       name,
@@ -44,44 +48,6 @@ class userCotroller {
       expires: expires,
     });
     res.status(200).json({ message: '로그인이 정상적으로 처리되었습니다.' });
-  };
-
-  editUser = async (req, res, next) => {
-    const { userId } = res.locals.user;
-    const {
-      email,
-      password,
-      company,
-      phoneNumber,
-      provider,
-      name,
-      role,
-      status,
-    } = req.body;
-
-    await this.userService.editUser({
-      email,
-      password,
-      company,
-      phoneNumber,
-      provider,
-      name,
-      role,
-      status,
-      userId,
-    });
-
-    res.status(200).json({ message: '회원정보 수정이 완료되었습니다.' });
-  };
-
-  deleteUser = async (req, res, next) => {
-    editUser = async (req, res, next) => {
-      const { userId } = res.locals.user;
-
-      await this.userService.deleteUser({ userId });
-
-      res.status(200).json({ message: '회원정보 수정이 완료되었습니다.' });
-    };
   };
 }
 
