@@ -1,4 +1,4 @@
-const { logger } = require('../middlewares/logger');
+const { logger } = require('../../middlewares/logger');
 const ClientGroupRepository = require('../repositories/clientgroup.repository');
 
 module.exports = class ClientGroupService {
