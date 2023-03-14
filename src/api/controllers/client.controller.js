@@ -1,3 +1,4 @@
+const { logger } = require('../../middlewares/logger');
 const ClientService = require('../services/client.service');
 
 module.exports = class ClientController {
@@ -7,11 +8,16 @@ module.exports = class ClientController {
 
   // 클라이언트 등록
   createClient = async (req, res, next) => {
-    const { userId } = res.locals.users;
+    logger.info(`clientController.createclient Request`);
+    // const { userId } = res.locals.users;
     const { clientName, contact } = req.body;
 
     try {
-      await this.ClientService.createClient(userId, clientName, contact);
+      await this.clientService.createClient({
+        //userId,
+        clientName,
+        contact,
+      });
 
       return res.status(201).json({ message: '등록이 완료되었습니다.' });
     } catch (error) {
@@ -22,7 +28,7 @@ module.exports = class ClientController {
   //클라이언트 전체 조회
   getAllClient = async (req, res, next) => {
     try {
-      const allData = await this.clientService.getAllClient();
+      const allData = await this.clientService.getAllClient({});
 
       return res.status(200).json({ data: allData });
     } catch (error) {
@@ -32,10 +38,13 @@ module.exports = class ClientController {
 
   //클라이언트 삭제
   deleteClient = async (req, res, next) => {
-    const { userId } = res.locals.user;
+    // const { userId } = res.locals.user;
     const { clientId } = req.params;
     try {
-      await this.clientService.deleteClient(userId, clientId);
+      await this.clientService.deleteClient({
+        //userId,
+        clientId,
+      });
 
       return res.status(200).json({ message: '삭제가 완료되었습니다.' });
     } catch (error) {
