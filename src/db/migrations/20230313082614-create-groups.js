@@ -17,22 +17,22 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      userid: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'userId',
-        },
-      },
-      companyId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Companies',
-          key: 'companyId',
-        },
-      },
+      // userid: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Users',
+      //     key: 'userId',
+      //   },
+      // },
+      // companyId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Companies',
+      //     key: 'companyId',
+      //   },
+      // },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
