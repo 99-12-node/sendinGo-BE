@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Users, {
-        targetKey: 'userId',
-        foreignKey: 'userId',
-      });
+      //   this.hasMany(models.Users, {
+      //     targetKey: 'userId',
+      //     foreignKey: 'userId',
+      //   });
       this.hasMany(models.Groups, {
         targetKey: 'groupId',
         foreignKey: 'groupId',
@@ -26,14 +26,14 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'userId',
-        },
-      },
+      // userId: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Users',
+      //     key: 'userId',
+      //   },
+      // },
       groupId: {
         type: DataTypes.INTEGER,
         allowNull: false,
