@@ -1,16 +1,33 @@
-const { User } = require('../../db/models');
+const { Users } = require('../../db/models');
 
 class userRepository {
-  signupRepo = async ({
+  createUser = async ({
     email,
     password,
     company,
+    companyNumber,
     phoneNumber,
+    provider,
     name,
     role,
+    status,
   }) => {
-    await User.create({ email, password, company, phoneNumber, name, role });
+    await Users.create({
+      email,
+      password,
+      phoneNumber,
+      provider,
+      name,
+      role,
+      status,
+    });
     return;
+  };
+
+  findUser = async ({ email }) => {
+    const user = await Users.findOne({ where: email });
+
+    return user;
   };
 }
 
