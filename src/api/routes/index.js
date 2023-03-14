@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 
+const clientRouter = require('./client.route');
 const clientGroupRouter = require('./clientgroup.route');
 
+router.use('/clients', [clientRouter]);
 router.use('/clients', [clientGroupRouter]);
 
 router.get('/', (_req, res) => {
