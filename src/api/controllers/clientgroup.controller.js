@@ -1,4 +1,4 @@
-const { logger } = require('../middlewares/logger');
+const { logger } = require('../../middlewares/logger');
 const ClientGroupService = require('../services/clientgroup.service');
 
 module.exports = class clientGroupController {
