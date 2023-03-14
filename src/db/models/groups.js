@@ -27,22 +27,22 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      userid: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'userId',
-        },
-      },
-      companyId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Companies',
-          key: 'companyId',
-        },
-      },
+      // userid: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Users',
+      //     key: 'userId',
+      //   },
+      // },
+      // companyId: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Companies',
+      //     key: 'companyId',
+      //   },
+      // },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
