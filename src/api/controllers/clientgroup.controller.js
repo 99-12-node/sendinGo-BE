@@ -9,10 +9,15 @@ module.exports = class clientGroupController {
   // 클라이언트 그룹 생성
   createClientGroup = async (req, res, next) => {
     logger.info(`clientGroupController.createclientGroup Request`);
+    //const {userId} = res.locals.users;
+    const { groupName, gruopDescription } = req.body;
 
     try {
-      // clientGroupService 활용하기
-      res.status(201).json({ message: '클라이언트 그룹이 생성되었습니다.' });
+      await this.clientGroupService.createClientGroup({
+        groupName,
+        gruopDescription,
+      });
+      res.status(201).json({ message: '그룹 생성이 완료되었습니다.' });
     } catch (error) {
       next(error);
     }
