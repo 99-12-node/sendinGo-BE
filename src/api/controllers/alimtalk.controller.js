@@ -1,4 +1,4 @@
-const { logger } = require('../middlewares/logger');
+const { logger } = require('../../middlewares/logger');
 const AlimtalkService = require('../services/alimtalk.service');
 
 const COMPANY = 'sendigo';

@@ -1,4 +1,4 @@
-const { logger } = require('../middlewares/logger');
+const { logger } = require('../../middlewares/logger');
 const axios = require('axios');
 
 const instance = axios.create({
