@@ -14,6 +14,9 @@ router.post('/talk/send', alimtalkController.sendAlimTalk);
 router.get('/talk/result', alimtalkController.getAlimTalkResult);
 
 // 알림톡 전송 결과 상세
-router.get('/talk/result/detail', alimtalkController.getAlimTalkDetailResult);
+router.get(
+  '/talk/result/detail/:mid',
+  alimtalkController.getAlimTalkDetailResult
+);
 
 module.exports = router;

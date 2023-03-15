@@ -68,11 +68,11 @@ module.exports = class AlimtalkService {
   };
 
   // 알림톡 전송 결과
-  getAlimTalkResult = async (filter) => {
+  getAlimTalkResult = async () => {
     logger.info(`AlimtalkService.getAlimTalkResult`);
     // const dateFormat = new Date().toISOString().substring(0, 10).replaceAll('-',''); // yyyymmdd
-    const startdate = filter.startdate;
-    const enddate = filter.enddate;
+    // const startdate = filter.startdate;
+    // const enddate = filter.enddate;
     const params = {
       ...authParams,
       //   page: filter.page ?? '1',
