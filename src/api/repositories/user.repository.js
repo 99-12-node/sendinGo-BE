@@ -25,7 +25,7 @@ class UserRepository {
   };
 
   findUser = async ({ email }) => {
-    const user = await Users.findOne({ where: email });
+    const user = await Users.findOne({ where: { email } });
 
     return user;
   };
