@@ -1,5 +1,7 @@
 const { logger } = require('../../middlewares/logger');
 const axios = require('axios');
+const url = require('url');
+require('dotenv').config();
 
 const instance = axios.create({
   baseURL: process.env.ALIGO_BASE_URL,
@@ -25,7 +27,10 @@ module.exports = class AlimtalkService {
   generateSendToken = async () => {
     logger.info(`AlimtalkService.generateSendToken`);
     const params = new URLSearchParams(noAuthParams);
-    const aligoRes = await instance.post('/akv10/token/create/3/m', params);
+    const aligoRes = await instance.post(
+      '/akv10/token/create/3/m',
+      params.toString()
+    );
     return aligoRes.data;
   };
 
@@ -38,7 +43,7 @@ module.exports = class AlimtalkService {
     testMode,
   }) => {
     logger.info(`AlimtalkService.sendAlimTalk`);
-    const params = new URLSearchParams({
+    const params = new url.URLSearchParams({
       ...authParams,
       senderkey: process.env.ALIGO_SENDERKEY,
       tpl_code: 'TM_2048',
@@ -57,7 +62,10 @@ module.exports = class AlimtalkService {
       testMode: 'Y',
     });
 
-    const aligoRes = await instance.post('/akv10/alimtalk/send/', params);
+    const aligoRes = await instance.post(
+      '/akv10/alimtalk/send/',
+      params.toString()
+    );
     const { mid, scnt, fcnt } = aligoRes.data.info;
     console.log('mid: ', mid, 'scnt: ', scnt, 'fcnt: ', fcnt);
     // 발송결과 DB에 저장
@@ -71,13 +79,16 @@ module.exports = class AlimtalkService {
     // const dateFormat = new Date().toISOString().substring(0, 10).replaceAll('-',''); // yyyymmdd
     // const startdate = filter.startdate;
     // const enddate = filter.enddate;
-    const params = new URLSearchParams({
+    const params = new url.URLSearchParams({
       ...authParams,
       //   page: filter.page ?? '1',
       //   limit: filter.limit ?? '10',
     });
 
-    const aligoRes = await instance.post('/akv10/history/list/', params);
+    const aligoRes = await instance.post(
+      '/akv10/history/list/',
+      params.toString()
+    );
     console.log('aligoRes.data:', aligoRes.data);
     const { mid, sender, msg_count, mbody, regdate } = aligoRes.data.list;
     console.log(
@@ -107,12 +118,15 @@ module.exports = class AlimtalkService {
   // 알림톡 전송 결과 상세
   getAlimTalkDetailResult = async ({ mid }) => {
     logger.info(`AlimtalkService.getAlimTalkDetailResult`);
-    const params = new URLSearchParams({
+    const params = new url.URLSearchParams({
       ...authParams,
       mid: req.query.mid,
     });
 
-    const aligoRes = await instance.post('/akv10/history/detail/', params);
+    const aligoRes = await instance.post(
+      '/akv10/history/detail/',
+      params.toString()
+    );
     const {
       msgid,
       sender,
