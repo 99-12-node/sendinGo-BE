@@ -1,6 +1,8 @@
 const userRepository = require('../repositories/user.repository');
 const bcrypt = require('bcrypt');
 const { BadRequestError } = require('../../exceptions/errors');
+require('dotenv').config();
+const { SALT } = process.env;
 
 class userService {
   constructor() {
@@ -17,12 +19,12 @@ class userService {
     role,
     status,
   }) => {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPw = await bcrypt.hash(password, salt);
+    const salt = await bcrypt.genSalt(SALT);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
     await this.userRepository.createUser({
       email,
-      password: hashedPw,
+      password: hashedPassword,
       company,
       phoneNumber,
       provider,
@@ -36,12 +38,13 @@ class userService {
 
   loginUser = async ({ email, password }) => {
     const user = await this.userRepository.findUser({ email });
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!user) {
-      throw new BadRequestError({ message: '이메일이 존재하지 않습니다.' });
+      throw new BadRequestError('이메일이 존재하지 않습니다.');
     }
-    if (password !== user.password) {
-      throw new BadRequestError({ message: '비밀번호가 일치하지 않습니다.' });
+    if (!isPasswordCorrect) {
+      throw new BadRequestError('비밀번호가 일치하지 않습니다.');
     }
 
     return;
