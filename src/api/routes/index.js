@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const userGroupRouter = require('./usergroup.route');
+const clientRouter = require('./client.route');
 
-router.use('/users', [userGroupRouter]);
+router.use('/clients', [clientRouter]);
 
 router.get('/', (_req, res) => {
   res.send('정상적으로 요청되었습니다.');
