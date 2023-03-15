@@ -6,10 +6,10 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const router = require('./src/api/routes');
 
-dotenv.config();
-
 const app = express();
 const port = process.env.PORT;
+
+dotenv.config();
 
 app.use(express.json());
 app.use(cookieparser());
