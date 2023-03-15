@@ -22,9 +22,7 @@ module.exports = class ClientRepository {
   getAllClient = async ({}) => {
     //userId
     const allData = await Clients.findAll({
-      attributes: ['clientId', 'clientName', 'contact'],
-      // where: { userId },
-      // attributes: ['clientid', 'clientName', 'contact', 'createdAt'],
+      attributes: ['clientId', 'clientName', 'contact', 'createdAt'],
     });
     return allData;
   };
