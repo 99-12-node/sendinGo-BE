@@ -14,24 +14,6 @@ router.post('/talk/send', alimtalkController.sendAlimTalk);
 router.get('/talk/result', alimtalkController.getAlimTalkResult);
 
 // 알림톡 전송 결과 상세
-router.get('/talk/result/detail', async (req, res) => {
-  const params = new URLSearchParams({
-    apikey: process.env.ALIGO_APIKEY,
-    userid: process.env.ALIGO_USERID,
-    token: process.env.ALIGO_TOKEN,
-    mid: req.query.mid,
-    page: '1',
-    limit: '10',
-  });
-
-  const aligoRes = await instance.post(
-    process.env.ALIGO_BASE_URL +
-      '/akv10/history/detail/' +
-      process.env.ALIGO_AUTH_MIN +
-      '/i/',
-    params
-  );
-  return res.status(200).json({ data: aligoRes.data });
-});
+router.get('/talk/result/detail', alimtalkController.getAlimTalkDetailResult);
 
 module.exports = router;

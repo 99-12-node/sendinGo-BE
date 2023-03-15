@@ -1,8 +1,6 @@
 const { logger } = require('../../middlewares/logger');
 const AlimtalkService = require('../services/alimtalk.service');
 
-const COMPANY = 'sendigo';
-
 module.exports = class AlimtalkController {
   constructor() {
     this.alimtalkService = new AlimtalkService();
