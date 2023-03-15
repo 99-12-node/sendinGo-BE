@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Groups', {
-      groupid: {
+      groupId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -17,21 +17,23 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      // userid: {
-      //   type: Sequelize.INTEGER,
+      // userId: {
+      //   type: DataTypes.INTEGER,
       //   allowNull: false,
       //   references: {
       //     model: 'Users',
       //     key: 'userId',
       //   },
+      //   onDelete: 'CASCADE',
       // },
       // companyId: {
-      //   type: Sequelize.INTEGER,
+      //   type: DataTypes.INTEGER,
       //   allowNull: false,
       //   references: {
-      //     model: 'Companies',
+      //     model: 'Users',
       //     key: 'companyId',
       //   },
+      //   onDelete: 'CASCADE',
       // },
       createdAt: {
         allowNull: false,

@@ -9,13 +9,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      // userId: {
+      // clientId: {
       //   type: Sequelize.INTEGER,
       //   allowNull: false,
       //   references: {
-      //     model: 'Users',
-      //     key: 'userId',
+      //     model: 'Clients',
+      //     key: 'clientId',
       //   },
+      //   onDelete: 'CASCADE',
       // },
       groupId: {
         type: Sequelize.INTEGER,
@@ -24,6 +25,7 @@ module.exports = {
           model: 'Groups',
           key: 'groupId',
         },
+        onDelete: 'CASCADE',
       },
     });
   },
