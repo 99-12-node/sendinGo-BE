@@ -1,36 +1,16 @@
-const userService = require('../services/user.service');
+const UserService = require('../services/user.service');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY, EXPIRE_IN } = process.env;
 
-class userCotroller {
+class UserCotroller {
   constructor() {
-    this.userService = new userService();
+    this.userService = new UserService();
   }
 
   createUser = async (req, res, next) => {
-    const {
-      email,
-      password,
-      company,
-      companyNumber,
-      phoneNumber,
-      provider,
-      name,
-      role,
-      status,
-    } = req.body;
-    await this.userService.createUser({
-      email,
-      password,
-      company,
-      companyNumber,
-      phoneNumber,
-      provider,
-      name,
-      role,
-      status,
-    });
+    const user = req.body;
+    await this.userService.createUser(user);
 
     res.status(201).json({ message: '회원가입이 완료 되었습니다.' });
   };
@@ -54,4 +34,4 @@ class userCotroller {
   };
 }
 
-module.exports = userCotroller;
+module.exports = UserCotroller;
