@@ -1,12 +1,12 @@
-const userRepository = require('../repositories/user.repository');
+const UserRepository = require('../repositories/user.repository');
 const bcrypt = require('bcrypt');
 const { BadRequestError } = require('../../exceptions/errors');
 require('dotenv').config();
 const { SALT } = process.env;
 
-class userService {
+class UserService {
   constructor() {
-    this.userRepository = new userRepository();
+    this.userRepository = new UserRepository();
   }
 
   createUser = async ({
@@ -51,4 +51,4 @@ class userService {
   };
 }
 
-module.exports = userService;
+module.exports = UserService;

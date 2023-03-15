@@ -1,6 +1,6 @@
 const { Users } = require('../../db/models');
 
-class userRepository {
+class UserRepository {
   createUser = async ({
     email,
     password,
@@ -31,4 +31,4 @@ class userRepository {
   };
 }
 
-module.exports = userRepository;
+module.exports = UserRepository;
