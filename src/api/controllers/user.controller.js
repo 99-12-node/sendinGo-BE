@@ -1,14 +1,14 @@
 const userService = require('../services/user.service');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const { KEY } = process.env;
+const { KEY, EXPIRE_IN } = process.env;
 
 class userCotroller {
   constructor() {
     this.userService = new userService();
   }
 
-  createUser = async (res, res, next) => {
+  createUser = async (req, res, next) => {
     const {
       email,
       password,
@@ -43,7 +43,9 @@ class userCotroller {
     let expires = new Date();
     expires.setMinutes(expires.getMinutes() + 60);
 
-    const token = jwt.sign({ userId: user.email }, KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user.email }, KEY, {
+      expiresIn: EXPIRE_IN,
+    });
 
     res.cookie('authorization', `Bearer ${token}`, {
       expires: expires,
