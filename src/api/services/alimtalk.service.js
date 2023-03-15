@@ -28,7 +28,7 @@ module.exports = class AlimtalkService {
     logger.info(`AlimtalkService.generateSendToken`);
     const params = new URLSearchParams(noAuthParams);
     const aligoRes = await instance.post(
-      '/akv10/token/create/3/m',
+      '/akv10/token/create/30/d',
       params.toString()
     );
     return aligoRes.data;
@@ -90,7 +90,7 @@ module.exports = class AlimtalkService {
       params.toString()
     );
     console.log('aligoRes.data:', aligoRes.data);
-    const { mid, sender, msg_count, mbody, regdate } = aligoRes.data.list;
+    const { mid, sender, msg_count, mbody, regdate } = aligoRes.data.list[0];
     console.log(
       'mid, sender, msg_count, mbody, regdate : ',
       mid,
@@ -120,7 +120,7 @@ module.exports = class AlimtalkService {
     logger.info(`AlimtalkService.getAlimTalkDetailResult`);
     const params = new url.URLSearchParams({
       ...authParams,
-      mid: req.query.mid,
+      mid,
     });
 
     const aligoRes = await instance.post(

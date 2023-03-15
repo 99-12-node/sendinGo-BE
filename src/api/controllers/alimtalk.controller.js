@@ -54,7 +54,7 @@ module.exports = class AlimtalkController {
 
   getAlimTalkDetailResult = async (req, res, next) => {
     logger.info(`AlimtalkController.getAlimTalkDetailResult`);
-    const { mid } = req.params;
+    const { mid } = req.query;
     try {
       const result = await this.alimtalkService.getAlimTalkResult({ mid });
       return res.status(200).json({ data: result });
