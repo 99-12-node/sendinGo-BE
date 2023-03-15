@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const userGroupRouter = require('./usergroup.route');
-const userRouter = require('./user.routes');
+const userRouter = require('./user.route');
 
 router.use('/users', [userGroupRouter]);
 router.use('/users', [userRouter]);
