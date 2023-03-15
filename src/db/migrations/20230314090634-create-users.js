@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.TINYINT,
+        type: Sequelize.INTEGER,
       },
       email: {
         type: Sequelize.STRING,
@@ -26,15 +26,15 @@ module.exports = {
         allowNull: false,
       },
       provider: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TINYINT,
         allowNull: false,
       },
       role: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TINYINT,
         allowNull: false,
       },
       status: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.TINYINT,
         allowNull: false,
         defaultValue: 0,
       },
