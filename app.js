@@ -7,9 +7,8 @@ const dotenv = require('dotenv');
 const router = require('./src/api/routes');
 
 const app = express();
-const port = process.env.PORT;
-
 dotenv.config();
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use(cookieparser());
