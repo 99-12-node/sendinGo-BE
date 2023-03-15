@@ -9,9 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.hasOne(models.Companies, {
-        sourceKey: 'userId',
-        foreignKey: 'userId',
+      this.belongsTo(models.Companies, {
+        targetKey: 'companyId',
+        foreignKey: 'companyId',
+        onDelete: 'CASCADE',
       });
     }
   }
@@ -22,6 +23,15 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
+      },
+      companyId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Companies',
+          key: 'companyId',
+        },
+        onDelete: 'CASCADE',
       },
       email: {
         type: DataTypes.STRING,
