@@ -24,10 +24,8 @@ module.exports = class AlimtalkService {
   // 토큰 생성
   generateSendToken = async () => {
     logger.info(`AlimtalkService.generateSendToken`);
-    const aligoRes = await instance.post(
-      '/akv10/token/create/3/m',
-      noAuthParams
-    );
+    const params = new URLSearchParams(noAuthParams);
+    const aligoRes = await instance.post('/akv10/token/create/3/m', params);
     return aligoRes.data;
   };
 
@@ -40,7 +38,7 @@ module.exports = class AlimtalkService {
     testMode,
   }) => {
     logger.info(`AlimtalkService.sendAlimTalk`);
-    const params = {
+    const params = new URLSearchParams({
       ...authParams,
       senderkey: process.env.ALIGO_SENDERKEY,
       tpl_code: 'TM_2048',
@@ -57,7 +55,7 @@ module.exports = class AlimtalkService {
         □ 결제금액 : 10,000 원`
       */
       testMode: 'Y',
-    };
+    });
 
     const aligoRes = await instance.post('/akv10/alimtalk/send/', params);
     const { mid, scnt, fcnt } = aligoRes.data.info;
@@ -73,14 +71,15 @@ module.exports = class AlimtalkService {
     // const dateFormat = new Date().toISOString().substring(0, 10).replaceAll('-',''); // yyyymmdd
     // const startdate = filter.startdate;
     // const enddate = filter.enddate;
-    const params = {
+    const params = new URLSearchParams({
       ...authParams,
       //   page: filter.page ?? '1',
       //   limit: filter.limit ?? '10',
-    };
+    });
 
     const aligoRes = await instance.post('/akv10/history/list/', params);
-    const { mid, sender, msg_count, mbody, regdate } = aligoRes.data.list[0];
+    console.log('aligoRes.data:', aligoRes.data);
+    const { mid, sender, msg_count, mbody, regdate } = aligoRes.data.list;
     console.log(
       'mid, sender, msg_count, mbody, regdate : ',
       mid,
