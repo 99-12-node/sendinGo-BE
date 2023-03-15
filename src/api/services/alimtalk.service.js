@@ -1,5 +1,7 @@
-const { logger } = require('../middlewares/logger');
+const { logger } = require('../../middlewares/logger');
 const axios = require('axios');
+const url = require('url');
+require('dotenv').config();
 
 const instance = axios.create({
   baseURL: process.env.ALIGO_BASE_URL,
@@ -24,9 +26,10 @@ module.exports = class AlimtalkService {
   // 토큰 생성
   generateSendToken = async () => {
     logger.info(`AlimtalkService.generateSendToken`);
+    const params = new URLSearchParams(noAuthParams);
     const aligoRes = await instance.post(
-      '/akv10/token/create/3/m',
-      noAuthParams
+      '/akv10/token/create/30/d',
+      params.toString()
     );
     return aligoRes.data;
   };
@@ -40,7 +43,7 @@ module.exports = class AlimtalkService {
     testMode,
   }) => {
     logger.info(`AlimtalkService.sendAlimTalk`);
-    const params = {
+    const params = new url.URLSearchParams({
       ...authParams,
       senderkey: process.env.ALIGO_SENDERKEY,
       tpl_code: 'TM_2048',
@@ -57,9 +60,12 @@ module.exports = class AlimtalkService {
         □ 결제금액 : 10,000 원`
       */
       testMode: 'Y',
-    };
+    });
 
-    const aligoRes = await instance.post('/akv10/alimtalk/send/', params);
+    const aligoRes = await instance.post(
+      '/akv10/alimtalk/send/',
+      params.toString()
+    );
     const { mid, scnt, fcnt } = aligoRes.data.info;
     console.log('mid: ', mid, 'scnt: ', scnt, 'fcnt: ', fcnt);
     // 발송결과 DB에 저장
@@ -68,18 +74,22 @@ module.exports = class AlimtalkService {
   };
 
   // 알림톡 전송 결과
-  getAlimTalkResult = async (filter) => {
+  getAlimTalkResult = async () => {
     logger.info(`AlimtalkService.getAlimTalkResult`);
     // const dateFormat = new Date().toISOString().substring(0, 10).replaceAll('-',''); // yyyymmdd
-    const startdate = filter.startdate;
-    const enddate = filter.enddate;
-    const params = {
+    // const startdate = filter.startdate;
+    // const enddate = filter.enddate;
+    const params = new url.URLSearchParams({
       ...authParams,
       //   page: filter.page ?? '1',
       //   limit: filter.limit ?? '10',
-    };
+    });
 
-    const aligoRes = await instance.post('/akv10/history/list/', params);
+    const aligoRes = await instance.post(
+      '/akv10/history/list/',
+      params.toString()
+    );
+    console.log('aligoRes.data:', aligoRes.data);
     const { mid, sender, msg_count, mbody, regdate } = aligoRes.data.list[0];
     console.log(
       'mid, sender, msg_count, mbody, regdate : ',
@@ -108,12 +118,15 @@ module.exports = class AlimtalkService {
   // 알림톡 전송 결과 상세
   getAlimTalkDetailResult = async ({ mid }) => {
     logger.info(`AlimtalkService.getAlimTalkDetailResult`);
-    const params = new URLSearchParams({
+    const params = new url.URLSearchParams({
       ...authParams,
-      mid: req.query.mid,
+      mid,
     });
 
-    const aligoRes = await instance.post('/akv10/history/detail/', params);
+    const aligoRes = await instance.post(
+      '/akv10/history/detail/',
+      params.toString()
+    );
     const {
       msgid,
       sender,

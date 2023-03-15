@@ -1,14 +1,12 @@
-const { logger } = require('../middlewares/logger');
+const { logger } = require('../../middlewares/logger');
 const AlimtalkService = require('../services/alimtalk.service');
-
-const COMPANY = 'sendigo';
 
 module.exports = class AlimtalkController {
   constructor() {
     this.alimtalkService = new AlimtalkService();
   }
   // 토큰 생성
-  generateSendToken = async (req, res, next) => {
+  generateSendToken = async (_req, res, next) => {
     logger.info(`AlimtalkController.generateSendToken`);
     try {
       const result = await this.alimtalkService.generateSendToken();
@@ -45,9 +43,9 @@ module.exports = class AlimtalkController {
   // 알림톡 전송 결과
   getAlimTalkResult = async (req, res, next) => {
     logger.info(`AlimtalkController.getAlimTalkResult`);
-    const filter = req.query;
+    // const filter = req.query;
     try {
-      const result = await this.alimtalkService.getAlimTalkResult(filter);
+      const result = await this.alimtalkService.getAlimTalkResult();
       return res.status(200).json({ data: result });
     } catch (e) {
       next(e);
@@ -56,7 +54,7 @@ module.exports = class AlimtalkController {
 
   getAlimTalkDetailResult = async (req, res, next) => {
     logger.info(`AlimtalkController.getAlimTalkDetailResult`);
-    const { mid } = req.params;
+    const { mid } = req.query;
     try {
       const result = await this.alimtalkService.getAlimTalkResult({ mid });
       return res.status(200).json({ data: result });
