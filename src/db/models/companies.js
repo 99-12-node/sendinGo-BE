@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Companies.init(
     {
-      companyid: {
+      companyId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
