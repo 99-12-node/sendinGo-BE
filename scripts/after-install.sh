@@ -3,7 +3,6 @@ REPOSITORY=/home/ubuntu/build
 
 cd $REPOSITORY
 
-sudo npm install 
+npm install 
 
-sudo pm2 stop all
-sudo pm2 start app.js --name deploy
+pm2 start app.js --name prod-app
