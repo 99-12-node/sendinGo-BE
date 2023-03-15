@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.TINYINT,
+        type: DataTypes.INTEGER,
       },
       email: {
         type: DataTypes.STRING,
@@ -40,15 +40,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       provider: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.TINYINT,
         allowNull: false,
       },
       role: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.TINYINT,
         allowNull: false,
       },
       status: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.TINYINT,
         allowNull: false,
         defaultValue: 0,
       },
