@@ -2,7 +2,7 @@ const UserRepository = require('../repositories/user.repository');
 const bcrypt = require('bcrypt');
 const { BadRequestError } = require('../../exceptions/errors');
 require('dotenv').config();
-const { SALT } = process.env;
+const SALT = parseInt(process.env.SALT);
 
 class UserService {
   constructor() {
@@ -13,6 +13,7 @@ class UserService {
     email,
     password,
     company,
+    companyNumber,
     phoneNumber,
     provider,
     name,
@@ -26,6 +27,7 @@ class UserService {
       email,
       password: hashedPassword,
       company,
+      companyNumber,
       phoneNumber,
       provider,
       name,
@@ -47,7 +49,7 @@ class UserService {
       throw new BadRequestError('비밀번호가 일치하지 않습니다.');
     }
 
-    return;
+    return user;
   };
 }
 
