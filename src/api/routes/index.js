@@ -7,7 +7,6 @@ const userRouter = require('./user.route');
 const alimtalkRouter = require('./alimtalk.route');
 
 router.use('/talk', [alimtalkRouter]);
-router.use('/clients', [clientRouter]);
 router.use('/users', [userGroupRouter]);
 // router.use('/clients', [clientRouter]);
 router.use('/users', [userRouter]);
