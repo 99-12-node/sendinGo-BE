@@ -49,11 +49,11 @@ module.exports = class AlimtalkService {
       sendbulkData[`subject_${i + 1}`] = data[i]['subject'];
       sendbulkData[`message_${i + 1}`] = data[i]['message']
         .replaceAll('#{회사명}', COMPANY)
-        .replaceAll('#{주문번호}', d['주문번호'])
-        .replaceAll('#{구/면}', d['구/면'])
-        .replaceAll('#{동/리}', d['동/리'])
-        .replaceAll('#{월일}', d['월일'])
-        .replaceAll('#{결제금액}', d['결제금액'].toLocaleString());
+        .replaceAll('#{주문번호}', data[i]['주문번호'])
+        .replaceAll('#{구/면}', data[i]['구/면'])
+        .replaceAll('#{동/리}', data[i]['동/리'])
+        .replaceAll('#{월일}', data[i]['월일'])
+        .replaceAll('#{결제금액}', data[i]['결제금액'].toLocaleString());
     }
     console.log('sendbulkData: ', sendbulkData);
 
