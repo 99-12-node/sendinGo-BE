@@ -8,13 +8,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      //   this.hasMany(models.Users, {
-      //     targetKey: 'userId',
-      //     foreignKey: 'userId',
+      //   this.belongsTo(models.Clients, {
+      //     targetKey: 'clientId',
+      //     foreignKey: 'clientId',
+      // onDelete: 'CASCADE',
       //   });
-      this.hasMany(models.Groups, {
+      this.belongsTo(models.Groups, {
         targetKey: 'groupId',
         foreignKey: 'groupId',
+        onDelete: 'CASCADE',
       });
     }
   }
@@ -26,13 +28,14 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      // userId: {
+      // clientId: {
       //   type: DataTypes.INTEGER,
       //   allowNull: false,
       //   references: {
-      //     model: 'Users',
-      //     key: 'userId',
+      //     model: 'Clients',
+      //     key: 'clientId',
       //   },
+      //   onDelete: 'CASCADE',
       // },
       groupId: {
         type: DataTypes.INTEGER,
@@ -41,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Groups',
           key: 'groupId',
         },
+        onDelete: 'CASCADE',
       },
     },
     {

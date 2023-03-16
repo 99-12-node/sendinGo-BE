@@ -9,6 +9,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      companyId: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Companies',
+          key: 'companyId',
+        },
+        onDelete: 'CASCADE',
+      },
       email: {
         type: Sequelize.STRING,
         allowNull: false,

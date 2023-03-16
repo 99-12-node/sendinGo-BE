@@ -1,5 +1,7 @@
-const { logger } = require('../middlewares/logger');
+const { logger } = require('../../middlewares/logger');
 const axios = require('axios');
+const url = require('url');
+require('dotenv').config();
 
 const instance = axios.create({
   baseURL: process.env.ALIGO_BASE_URL,
@@ -24,62 +26,77 @@ module.exports = class AlimtalkService {
   // 토큰 생성
   generateSendToken = async () => {
     logger.info(`AlimtalkService.generateSendToken`);
+    const params = new URLSearchParams(noAuthParams);
     const aligoRes = await instance.post(
-      '/akv10/token/create/3/m',
-      noAuthParams
+      '/akv10/token/create/30/d',
+      params.toString()
     );
     return aligoRes.data;
   };
 
   // 알림톡 전송
-  sendAlimTalk = async ({
-    tpl_code,
-    recvname_1,
-    subject_1,
-    message_1,
-    testMode,
-  }) => {
+  sendAlimTalk = async ({ data }) => {
     logger.info(`AlimtalkService.sendAlimTalk`);
-    const params = {
+    console.log('data: ', data);
+    let sendbulkData;
+    for (let i = 0; i < data.length; i++) {
+      // const receiver = `receiver_${i + 1}`;
+      // const recvname = `recvname_${i + 1}`;
+      // const subject = `subject_${i + 1}`;
+
+      sendbulkData = {
+        [`receiver_${i + 1}`]: process.env.RECEIVER_1,
+        [`recvname_${i + 1}`]: data[i][recvname],
+        [`subject_${i + 1}`]: data[i][subject],
+        [`message_${i + 1}`]: data[i][message]
+          .replaceAll('#{회사명}', COMPANY)
+          .replaceAll('#{주문번호}', d.주문번호)
+          .replaceAll('#{구/면}', d['구/면'])
+          .replaceAll('#{동/리}', d['동/리'])
+          .replaceAll('#{월일}', d.월일)
+          .replaceAll('#{결제금액}', d.결제금액.toLocaleString()),
+      };
+    }
+    console.log('sendbulkData: ', sendbulkData);
+
+    const params = new url.URLSearchParams({
       ...authParams,
       senderkey: process.env.ALIGO_SENDERKEY,
       tpl_code: 'TM_2048',
       sender: process.env.SENDER,
-      receiver_1: process.env.RECEIVER_1,
-      recvname_1,
-      subject_1,
-      message_1,
-      /*
-        `[${COMPANY}] 주문완료안내\n
-        □ 주문번호 : 123412314123\n
-        □ 배송지 : 어느구 어느동\n
-        □ 배송예정일 : 03월 10일 \n
-        □ 결제금액 : 10,000 원`
-      */
-      testMode: 'Y',
-    };
-
-    const aligoRes = await instance.post('/akv10/alimtalk/send/', params);
+      ...sendbulkData,
+    });
+    console.log('params: ', params);
+    const aligoRes = await instance.post(
+      '/akv10/alimtalk/send/',
+      params.toString()
+    );
+    console.log('aligoRes.data', aligoRes.data);
     const { mid, scnt, fcnt } = aligoRes.data.info;
     console.log('mid: ', mid, 'scnt: ', scnt, 'fcnt: ', fcnt);
+
     // 발송결과 DB에 저장
     // await sendResult.create({ mid, scnt, fcnt });
     return aligoRes.data;
   };
 
   // 알림톡 전송 결과
-  getAlimTalkResult = async (filter) => {
+  getAlimTalkResult = async () => {
     logger.info(`AlimtalkService.getAlimTalkResult`);
     // const dateFormat = new Date().toISOString().substring(0, 10).replaceAll('-',''); // yyyymmdd
-    const startdate = filter.startdate;
-    const enddate = filter.enddate;
-    const params = {
+    // const startdate = filter.startdate;
+    // const enddate = filter.enddate;
+    const params = new url.URLSearchParams({
       ...authParams,
       //   page: filter.page ?? '1',
       //   limit: filter.limit ?? '10',
-    };
+    });
 
-    const aligoRes = await instance.post('/akv10/history/list/', params);
+    const aligoRes = await instance.post(
+      '/akv10/history/list/',
+      params.toString()
+    );
+    console.log('aligoRes.data:', aligoRes.data);
     const { mid, sender, msg_count, mbody, regdate } = aligoRes.data.list[0];
     console.log(
       'mid, sender, msg_count, mbody, regdate : ',
@@ -108,12 +125,15 @@ module.exports = class AlimtalkService {
   // 알림톡 전송 결과 상세
   getAlimTalkDetailResult = async ({ mid }) => {
     logger.info(`AlimtalkService.getAlimTalkDetailResult`);
-    const params = new URLSearchParams({
+    const params = new url.URLSearchParams({
       ...authParams,
-      mid: req.query.mid,
+      mid,
     });
 
-    const aligoRes = await instance.post('/akv10/history/detail/', params);
+    const aligoRes = await instance.post(
+      '/akv10/history/detail/',
+      params.toString()
+    );
     const {
       msgid,
       sender,
