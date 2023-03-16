@@ -3,13 +3,13 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY, EXPIRE_IN } = process.env;
 
-class UserCotroller {
+class UserController {
   constructor() {
     this.userService = new UserService();
   }
 
   createUser = async (req, res, next) => {
-    logger.info(`UserCotroller.createUser Request`);
+    logger.info(`UserController.createUser Request`);
     const user = req.body;
     try {
       await this.userService.createUser(user);
@@ -20,7 +20,7 @@ class UserCotroller {
   };
 
   checkUserEmail = async (req, res, next) => {
-    logger.info(`UserCotroller.checkUserId Request`);
+    logger.info(`UserController.checkUserEmail Request`);
     const { email } = req.body;
     await this.userService.checkUserEmail({ email });
 
@@ -28,7 +28,7 @@ class UserCotroller {
   };
 
   loginUser = async (req, res, next) => {
-    logger.info(`UserCotroller.loginUser Request`);
+    logger.info(`UserController.loginUser Request`);
     const { email, password } = req.body;
     try {
       const user = await this.userService.loginUser({ email, password });
@@ -48,6 +48,14 @@ class UserCotroller {
       next(error);
     }
   };
+
+  editUser = async (req, res, next) => {
+    logger.info(`UserController.editUser Request`);
+    const user = req.body;
+    await this.userService.editUser(user);
+
+    res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
+  };
 }
 
-module.exports = UserCotroller;
+module.exports = UserController;
