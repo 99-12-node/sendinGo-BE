@@ -2,7 +2,9 @@ name: deploy
 
 on:
   push:
-    branches: [feature/talk]
+    branches: [main]
+  push_request:
+    branches: [main]
 
 jobs:
   build:
