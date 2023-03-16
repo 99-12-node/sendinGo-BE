@@ -8,7 +8,7 @@ module.exports = class ClientController {
 
   // 클라이언트 등록
   createClient = async (req, res, next) => {
-    logger.info(`clientController.createclient Request`);
+    logger.info(`ClientController.createClient Request`);
     // const { userId } = res.locals.users;
     const { clientName, contact } = req.body;
 
