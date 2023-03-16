@@ -40,20 +40,25 @@ module.exports = class AlimtalkService {
     console.log('data: ', data);
     const sendbulkData = {};
     for (let i = 0; i < data.length; i++) {
-      // const receiver = `receiver_${i + 1}`;
-      // const recvname = `recvname_${i + 1}`;
-      // const subject = `subject_${i + 1}`;
-
       sendbulkData[`receiver_${i + 1}`] = process.env.RECEIVER_1;
       sendbulkData[`recvname_${i + 1}`] = data[i]['recvname'];
       sendbulkData[`subject_${i + 1}`] = data[i]['subject'];
       sendbulkData[`message_${i + 1}`] = data[i]['message']
         .replaceAll('#{회사명}', COMPANY)
+        .replaceAll('#{고객명}', data[i]['고객명'])
+        .replaceAll('#{고객명}', data[i]['고객명'])
         .replaceAll('#{주문번호}', data[i]['주문번호'])
         .replaceAll('#{구/면}', data[i]['구/면'])
         .replaceAll('#{동/리}', data[i]['동/리'])
         .replaceAll('#{월일}', data[i]['월일'])
-        .replaceAll('#{결제금액}', data[i]['결제금액'].toLocaleString());
+        .replaceAll(
+          '#{결제금액}',
+          data[i]['결제금액']
+            .toLocaleString()
+            .replaceAll('#{택배회사명}', data[i]['택배회사명'])
+            .replaceAll('#{택배배송시간}', data[i]['택배배송시간'])
+            .replaceAll('#{송장번호}', data[i]['송장번호'])
+        );
     }
     console.log('sendbulkData: ', sendbulkData);
 
@@ -64,7 +69,7 @@ module.exports = class AlimtalkService {
       sender: process.env.SENDER,
       ...sendbulkData,
     });
-    console.log('params: ', params);
+
     const aligoRes = await instance.post(
       '/akv10/alimtalk/send/',
       params.toString()
