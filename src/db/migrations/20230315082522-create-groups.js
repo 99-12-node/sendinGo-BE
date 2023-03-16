@@ -18,7 +18,7 @@ module.exports = {
         allowNull: true,
       },
       userId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Users',
@@ -27,7 +27,7 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       companyId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Users',
