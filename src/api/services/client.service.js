@@ -11,7 +11,7 @@ module.exports = class ClientService {
     clientName,
     contact,
   }) => {
-    logger.info(`clientController.createclient Request`);
+    logger.info(`clientService.createClient Request`);
     const createData = await this.clientRepository.createClient({
       //userId
       clientName,
