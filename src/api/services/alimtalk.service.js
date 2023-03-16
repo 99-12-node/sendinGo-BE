@@ -38,24 +38,22 @@ module.exports = class AlimtalkService {
   sendAlimTalk = async ({ data }) => {
     logger.info(`AlimtalkService.sendAlimTalk`);
     console.log('data: ', data);
-    let sendbulkData;
+    const sendbulkData = {};
     for (let i = 0; i < data.length; i++) {
       // const receiver = `receiver_${i + 1}`;
       // const recvname = `recvname_${i + 1}`;
       // const subject = `subject_${i + 1}`;
 
-      sendbulkData = {
-        [`receiver_${i + 1}`]: process.env.RECEIVER_1,
-        [`recvname_${i + 1}`]: data[i][recvname],
-        [`subject_${i + 1}`]: data[i][subject],
-        [`message_${i + 1}`]: data[i][message]
-          .replaceAll('#{회사명}', COMPANY)
-          .replaceAll('#{주문번호}', d.주문번호)
-          .replaceAll('#{구/면}', d['구/면'])
-          .replaceAll('#{동/리}', d['동/리'])
-          .replaceAll('#{월일}', d.월일)
-          .replaceAll('#{결제금액}', d.결제금액.toLocaleString()),
-      };
+      sendbulkData[`receiver_${i + 1}`] = process.env.RECEIVER_1;
+      sendbulkData[`recvname_${i + 1}`] = data[i]['recvname'];
+      sendbulkData[`subject_${i + 1}`] = data[i]['subject'];
+      sendbulkData[`message_${i + 1}`] = data[i]['message']
+        .replaceAll('#{회사명}', COMPANY)
+        .replaceAll('#{주문번호}', d['주문번호'])
+        .replaceAll('#{구/면}', d['구/면'])
+        .replaceAll('#{동/리}', d['동/리'])
+        .replaceAll('#{월일}', d['월일'])
+        .replaceAll('#{결제금액}', d['결제금액'].toLocaleString());
     }
     console.log('sendbulkData: ', sendbulkData);
 
