@@ -1,56 +1,30 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Groups extends Model {
+  class Clients extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      this.belongsTo(models.Users, {
-        targetKey: 'userId',
-        foreignKey: 'userId',
-      });
-      this.belongsTo(models.Users, {
-        targetKey: 'companyId',
-        foreignKey: 'companyId',
-      });
-    }
+    static associate(models) {}
   }
-  Groups.init(
+  Clients.init(
     {
-      groupId: {
+      clientId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      groupName: {
+      clientName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      groupDescription: {
+      contact: {
         type: DataTypes.STRING,
-        allowNull: true,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
+        unique: true,
         allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'userId',
-        },
-        onDelete: 'CASCADE',
-      },
-      companyId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'companyId',
-        },
-        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
@@ -65,8 +39,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'ClientGroups',
+      modelName: 'Clients',
     }
   );
-  return Groups;
+  return Clients;
 };

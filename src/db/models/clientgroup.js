@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      //   this.belongsTo(models.Clients, {
-      //     targetKey: 'clientId',
-      //     foreignKey: 'clientId',
-      // onDelete: 'CASCADE',
-      //   });
+      this.belongsTo(models.Clients, {
+        targetKey: 'clientId',
+        foreignKey: 'clientId',
+        onDelete: 'CASCADE',
+      });
       this.belongsTo(models.Groups, {
         targetKey: 'groupId',
         foreignKey: 'groupId',
@@ -28,15 +28,15 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      // clientId: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: 'Clients',
-      //     key: 'clientId',
-      //   },
-      //   onDelete: 'CASCADE',
-      // },
+      clientId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Clients',
+          key: 'clientId',
+        },
+        onDelete: 'CASCADE',
+      },
       groupId: {
         type: DataTypes.INTEGER,
         allowNull: false,
