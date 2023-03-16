@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
 const { Users } = require('../../db/models');
-const { UnauthorizedError } = require('../../exceptions/errors');
+const { UnauthorizedError } = require('../exceptions/errors');
 require('dotenv').config();
 const { KEY } = process.env;
 
 module.exports = async (req, res, next) => {
-  const { Authorization } = req.headers;
+  const { Authorization } = req.cookies;
   const [tokenType, token] = (Authorization ?? '').split(' ');
   if (tokenType !== 'Bearer' || !token) {
     throw new UnauthorizedError(
@@ -25,7 +25,7 @@ module.exports = async (req, res, next) => {
     res.locals.user = user;
     next();
   } catch (error) {
-    res.clearCookie('Authorization'); //인증에 실패 할 경우 쿠키 삭제
-    next(error);
+    res.clearCookie('Authorization');
+    throw new UnauthorizedError('유효하지 않은 토큰입니다.');
   }
 };
