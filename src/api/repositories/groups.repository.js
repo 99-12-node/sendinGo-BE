@@ -1,10 +1,10 @@
 const { logger } = require('../../middlewares/logger');
 const { Groups } = require('../../db/models');
 
-module.exports = class ClientGroupRepository {
+module.exports = class GroupRepository {
   constructor() {}
   // 클라이언트 그룹 생성
-  createClientGroup = async ({
+  createGroup = async ({
     //userId,
     groupName,
     groupDescription,
@@ -19,7 +19,7 @@ module.exports = class ClientGroupRepository {
 
   //그룹 전체 조회
   getAllGroup = async ({ groupId, groupName, createdAt }) => {
-    logger.info(`clientGroupController.getAllGroup Request`);
+    logger.info(`GroupRepository.getAllGroup Request`);
     const allGroupData = await Groups.findAll({
       groupId,
       groupName,

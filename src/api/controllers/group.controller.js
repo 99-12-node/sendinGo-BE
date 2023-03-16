@@ -1,18 +1,18 @@
 const { logger } = require('../../middlewares/logger');
-const ClientGroupService = require('../services/clientgroup.service');
+const GroupService = require('../services/group.service');
 
-module.exports = class clientGroupController {
+module.exports = class GroupController {
   constructor() {
-    this.clientGroupService = new ClientGroupService();
+    this.groupService = new GroupService();
   }
 
   // 클라이언트 그룹 생성
-  createClientGroup = async (req, res, next) => {
+  createGroup = async (req, res, next) => {
     //const {userId} = res.locals.users;
     const { clientId, groupName, gruopDescription } = req.body;
 
     try {
-      await this.clientGroupService.createClientGroup({
+      await this.groupService.createGroup({
         //userId
         clientId,
         groupName,
@@ -26,10 +26,10 @@ module.exports = class clientGroupController {
 
   //그룹 전체 조회
   getAllGroup = async (req, res, next) => {
-    logger.info(`clientGroupController.getAllGroup Request`);
+    logger.info(`GroupController.getAllGroup Request`);
     const { groupId, groupName, createdAt } = req.body;
     try {
-      const allGroupData = await this.clientGroupService.getAllGroup({
+      const allGroupData = await this.groupService.getAllGroup({
         groupId,
         groupName,
         createdAt,
