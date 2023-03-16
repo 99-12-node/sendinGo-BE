@@ -9,7 +9,7 @@ module.exports = class ClientRepository {
     clientName,
     contact,
   }) => {
-    logger.info(`clientRepository.createClient Request`);
+    logger.info(`ClientRepository.createClient Request`);
     const createData = await Clients.create({
       //userId,
       clientName,
