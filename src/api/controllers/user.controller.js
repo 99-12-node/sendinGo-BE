@@ -19,6 +19,14 @@ class UserCotroller {
     }
   };
 
+  checkUserEmail = async (req, res, next) => {
+    logger.info(`UserCotroller.checkUserId Request`);
+    const { email } = req.body;
+    await this.userService.checkUserEmail({ email });
+
+    res.stutus(200).json({ message: '사용가능 한 이메일 입니다.' });
+  };
+
   loginUser = async (req, res, next) => {
     logger.info(`UserCotroller.loginUser Request`);
     const { email, password } = req.body;

@@ -38,6 +38,16 @@ class UserService {
     return;
   };
 
+  checkUserEmail = async ({ email }) => {
+    const user = await this.userRepository.findUser({ email });
+
+    if (user) {
+      throw new BadRequestError('중복 된 이메일이 존재합니다.');
+    }
+
+    return;
+  };
+
   loginUser = async ({ email, password }) => {
     const user = await this.userRepository.findUser({ email });
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
