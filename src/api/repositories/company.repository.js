@@ -14,6 +14,15 @@ class CompanyRepository {
 
     return company;
   };
+
+  editCompany = async ({ companyName, companyNumber, companyId }) => {
+    await Companies.update(
+      { companyName, companyNumber },
+      { where: { companyId } }
+    );
+
+    return;
+  };
 }
 
 module.exports = CompanyRepository;
