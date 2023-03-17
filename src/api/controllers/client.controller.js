@@ -13,13 +13,16 @@ module.exports = class ClientController {
     const { clientName, contact } = req.body;
 
     try {
-      await this.clientService.createClient({
+      const newClient = await this.clientService.createClient({
         //userId,
         clientName,
         contact,
       });
 
-      return res.status(201).json({ message: '등록이 완료되었습니다.' });
+      return res.status(201).json({
+        clientId: newClient.clientId,
+        message: '등록이 완료되었습니다.',
+      });
     } catch (error) {
       next(error);
     }
