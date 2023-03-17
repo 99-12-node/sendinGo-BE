@@ -8,6 +8,7 @@ class UserRepository {
     provider,
     name,
     status,
+    companyId,
   }) => {
     await Users.create({
       email,
@@ -16,6 +17,7 @@ class UserRepository {
       provider,
       name,
       status,
+      companyId,
     });
     return;
   };

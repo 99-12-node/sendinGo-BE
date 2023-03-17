@@ -9,15 +9,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      // clientId: {
-      //   type: Sequelize.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: 'Clients',
-      //     key: 'clientId',
-      //   },
-      //   onDelete: 'CASCADE',
-      // },
+      clientId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Clients',
+          key: 'clientId',
+        },
+        onDelete: 'CASCADE',
+      },
       groupId: {
         type: Sequelize.INTEGER,
         allowNull: false,

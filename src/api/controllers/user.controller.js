@@ -14,8 +14,8 @@ class UserController {
     try {
       await this.userService.createUser(user);
       res.status(201).json({ message: '회원가입이 완료 되었습니다.' });
-    } catch (error) {
-      next(error);
+    } catch (e) {
+      next(e);
     }
   };
 
@@ -39,13 +39,12 @@ class UserController {
       const token = jwt.sign({ userId: user.email }, KEY, {
         expiresIn: EXPIRE_IN,
       });
-
-      res.cookie('Authorization', `Bearer ${token}`, {
+      res.cookie('authorization', `Bearer ${token}`, {
         expires: expires,
       });
       res.status(200).json({ message: '로그인이 정상적으로 처리되었습니다.' });
-    } catch (error) {
-      next(error);
+    } catch (e) {
+      next(e);
     }
   };
 
