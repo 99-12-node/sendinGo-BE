@@ -4,13 +4,12 @@ class UserRepository {
   createUser = async ({
     email,
     password,
-    company,
-    companyNumber,
     phoneNumber,
     provider,
     name,
     role,
     status,
+    companyId,
   }) => {
     await Users.create({
       email,
@@ -20,6 +19,7 @@ class UserRepository {
       name,
       role,
       status,
+      companyId,
     });
     return;
   };
