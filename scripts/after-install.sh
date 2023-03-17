@@ -7,4 +7,5 @@ npm install
 
 pm2 stop all
 
-pm2 start app.js --name prod-app
+pm2 start ecosystem.config.js --env development --only sendingo-app-dev
+pm2 start ecosystem.config.js --env production --only sendingo-app
