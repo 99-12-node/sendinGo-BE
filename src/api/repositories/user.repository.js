@@ -4,12 +4,9 @@ class UserRepository {
   createUser = async ({
     email,
     password,
-    company,
-    companyNumber,
     phoneNumber,
     provider,
     name,
-    role,
     status,
   }) => {
     await Users.create({
@@ -18,7 +15,6 @@ class UserRepository {
       phoneNumber,
       provider,
       name,
-      role,
       status,
     });
     return;
@@ -28,6 +24,13 @@ class UserRepository {
     const user = await Users.findOne({ where: { email } });
 
     return user;
+  };
+
+  editUser = async ({ email, password, phoneNumber, name }) => {
+    await Users.update(
+      { email, password, phoneNumber, name },
+      { where: { userId } }
+    );
   };
 }
 
