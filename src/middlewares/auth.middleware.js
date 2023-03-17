@@ -26,6 +26,6 @@ module.exports = async (req, res, next) => {
     next();
   } catch (error) {
     res.clearCookie('Authorization');
-    throw new UnauthorizedError('유효하지 않은 토큰입니다.');
+    next(error);
   }
 };
