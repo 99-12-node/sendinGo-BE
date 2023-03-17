@@ -1,4 +1,5 @@
 const UserService = require('../services/user.service');
+const { logger } = require('../../middlewares/logger');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY, EXPIRE_IN } = process.env;
@@ -52,7 +53,6 @@ class UserController {
     logger.info(`UserController.editUser Request`);
     const { userId } = res.locals.user;
     const user = { ...req.body, userId };
-
     try {
       await this.userService.editUser(user);
 
