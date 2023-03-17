@@ -19,8 +19,7 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 전체 조회
-  getAllClient = async ({}) => {
-    //userId
+  getAllClient = async () => {
     const allData = await Clients.findAll({
       attributes: ['clientId', 'clientName', 'contact', 'createdAt'],
     });

@@ -31,7 +31,7 @@ module.exports = class ClientController {
   //클라이언트 전체 조회
   getAllClient = async (req, res, next) => {
     try {
-      const allData = await this.clientService.getAllClient({});
+      const allData = await this.clientService.getAllClient();
 
       return res.status(200).json({ data: allData });
     } catch (error) {
