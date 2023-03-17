@@ -51,10 +51,16 @@ class UserController {
 
   editUser = async (req, res, next) => {
     logger.info(`UserController.editUser Request`);
-    const user = req.body;
-    await this.userService.editUser(user);
+    const { userId } = res.locals.user;
+    const user = { ...req.body, userId };
 
-    res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
+    try {
+      await this.userService.editUser(user);
+
+      res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
+    } catch (error) {
+      next(error);
+    }
   };
 }
 
