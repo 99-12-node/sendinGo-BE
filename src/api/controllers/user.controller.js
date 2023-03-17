@@ -37,7 +37,7 @@ class UserController {
       let expires = new Date();
       expires.setMinutes(expires.getMinutes() + 60);
 
-      const token = jwt.sign({ userId: user.email }, KEY, {
+      const token = jwt.sign({ userId: user.userId }, KEY, {
         expiresIn: EXPIRE_IN,
       });
       res.cookie('authorization', `Bearer ${token}`, {
