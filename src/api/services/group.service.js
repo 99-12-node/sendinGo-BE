@@ -33,4 +33,10 @@ module.exports = class GroupService {
   };
 
   //그룹 삭제
+  deleteGroup = async ({ groupId }) => {
+    logger.info(`GroupService.deleteGroup Request`);
+    const deleteGroupData = await this.groupRepository.deleteGroup({ groupId });
+
+    return deleteGroupData;
+  };
 };

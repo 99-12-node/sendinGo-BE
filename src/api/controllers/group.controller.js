@@ -37,4 +37,14 @@ module.exports = class GroupController {
   };
 
   //그룹 삭제
+  deleteGroup = async (req, res, next) => {
+    const { groupId } = req.params;
+
+    try {
+      await this.groupService.deleteGroup({ groupId });
+      res.status(200).json({ message: '그룹 삭제가 완료되었습니다.' });
+    } catch (error) {
+      next(error);
+    }
+  };
 };
