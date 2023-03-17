@@ -4,11 +4,10 @@ const cookieparser = require('cookie-parser');
 const errorMiddleware = require('./src/middlewares/error.middleware');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const router = require('./src/routes');
-
-dotenv.config();
+const router = require('./src/api/routes');
 
 const app = express();
+dotenv.config();
 const port = process.env.PORT;
 
 app.use(express.json());
