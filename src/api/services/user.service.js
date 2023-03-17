@@ -1,5 +1,6 @@
 const UserRepository = require('../repositories/user.repository');
 const CompanyRepository = require('../repositories/company.repository');
+const { logger } = require('../../middlewares/logger');
 const bcrypt = require('bcrypt');
 const { BadRequestError } = require('../../exceptions/errors');
 require('dotenv').config();
@@ -19,6 +20,7 @@ class UserService {
     phoneNumber,
     name,
   }) => {
+    logger.info(`UserService.createUser Request`);
     const salt = await bcrypt.genSalt(SALT);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -41,6 +43,7 @@ class UserService {
   };
 
   checkUserEmail = async ({ email }) => {
+    logger.info(`UserService.checkUserEmail Request`);
     const user = await this.userRepository.findUser({ email });
 
     if (user) {
@@ -51,6 +54,7 @@ class UserService {
   };
 
   loginUser = async ({ email, password }) => {
+    logger.info(`UserService.loginUser Request`);
     const user = await this.userRepository.findUser({ email });
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
@@ -62,6 +66,38 @@ class UserService {
     }
 
     return user;
+  };
+
+  editUser = async ({
+    email,
+    password,
+    companyName,
+    companyNumber,
+    phoneNumber,
+    name,
+    userId,
+  }) => {
+    logger.info(`UserService.editUser ${email}Request`);
+    const salt = await bcrypt.genSalt(SALT);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await this.userRepository.editUser({
+      email,
+      password: hashedPassword,
+      phoneNumber,
+      name,
+      userId,
+    });
+
+    const updatedUser = await this.userRepository.findByUserId({ userId });
+
+    await this.companyRepository.editCompany({
+      companyName,
+      companyNumber,
+      companyId: updatedUser.companyId,
+    });
+
+    return;
   };
 }
 
