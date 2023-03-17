@@ -1,4 +1,4 @@
-const { Users } = require('../../db/models');
+const { Users, Companies, sequelize } = require('../../db/models');
 
 class UserRepository {
   createUser = async ({
@@ -22,6 +22,42 @@ class UserRepository {
       companyId,
     });
     return;
+  };
+
+  createNewUserAndCompany = async ({
+    email,
+    password,
+    companyName,
+    companyNumber,
+    phoneNumber,
+    name,
+    provider,
+    role,
+  }) => {
+    try {
+      const result = await sequelize.transaction(async (t) => {
+        const newCompany = await Companies.create(
+          { companyName, companyNumber },
+          { transaction: t }
+        );
+        const newUser = await Users.create(
+          {
+            email,
+            password,
+            phoneNumber,
+            provider,
+            name,
+            role,
+            companyId: newCompany.companyId,
+          },
+          { transaction: t }
+        );
+      });
+
+      return result;
+    } catch (e) {
+      throw new Error(e.message);
+    }
   };
 
   findUser = async ({ email }) => {
