@@ -12,6 +12,7 @@ jobs:
     environment: production
     env:
       AWS-REGION: ap-northeast-2
+      DIALECT: mysql
 
     steps:
       - name: Checkout source code
@@ -24,6 +25,36 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: create env file
+        working-directory: ./
+        run: |
+          pwd
+          touch .env
+          echo PORT=${{ vars.PORT }} >> .env
+          echo PORT_DEV=${{ vars.PORT_DEV }} >> .env
+          echo ALIGO_BASE_URL=${{ secrets.ALIGO_BASE_URL }} >> .env
+          echo ALIGO_USERID=${{ secrets.ALIGO_USERID }} >> .env
+          echo ALIGO_APIKEY=${{ secrets.ALIGO_APIKEY }} >> .env
+          echo ALIGO_TOKEN=${{ secrets.ALIGO_TOKEN }} >> .env
+          echo ALIGO_SENDERKEY=${{ secrets.ALIGO_SENDERKEY }} >> .env
+          echo SENDER=${{ secrets.SENDER }} >> .env
+          echo RECEIVER_1=${{ secrets.RECEIVER_1 }} >> .env
+          echo KEY=${{ secrets.KEY }} >> .env
+          echo EXPIRE_IN=${{ secrets.EXPIRE_IN }} >> .env
+          echo SALT=${{ secrets.SALT }} >> .env
+
+          echo DEV_DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
+          echo DEV_DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+          echo DEV_DB_DATABASE=${{ vars.DB_DATABASE_DEV }} >> .env
+          echo DEV_DB_HOST=${{ secrets.DB_HOST }} >> .env
+          echo DEV_DB_DIALECT=${{ env.DIALECT }} >> .env
+          echo PROD_DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
+          echo PROD_DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+          echo PROD_DB_DATABASE=${{ vars.DB_DATABASE_PROD }} >> .env
+          echo PROD_DB_HOST=${{ secrets.DB_HOST }} >> .env
+          echo PROD_DB_DIALECT=${{ env.DIALECT }} >> .env
+          cat .env
 
       - name: zip file
         run: zip -r deploy.zip ./scripts ./appspec.yml ./.env ./package.json ./app.js ./src
