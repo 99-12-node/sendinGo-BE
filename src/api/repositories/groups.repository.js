@@ -21,17 +21,10 @@ module.exports = class GroupRepository {
   };
 
   //그룹 전체 조회
-  getAllGroup = async ({ groupId, groupName, createdAt }) => {
+  getAllGroup = async () => {
     logger.info(`GroupRepository.getAllGroup Request`);
     const allGroupData = await Groups.findAll({
       attributes: ['groupId', 'groupName', 'createdAt'],
-      where: {
-        [Op.and]: [
-          { groupId: { [Op.ne]: null } },
-          { groupName: { [Op.ne]: null } },
-          { createdAt: { [Op.ne]: null } },
-        ],
-      },
     });
     return allGroupData;
   };
