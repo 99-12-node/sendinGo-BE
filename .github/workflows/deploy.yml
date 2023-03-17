@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-20.04
     environment: production
     env:
-      AWS-REGION: ap-northeast-2
+      AWS_REGION: ap-northeast-2
       DIALECT: mysql
 
     steps:
