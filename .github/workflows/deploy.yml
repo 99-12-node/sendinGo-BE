@@ -3,19 +3,22 @@ name: deploy
 on:
   push:
     branches: [main]
-  push_request:
+  pull_request:
     branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-20.04
-    environment: development
+    environment: production
+    env:
+      AWS_REGION: ap-northeast-2
+      DIALECT: mysql
 
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: 16
@@ -29,6 +32,7 @@ jobs:
           pwd
           touch .env
           echo PORT=${{ vars.PORT }} >> .env
+          echo PORT_DEV=${{ vars.PORT_DEV }} >> .env
           echo ALIGO_BASE_URL=${{ secrets.ALIGO_BASE_URL }} >> .env
           echo ALIGO_USERID=${{ secrets.ALIGO_USERID }} >> .env
           echo ALIGO_APIKEY=${{ secrets.ALIGO_APIKEY }} >> .env
@@ -36,29 +40,34 @@ jobs:
           echo ALIGO_SENDERKEY=${{ secrets.ALIGO_SENDERKEY }} >> .env
           echo SENDER=${{ secrets.SENDER }} >> .env
           echo RECEIVER_1=${{ secrets.RECEIVER_1 }} >> .env
-          echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> .env
-          echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> .env
-          echo AWS_REGION=${{ vars.AWS_REGION }} >> .env
-          echo AWS_S3_BUCKET_NAME=${{ vars.AWS_S3_BUCKET_NAME }} >> .env
+          echo KEY=${{ secrets.KEY }} >> .env
+          echo EXPIRE_IN=${{ secrets.EXPIRE_IN }} >> .env
+          echo SALT=${{ secrets.SALT }} >> .env
+
           echo DEV_DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
           echo DEV_DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
-          echo DEV_DB_DATABASE=${{ vars.DB_DATABASE }} >> .env
+          echo DEV_DB_DATABASE=${{ vars.DB_DATABASE_DEV }} >> .env
           echo DEV_DB_HOST=${{ secrets.DB_HOST }} >> .env
-          echo DEV_DB_DIALECT=${{ vars.DIALECT }} >> .env
+          echo DEV_DB_DIALECT=${{ env.DIALECT }} >> .env
+          echo PROD_DB_USERNAME=${{ secrets.DB_USERNAME }} >> .env
+          echo PROD_DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+          echo PROD_DB_DATABASE=${{ vars.DB_DATABASE_PROD }} >> .env
+          echo PROD_DB_HOST=${{ secrets.DB_HOST }} >> .env
+          echo PROD_DB_DIALECT=${{ env.DIALECT }} >> .env
           cat .env
 
       - name: zip file
-        run: zip -r deploy.zip ./scripts ./appspec.yml ./.env ./package.json ./app.js ./src
+        run: zip -r deploy.zip ./scripts ./appspec.yml ./.env ./package.json ./app.js ./src  ./ecosystem.config.js
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: upload to S3
-        run: aws s3 cp --region ${{ vars.AWS_REGION }} ./deploy.zip s3://${{ vars.AWS_S3_BUCKET_NAME }}/deploy/
+        run: aws s3 cp --region ${{ env.AWS_REGION }} ./deploy.zip s3://${{ secrets.AWS_S3_BUCKET_NAME }}/deploy/
 
       - name: deploy with AWS codeDeploy
-        run: aws deploy create-deployment --application-name ${{ vars.CODE_DEPLOY_APPLICATION_NAME }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ vars.CODE_DEPLOY_GROUP_NAME }} --s3-location bucket=${{ vars.AWS_S3_BUCKET_NAME }},bundleType=zip,key=deploy/deploy.zip
+        run: aws deploy create-deployment --application-name ${{ secrets.CODE_DEPLOY_APPLICATION_NAME }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ secrets.CODE_DEPLOY_GROUP_NAME }} --s3-location bucket=${{ secrets.AWS_S3_BUCKET_NAME }},bundleType=zip,key=deploy/deploy.zip

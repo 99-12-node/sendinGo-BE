@@ -9,8 +9,8 @@ class CompanyRepository {
     return newCompany;
   };
 
-  findCompany = async ({ companyId }) => {
-    const company = await Companies.findPK({ companyId });
+  findCompanyByName = async ({ companyName }) => {
+    const company = await Companies.findOne({ where: { companyName } });
 
     return company;
   };

@@ -2,7 +2,7 @@ const UserRepository = require('../repositories/user.repository');
 const CompanyRepository = require('../repositories/company.repository');
 const { logger } = require('../../middlewares/logger');
 const bcrypt = require('bcrypt');
-const { BadRequestError } = require('../../exceptions/errors');
+const { BadRequestError, Conflict } = require('../../exceptions/errors');
 require('dotenv').config();
 const SALT = parseInt(process.env.SALT);
 
@@ -20,26 +20,45 @@ class UserService {
     phoneNumber,
     name,
   }) => {
-    logger.info(`UserService.createUser Request`);
-    const salt = await bcrypt.genSalt(SALT);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    try {
+      logger.info(`UserService.createUser Request`);
+      const salt = await bcrypt.genSalt(SALT);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newCompany = await this.companyRepository.createCompany({
-      companyName,
-      companyNumber,
-    });
+      const existCompany = await this.companyRepository.findCompanyByName({
+        companyName,
+      });
 
-    await this.userRepository.createUser({
-      email,
-      password: hashedPassword,
-      phoneNumber,
-      provider: 0,
-      name,
-      role: 0,
-      companyId: newCompany.companyId,
-    });
-
-    return;
+      if (!existCompany) {
+        await this.userRepository.createNewUserAndCompany({
+          email,
+          password: hashedPassword,
+          companyName,
+          companyNumber,
+          phoneNumber,
+          provider: 0,
+          name,
+          role: 0,
+        });
+      } else {
+        await this.userRepository.createUser({
+          email,
+          password: hashedPassword,
+          phoneNumber,
+          provider: 0,
+          name,
+          role: 0,
+          companyId: existCompany.companyId,
+        });
+      }
+      return;
+    } catch (e) {
+      console.error(e.errors[0].message);
+      console.error(e.parent.message);
+      if (e.message === 'Validation error') {
+        throw new BadRequestError(e.errors[0].message);
+      }
+    }
   };
 
   checkUserEmail = async ({ email }) => {

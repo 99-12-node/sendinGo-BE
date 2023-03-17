@@ -1,4 +1,5 @@
 const { logger } = require('../../middlewares/logger');
+const { BadRequestError } = require('../../exceptions/errors');
 const GroupRepository = require('../repositories/groups.repository');
 
 module.exports = class GroupService {
@@ -13,28 +14,21 @@ module.exports = class GroupService {
     groupDescription,
   }) => {
     const groupData = await this.groupRepository.createGroup({
-      //userId,
       clientId,
       groupName,
       groupDescription,
     });
     if (!groupData) {
-      throw new Error('그룹 생성에 실패하였습니다.');
+      throw new BadRequestError('그룹 생성에 실패하였습니다.');
     }
     return groupData;
   };
 
   //그룹 전체 조회
-  getAllGroup = async ({ groupId, groupName, createdAt }) => {
+  getAllGroup = async () => {
     logger.info(`GroupService.getAllGroup Request`);
-    const allGroupData = await this.groupRepository.getAllGroup({
-      groupId,
-      groupName,
-      createdAt,
-    });
-    if (!allGroupData) {
-      throw new Error('그룹 조회에 실패하였습니다.');
-    }
+    const allGroupData = await this.groupRepository.getAllGroup();
+
     return allGroupData;
   };
 

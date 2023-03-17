@@ -13,13 +13,16 @@ module.exports = class ClientController {
     const { clientName, contact } = req.body;
 
     try {
-      await this.clientService.createClient({
+      const newClient = await this.clientService.createClient({
         //userId,
         clientName,
         contact,
       });
 
-      return res.status(201).json({ message: '등록이 완료되었습니다.' });
+      return res.status(201).json({
+        clientId: newClient.clientId,
+        message: '등록이 완료되었습니다.',
+      });
     } catch (error) {
       next(error);
     }
@@ -28,7 +31,7 @@ module.exports = class ClientController {
   //클라이언트 전체 조회
   getAllClient = async (req, res, next) => {
     try {
-      const allData = await this.clientService.getAllClient({});
+      const allData = await this.clientService.getAllClient();
 
       return res.status(200).json({ data: allData });
     } catch (error) {
