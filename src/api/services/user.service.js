@@ -1,4 +1,5 @@
 const UserRepository = require('../repositories/user.repository');
+const CompanyRepository = require('../repositories/company.repository');
 const bcrypt = require('bcrypt');
 const { BadRequestError } = require('../../exceptions/errors');
 require('dotenv').config();
@@ -7,32 +8,33 @@ const SALT = parseInt(process.env.SALT);
 class UserService {
   constructor() {
     this.userRepository = new UserRepository();
+    this.companyRepository = new CompanyRepository();
   }
 
   createUser = async ({
     email,
     password,
-    company,
+    companyName,
     companyNumber,
     phoneNumber,
-    provider,
     name,
-    role,
-    status,
   }) => {
     const salt = await bcrypt.genSalt(SALT);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    const newCompany = await this.companyRepository.createCompany({
+      companyName,
+      companyNumber,
+    });
+
     await this.userRepository.createUser({
       email,
       password: hashedPassword,
-      company,
-      companyNumber,
       phoneNumber,
-      provider,
+      provider: 0,
       name,
-      role,
-      status,
+      role: 0,
+      companyId: newCompany.companyId,
     });
 
     return;
