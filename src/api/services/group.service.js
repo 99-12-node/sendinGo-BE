@@ -1,4 +1,5 @@
 const { logger } = require('../../middlewares/logger');
+const { BadRequestError } = require('../../exceptions/errors');
 const GroupRepository = require('../repositories/groups.repository');
 
 module.exports = class GroupService {
@@ -19,7 +20,7 @@ module.exports = class GroupService {
       groupDescription,
     });
     if (!groupData) {
-      throw new Error('그룹 생성에 실패하였습니다.');
+      throw new BadRequestError('그룹 생성에 실패하였습니다.');
     }
     return groupData;
   };
