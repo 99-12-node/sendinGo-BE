@@ -25,11 +25,9 @@ module.exports = class ClientService {
   };
 
   //클라이언트 전체 조회
-  getAllClient = async ({}) => {
-    const allData = await this.clientRepository.getAllClient({});
-    if (!allData) {
-      throw new BadRequestError('클라이언트 조회에 실패하였습니다.');
-    }
+  getAllClient = async () => {
+    const allData = await this.clientRepository.getAllClient();
+
     return allData;
   };
 
