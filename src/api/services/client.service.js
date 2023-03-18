@@ -1,5 +1,5 @@
 const { logger } = require('../../middlewares/logger');
-const { BadRequestError, Conflict } = require('../../exceptions/errors');
+const { BadRequestError, Conflict, NotFoundError } = require('../../exceptions/errors');
 const ClientRepository = require('../repositories/client.repository');
 
 module.exports = class ClientService {
@@ -61,5 +61,15 @@ module.exports = class ClientService {
     // }
 
     return deleteData;
+  };
+
+  // 클라이언트 Id로 조회
+  getClientById = async ({ clientId }) => {
+    logger.info(`ClientService.getClientById Request`);
+    const existClient = await this.clientRepository.getClientById({ clientId });
+    if (!existClient) {
+      throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+    }
+    return existClient;
   };
 };
