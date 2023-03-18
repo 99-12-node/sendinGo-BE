@@ -20,14 +20,27 @@ module.exports = class ClientRepository {
 
   //클라이언트 전체 조회
   getAllClient = async () => {
+    logger.info(`ClientRepository.getAllClient Request`);
     const allData = await Clients.findAll({
       attributes: ['clientId', 'clientName', 'contact', 'createdAt'],
     });
     return allData;
   };
 
+  //클라이언트 수정
+  editClientInfo = async ({ clientId, clientName, contact }) => {
+    logger.info(`ClientRepository.editClientInfo Request`);
+    const editClientData = await Clients.update(
+      { clientName, contact },
+      { where: { clientId } }
+    );
+
+    return editClientData;
+  };
+
   //클라이언트 삭제
   deleteClient = async ({ clientId }) => {
+    logger.info(`ClientRepository.deleteClient Request`);
     const deleteData = await Clients.destroy({
       where: { clientId },
     });
