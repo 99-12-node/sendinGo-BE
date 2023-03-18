@@ -48,8 +48,8 @@ module.exports = class ClientController {
     const { clientName, contact } = req.body;
 
     try {
-      if (!(clientName && contact)) {
-        throw new BadRequestError('이름과 번호를 작성해주세요');
+      if (!clientName || !contact) {
+        throw new BadRequestError('정보를 입력해주세요.');
       }
       await this.clientService.editClientInfo({
         clientId,
