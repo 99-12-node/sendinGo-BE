@@ -26,6 +26,8 @@ module.exports = class ClientService {
 
   //클라이언트 전체 조회
   getAllClient = async () => {
+    logger.info(`ClientService.getAllClient Request`);
+
     const allData = await this.clientRepository.getAllClient();
 
     return allData;
@@ -54,6 +56,7 @@ module.exports = class ClientService {
     //userId,
     clientId,
   }) => {
+    logger.info(`ClientService.deleteClient Request`);
     const deleteData = await this.clientRepository.deleteClient({ clientId });
     if (!deleteData) {
       throw new BadRequestError('클라이언트 삭제에 실패하였습니다.');

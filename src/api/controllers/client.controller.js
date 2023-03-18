@@ -31,6 +31,7 @@ module.exports = class ClientController {
 
   //클라이언트 전체 조회
   getAllClient = async (req, res, next) => {
+    logger.info(`ClientController.getAllClient Request`);
     try {
       const allData = await this.clientService.getAllClient();
 
@@ -64,6 +65,8 @@ module.exports = class ClientController {
 
   //클라이언트 삭제
   deleteClient = async (req, res, next) => {
+    logger.info(`ClientController.deleteClient Request`);
+
     // const { userId } = res.locals.user;
     const { clientId } = req.params;
     try {
