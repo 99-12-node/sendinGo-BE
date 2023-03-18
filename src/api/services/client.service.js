@@ -1,4 +1,5 @@
 const { logger } = require('../../middlewares/logger');
+const { BadRequestError, Conflict } = require('../../exceptions/errors');
 const ClientRepository = require('../repositories/client.repository');
 
 module.exports = class ClientService {
@@ -18,18 +19,36 @@ module.exports = class ClientService {
       contact,
     });
     if (!createData) {
-      throw new Error('클라이언트 등록에 실패하였습니다.');
+      throw new BadRequestError('클라이언트 등록에 실패하였습니다.');
     }
     return createData;
   };
 
   //클라이언트 전체 조회
-  getAllClient = async ({}) => {
-    const allData = await this.clientRepository.getAllClient({});
-    if (!allData) {
-      throw new Error('클라이언트 조회에 실패하였습니다.');
-    }
+  getAllClient = async () => {
+    logger.info(`ClientService.getAllClient Request`);
+
+    const allData = await this.clientRepository.getAllClient();
+
     return allData;
+  };
+
+  //클라이언트 수정
+  editClientInfo = async ({ clientId, clientName, contact }) => {
+    logger.info(`ClientService.editClientInfo Request`);
+    const existContact = await this.clientRepository.findOneContact({
+      contact,
+    });
+    if (existContact) {
+      throw new Conflict('이미 등록되어있는 번호입니다.');
+    }
+    const editClientData = await this.clientRepository.editClientInfo({
+      clientId,
+      clientName,
+      contact,
+    });
+
+    return editClientData;
   };
 
   //클라이언트 삭제
@@ -37,9 +56,10 @@ module.exports = class ClientService {
     //userId,
     clientId,
   }) => {
+    logger.info(`ClientService.deleteClient Request`);
     const deleteData = await this.clientRepository.deleteClient({ clientId });
     if (!deleteData) {
-      throw new Error('클라이언트 삭제에 실패하였습니다.');
+      throw new BadRequestError('클라이언트 삭제에 실패하였습니다.');
     }
     // if (deleteData.userId !== userId) {
     //   throw new Error('권한이 없습니다.');

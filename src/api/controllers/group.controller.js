@@ -27,18 +27,25 @@ module.exports = class GroupController {
   //그룹 전체 조회
   getAllGroup = async (req, res, next) => {
     logger.info(`GroupController.getAllGroup Request`);
-    const { groupId, groupName, createdAt } = req.body;
+
     try {
-      const allGroupData = await this.groupService.getAllGroup({
-        groupId,
-        groupName,
-        createdAt,
-      });
-      res.status(200)({ data: allGroupData });
+      const allGroupData = await this.groupService.getAllGroup();
+      res.status(200).json({ data: allGroupData });
     } catch (error) {
       next(error);
     }
   };
 
   //그룹 삭제
+  deleteGroup = async (req, res, next) => {
+    logger.info(`GroupController.deleteGroup Request`);
+    const { groupId } = req.params;
+
+    try {
+      await this.groupService.deleteGroup({ groupId });
+      res.status(200).json({ message: '그룹 삭제가 완료되었습니다.' });
+    } catch (error) {
+      next(error);
+    }
+  };
 };
