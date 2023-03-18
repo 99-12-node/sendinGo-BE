@@ -33,4 +33,10 @@ module.exports = class ClientRepository {
     });
     return deleteData;
   };
+
+  //클라이언트 Id로 조회
+  getClientById = async ({ clientId }) => {
+    const client = await Clients.findByPk(clientId);
+    return client;
+  };
 };
