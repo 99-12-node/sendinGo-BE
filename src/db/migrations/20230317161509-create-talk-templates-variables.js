@@ -12,7 +12,7 @@ module.exports = {
           type: Sequelize.INTEGER,
         },
         talkTemplateId: {
-          type: Sequelize.STRING,
+          type: Sequelize.INTEGER,
           allowNull: false,
           references: {
             model: 'TalkTemplates',
@@ -21,7 +21,7 @@ module.exports = {
           onDelete: 'CASCADE',
         },
         talkVariableId: {
-          type: Sequelize.STRING,
+          type: Sequelize.INTEGER,
           allowNull: false,
           references: {
             model: 'TalkVariables',
