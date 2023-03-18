@@ -5,7 +5,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('TalkVariables', [
       {
-        talkVariableEng: 'companyName',
+        talkVariableEng: 'organizationName',
         talkVariableKor: '회사명',
       },
       {
