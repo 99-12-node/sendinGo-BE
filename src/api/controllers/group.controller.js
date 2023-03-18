@@ -38,6 +38,7 @@ module.exports = class GroupController {
 
   //그룹 삭제
   deleteGroup = async (req, res, next) => {
+    logger.info(`GroupController.deleteGroup Request`);
     const { groupId } = req.params;
 
     try {

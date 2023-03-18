@@ -34,4 +34,10 @@ module.exports = class GroupRepository {
     const deleteGroupData = await Groups.destroy({ where: { groupId } });
     return deleteGroupData;
   };
+
+  //그룹 삭제시, 삭제할 groupId 있는지 찾아보기
+  findGroup = async ({ groupId }) => {
+    const findGroupData = await Groups.findOne({ where: { groupId } });
+    return findGroupData;
+  };
 };
