@@ -44,10 +44,6 @@ module.exports = {
         talkVariableEng: 'name',
         talkVariableKor: '고객명',
       },
-      {
-        talkVariableEng: 'paymentPrice',
-        talkVariableKor: '결제금액',
-      },
     ]);
   },
 
