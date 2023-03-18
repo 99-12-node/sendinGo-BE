@@ -1,10 +1,12 @@
 const jwt = require('jsonwebtoken');
-const { Users } = require('../db/models');
+const { Users, Companies } = require('../db/models');
 const { UnauthorizedError } = require('../exceptions/errors');
+const { logger } = require('../../middlewares/logger');
 require('dotenv').config();
 const { KEY } = process.env;
 
 module.exports = async (req, res, next) => {
+  logger.info(`auth.middleware.module.exports Request`);
   const { authorization } = req.cookies;
   const [tokenType, token] = (authorization ?? '').split(' ');
 
@@ -16,14 +18,19 @@ module.exports = async (req, res, next) => {
   try {
     const decodedToken = jwt.verify(token, KEY);
     const userId = decodedToken.userId;
+    const companyId = decodedToken.companyId;
+    const company = await Companies.findOne({ where: { companyId } });
     const user = await Users.findOne({ where: { userId } });
     if (!user) {
       throw new UnauthorizedError(
         '토큰에 해당하는 사용자가 존재하지 않습니다.'
       );
     }
-
-    res.locals.user = user;
+    if (!company) {
+      throw new UnauthorizedError('토큰에 해당하는 소속이 존재하지 않습니다.');
+    }
+    logger.info(`auth.middleware.user.company Request`);
+    res.locals.user = { user, company };
     next();
   } catch (error) {
     res.clearCookie('authorization');
