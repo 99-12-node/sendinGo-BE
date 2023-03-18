@@ -66,7 +66,7 @@ class UserService {
     const user = await this.userRepository.findUser({ email });
 
     if (user) {
-      throw new BadRequestError('중복 된 이메일이 존재합니다.');
+      throw new Conflict('중복 된 이메일이 존재합니다.');
     }
 
     return;
