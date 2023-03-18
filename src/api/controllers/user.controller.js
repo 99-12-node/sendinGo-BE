@@ -37,12 +37,14 @@ class UserController {
       let expires = new Date();
       expires.setMinutes(expires.getMinutes() + 60);
 
-      const token = jwt.sign({ userId: user.userId }, KEY, {
-        expiresIn: EXPIRE_IN,
-      });
-      res.cookie('authorization', `Bearer ${token}`, {
-        expires: expires,
-      });
+      const token = jwt.sign(
+        { userId: user.userId, companyId: user.companyId },
+        KEY,
+        {
+          expiresIn: EXPIRE_IN,
+        }
+      );
+      res.cookie('authorization', `Bearer ${token}`, { expires });
       res.status(200).json({ message: '로그인이 정상적으로 처리되었습니다.' });
     } catch (e) {
       next(e);
