@@ -62,7 +62,7 @@ class UserRepository {
     }
   };
 
-  findUser = async ({ email }) => {
+  findUserByEmail = async ({ email }) => {
     logger.info(`UserRepository.findUser Request`);
     const user = await Users.findOne({ where: { email } });
 
