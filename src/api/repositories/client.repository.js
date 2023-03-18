@@ -38,17 +38,6 @@ module.exports = class ClientRepository {
     return editClientData;
   };
 
-  //클라이언트 수정시 동일한 번호있는지 확인
-  findOneContact = async ({ contact }) => {
-    logger.info(`ClientRepository.findOneContact Request`);
-    const existContact = await Clients.findOne({
-      where: {
-        contact,
-      },
-    });
-    return existContact;
-  };
-
   //클라이언트 삭제
   deleteClient = async ({ clientId }) => {
     logger.info(`ClientRepository.deleteClient Request`);
