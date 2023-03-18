@@ -1,5 +1,6 @@
 const UserService = require('../services/user.service');
 const { logger } = require('../../middlewares/logger');
+const { UnauthorizedError } = require('../../exceptions/errors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY, EXPIRE_IN } = process.env;
@@ -8,6 +9,27 @@ class UserController {
   constructor() {
     this.userService = new UserService();
   }
+
+  getUser = async (req, res, next) => {
+    logger.info(`UserController.getUser Request`);
+
+    const userId = res.locals.user.userId;
+    const companyId = res.locals.user.companyId;
+    const requestUserId = req.params.userId;
+
+    if (userId !== requestUserId) {
+      throw new UnauthorizedError(
+        '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
+      );
+    }
+
+    const data = await this.userService.getUser({
+      userId,
+      companyId,
+    });
+
+    res.status(200).json({ data });
+  };
 
   createUser = async (req, res, next) => {
     logger.info(`UserController.createUser Request`);

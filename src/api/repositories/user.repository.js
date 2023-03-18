@@ -2,6 +2,15 @@ const { Users, Companies, sequelize } = require('../../db/models');
 const { logger } = require('../../middlewares/logger');
 
 class UserRepository {
+  findUserByUserId = async ({ userId }) => {
+    logger.info(`UserRepository.findUserByUserId Request`);
+    const user = await Users.findOne({
+      attributes: ['name', 'phoneNumber', 'email'],
+      where: { userId },
+    });
+
+    return user;
+  };
   createUser = async ({
     email,
     password,

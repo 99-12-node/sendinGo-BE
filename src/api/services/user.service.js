@@ -12,6 +12,16 @@ class UserService {
     this.companyRepository = new CompanyRepository();
   }
 
+  getUser = async ({ userId, companyId }) => {
+    logger.info(`UserService.getUser Request`);
+    const user = await this.userRepository.findUserByUserId({ userId });
+    const company = await this.companyRepository.findCompanyByCompanyId({
+      companyId,
+    });
+
+    return { user, company };
+  };
+
   createUser = async ({
     email,
     password,
