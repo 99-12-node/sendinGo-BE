@@ -20,6 +20,7 @@ module.exports = class ClientRepository {
 
   //클라이언트 전체 조회
   getAllClient = async () => {
+    logger.info(`ClientRepository.getAllClient Request`);
     const allData = await Clients.findAll({
       attributes: ['clientId', 'clientName', 'contact', 'createdAt'],
     });
@@ -39,6 +40,7 @@ module.exports = class ClientRepository {
 
   //클라이언트 수정시 동일한 번호있는지 확인
   findOneContact = async ({ contact }) => {
+    logger.info(`ClientRepository.findOneContact Request`);
     const existContact = await Clients.findOne({
       where: {
         contact,
@@ -49,6 +51,7 @@ module.exports = class ClientRepository {
 
   //클라이언트 삭제
   deleteClient = async ({ clientId }) => {
+    logger.info(`ClientRepository.deleteClient Request`);
     const deleteData = await Clients.destroy({
       where: { clientId },
     });
