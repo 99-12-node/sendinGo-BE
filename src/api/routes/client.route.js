@@ -6,6 +6,7 @@ const clientController = new ClientController();
 
 router.post('/', clientController.createClient);
 router.get('/', clientController.getAllClient);
+router.patch('/:clientId', clientController.editClientInfo);
 router.delete('/:clientId', clientController.deleteClient);
 
 module.exports = router;
