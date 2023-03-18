@@ -1,5 +1,4 @@
 const { logger } = require('../../middlewares/logger');
-const { Op } = require('sequelize');
 const { Groups, Clients } = require('../../db/models');
 
 module.exports = class GroupRepository {
@@ -30,4 +29,15 @@ module.exports = class GroupRepository {
   };
 
   //그룹 삭제
+  deleteGroup = async ({ groupId }) => {
+    logger.info(`GroupRepository.deleteGroup Request`);
+    const deleteGroupData = await Groups.destroy({ where: { groupId } });
+    return deleteGroupData;
+  };
+
+  //그룹 삭제시, 삭제할 groupId 있는지 찾아보기
+  findGroupId = async ({ groupId }) => {
+    const findGroupData = await Groups.findOne({ where: { groupId } });
+    return findGroupData;
+  };
 };

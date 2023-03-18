@@ -1,5 +1,5 @@
 const { logger } = require('../../middlewares/logger');
-const { BadRequestError } = require('../../exceptions/errors');
+const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
 const GroupRepository = require('../repositories/groups.repository');
 
 module.exports = class GroupService {
@@ -33,4 +33,18 @@ module.exports = class GroupService {
   };
 
   //그룹 삭제
+  //그룹아이디 요청받아서 리포지 그룹아이디 불러봤는데
+  //없는 아이디라면 조회에 실패했다는 에러 메시지 반환
+  deleteGroup = async ({ groupId }) => {
+    logger.info(`GroupService.deleteGroup Request`);
+    const findGroupData = await this.groupRepository.findGroupId({ groupId });
+    if (!findGroupData) {
+      throw new NotFoundError('그룹 조회에 실패하였습니다.');
+    }
+    const deleteGroupData = await this.groupRepository.deleteGroup({
+      groupId,
+    });
+
+    return deleteGroupData;
+  };
 };
