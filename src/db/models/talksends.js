@@ -11,30 +11,32 @@ module.exports = (sequelize, DataTypes) => {
       // this.belongsTo(models.Users, {
       //   targetKey: 'userId',
       //   foreignKey: 'userId',
+      //   onDelete: 'CASCADE',
       // });
-      // this.belongsTo(models.Companies, {
+      // this.belongsTo(models.Users, {
       //   targetKey: 'companyId',
       //   foreignKey: 'companyId',
+      //   onDelete: 'CASCADE',
       // });
-      this.belongsTo(models.Clients, {
+      this.belongsTo(models.TalkContents, {
         targetKey: 'clientId',
         foreignKey: 'clientId',
-        onDelete: 'CASCADE',
+        onDelete: 'NO ACTION',
       });
       this.belongsTo(models.Groups, {
         targetKey: 'groupId',
         foreignKey: 'groupId',
-        onDelete: 'CASCADE',
+        onDelete: 'NO ACTION',
       });
-      this.belongsTo(models.TalkTemplates, {
+      this.belongsTo(models.TalkContents, {
         targetKey: 'talkTemplateId',
         foreignKey: 'talkTemplateId',
-        onDelete: 'CASCADE',
+        onDelete: 'NO ACTION',
       });
       this.belongsTo(models.TalkContents, {
         targetKey: 'talkContentId',
         foreignKey: 'talkContentId',
-        onDelete: 'CASCADE',
+        onDelete: 'NO ACTION',
       });
     }
   }
@@ -95,19 +97,19 @@ module.exports = (sequelize, DataTypes) => {
       //   type: DataTypes.INTEGER,
       //   allowNull: false,
       //   references: {
-      //     model: 'Companies',
+      //     model: 'Users',
       //     key: 'companyId',
       //   },
       //   onDelete: 'CASCADE',
       // },
       groupId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'Groups',
           key: 'groupId',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'NO ACTION',
       },
       talkContentId: {
         type: DataTypes.INTEGER,
@@ -116,25 +118,25 @@ module.exports = (sequelize, DataTypes) => {
           model: 'TalkContents',
           key: 'talkContentId',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'NO ACTION',
       },
       clientId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'Clients',
+          model: 'TalkContents',
           key: 'clientId',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'NO ACTION',
       },
       talkTemplateId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'TalkTemplates',
+          model: 'TalkContents',
           key: 'talkTemplateId',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'NO ACTION',
       },
       createdAt: {
         allowNull: false,
