@@ -46,15 +46,15 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes``.INTEGER,
+        type: DataTypes.INTEGER,
       },
       code: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       message: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       mid: {
         type: DataTypes.INTEGER,
@@ -141,12 +141,12 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
-        defaultValue: DataTypes.fn('now'),
+        defaultValue: DataTypes.NOW,
       },
       updatedAt: {
         allowNull: false,
         type: DataTypes.DATE,
-        defaultValue: DataTypes.fn('now'),
+        defaultValue: DataTypes.NOW,
       },
     },
     {

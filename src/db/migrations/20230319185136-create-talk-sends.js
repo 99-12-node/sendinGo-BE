@@ -11,11 +11,11 @@ module.exports = {
       },
       code: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       message: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       mid: {
         type: Sequelize.INTEGER,
