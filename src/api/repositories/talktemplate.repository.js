@@ -21,7 +21,7 @@ module.exports = class TalkTemplateRepository {
   };
 
   // 템플릿 코드에 맞는 변수 조회
-  getVariablesByCode = async ({ talkTemplateId }) => {
+  getVariablesByTemplateId = async ({ talkTemplateId }) => {
     logger.info(`TalkTemplateRepository.getVariablesByCode Request`);
     try {
       const talkVarialbes = await TalkVariables.findAll({

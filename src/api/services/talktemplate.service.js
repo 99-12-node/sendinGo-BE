@@ -10,8 +10,8 @@ module.exports = class TalkTemplateService {
   }
 
   // 템플릿 데이터 검증
-  verifyTemplateData = async ({ talkTemplateCode, ...talkContentData }) => {
-    logger.info(`TalkTemplateService.getTemplateByCode`);
+  verifyTemplateData = async ({ talkTemplateId, ...talkContentData }) => {
+    logger.info(`TalkTemplateService.verifyTemplateData`);
     // 템플릿 코드로 템플릿 존재여부 확인
     const existedTemplate = await this.talkTemplateRepository.getTemplateByCode(
       {
@@ -22,9 +22,10 @@ module.exports = class TalkTemplateService {
       throw new NotFoundError('템플릿 조회에 실패하였습니다.');
     }
     // 해당 템플릿 변수들 불러오기
-    const variables = await this.talkTemplateRepository.getVariablesByCode({
-      talkTemplateId: existedTemplate.talkTemplateId,
-    });
+    const variables =
+      await this.talkTemplateRepository.getVariablesByTemplateId({
+        talkTemplateId: existedTemplate.talkTemplateId,
+      });
     // 입력 데이터와 템플릿 변수 일치여부 확인
     const result = variables.every((value) => {
       const currentVariable = value['talkVariableEng'];

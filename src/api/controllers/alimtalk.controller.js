@@ -1,13 +1,9 @@
 const { logger } = require('../../middlewares/logger');
 const AlimtalkService = require('../services/alimtalk.service');
-const ClientService = require('../services/client.service');
-const TalkTemplateService = require('../services/talktemplate.service');
 
 module.exports = class AlimtalkController {
   constructor() {
     this.alimtalkService = new AlimtalkService();
-    this.clientService = new ClientService();
-    this.talkTemplateService = new TalkTemplateService();
   }
   // 토큰 생성
   generateSendToken = async (_req, res, next) => {
@@ -26,21 +22,13 @@ module.exports = class AlimtalkController {
     const { clientId, templateCode, ...talkContentData } = req.body;
 
     try {
-      const confirm = await Promise.allSettled([
-        await this.clientService.getClientById({ clientId }),
-        await this.talkTemplateService.verifyTemplateData({
-          talkTemplateCode: templateCode,
-          ...talkContentData,
-        }),
-      ]);
-      if (confirm) {
-        // 알림톡 전송 내용 저장
-        const result = await this.alimtalkService.saveTalkContents({
-          clientId,
-          ...talkContentData,
-        });
-        return res.status(201).json(result);
-      }
+      // 알림톡 전송 내용 저장
+      const result = await this.alimtalkService.saveTalkContents({
+        clientId,
+        talkTemplateCode: templateCode,
+        ...talkContentData,
+      });
+      return res.status(201).json(result);
     } catch (e) {
       next(e);
     }

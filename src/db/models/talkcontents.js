@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'clientId',
         onDelete: 'CASCADE',
       });
+      this.belongsTo(models.TalkTemplates, {
+        sourceKey: 'talkTemplateId',
+        foreignKey: 'talkTemplateId',
+        onDelete: 'CASCADE',
+      });
     }
   }
   TalkContents.init(
@@ -32,6 +37,15 @@ module.exports = (sequelize, DataTypes) => {
           key: 'clientId',
         },
         onDelete: 'CASCADE',
+      },
+      talkTemplateId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'TalkTemplates',
+          key: 'talkTemplateId',
+        },
+        onDelete: 'NO ACTION',
       },
       organizationName: {
         type: DataTypes.STRING,
