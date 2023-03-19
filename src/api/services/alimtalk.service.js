@@ -1,6 +1,10 @@
 const { logger } = require('../../middlewares/logger');
+const ClientRepository = require('../repositories/client.repository');
+const TalkContentRepository = require('../repositories/talkcontent.repository');
+const TalkTemplateRepository = require('../repositories/talktemplate.repository');
 const axios = require('axios');
 const url = require('url');
+const { BadRequestError } = require('../../exceptions/errors');
 require('dotenv').config();
 
 const instance = axios.create({
@@ -22,7 +26,11 @@ const authParams = {
 const COMPANY = 'sendigo';
 
 module.exports = class AlimtalkService {
-  constructor() {}
+  constructor() {
+    this.clientRepositoy = new ClientRepository();
+    this.talkContentRepository = new TalkContentRepository();
+    this.talkTemplateRepository = new TalkTemplateRepository();
+  }
   // 토큰 생성
   generateSendToken = async () => {
     logger.info(`AlimtalkService.generateSendToken`);
@@ -32,6 +40,21 @@ module.exports = class AlimtalkService {
       params.toString()
     );
     return aligoRes.data;
+  };
+
+  // 알림톡 전송 내용 저장
+  saveTalkContents = async ({ clientId, ...talkContentData }) => {
+    logger.info(`AlimtalkService.saveTalkContents`);
+    try {
+      const result = await this.talkContentRepository.createTalkContent({
+        clientId,
+        ...talkContentData,
+      });
+      return { message: '성공적으로 저장 하였습니다.', data: result };
+    } catch (e) {
+      console.error(e);
+      throw new BadRequestError('입력값을 다시 확인해주세요.');
+    }
   };
 
   // 알림톡 전송
