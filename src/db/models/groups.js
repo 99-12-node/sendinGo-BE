@@ -16,6 +16,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'companyId',
         foreignKey: 'companyId',
       });
+      this.hasMany(models.TalkSends, {
+        sourceKey: 'groupId',
+        foreignKey: 'groupId',
+        onDelete: 'NO ACTION',
+      });
     }
   }
   Groups.init(
