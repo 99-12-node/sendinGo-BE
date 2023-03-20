@@ -85,6 +85,13 @@ class UserController {
       next(error);
     }
   };
+
+  deleteUser = async (req, res, next) => {
+    logger.info(`UserController.deleteUser Request`);
+    await this.userService.deleteUser({ userId });
+
+    res.status(200).json({ message: '회원 탈퇴가 완료 되었습니다.' });
+  };
 }
 
 module.exports = UserController;
