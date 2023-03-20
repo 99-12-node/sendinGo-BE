@@ -2,45 +2,20 @@ const { logger } = require('../../middlewares/logger');
 const ClientRepository = require('../repositories/client.repository');
 const TalkContentRepository = require('../repositories/talkcontent.repository');
 const TalkTemplateRepository = require('../repositories/talktemplate.repository');
-const axios = require('axios');
-const url = require('url');
-const { BadRequestError } = require('../../exceptions/errors');
-require('dotenv').config();
-
-const instance = axios.create({
-  baseURL: process.env.ALIGO_BASE_URL,
-  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-});
-
-const noAuthParams = {
-  apikey: process.env.ALIGO_APIKEY,
-  userid: process.env.ALIGO_USERID,
-};
-
-const authParams = {
-  apikey: process.env.ALIGO_APIKEY,
-  userid: process.env.ALIGO_USERID,
-  token: process.env.ALIGO_TOKEN,
-};
-
-const COMPANY = 'sendigo';
+const TalkSendRepository = require('../repositories/talksend.repository');
+const GroupRepository = require('../repositories/groups.repository');
+const AligoService = require('./aligo.service');
+const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
+const aligoService = new AligoService();
 
 module.exports = class AlimtalkService {
   constructor() {
     this.clientRepository = new ClientRepository();
     this.talkContentRepository = new TalkContentRepository();
     this.talkTemplateRepository = new TalkTemplateRepository();
+    this.talkSendRepository = new TalkSendRepository();
+    this.groupRepository = new GroupRepository();
   }
-  // 토큰 생성
-  generateSendToken = async () => {
-    logger.info(`AlimtalkService.generateSendToken`);
-    const params = new URLSearchParams(noAuthParams);
-    const aligoRes = await instance.post(
-      '/akv10/token/create/30/d',
-      params.toString()
-    );
-    return aligoRes.data;
-  };
 
   // 알림톡 전송 내용 저장
   saveTalkContents = async ({
@@ -97,53 +72,73 @@ module.exports = class AlimtalkService {
     }
   };
 
-  // 알림톡 전송
-  sendAlimTalk = async ({ data }) => {
+  // 알림톡 발송
+  sendAlimTalk = async (datas) => {
     logger.info(`AlimtalkService.sendAlimTalk`);
-    console.log('data: ', data);
-    const sendbulkData = {};
-    for (let i = 0; i < data.length; i++) {
-      sendbulkData[`receiver_${i + 1}`] = process.env.RECEIVER_1;
-      sendbulkData[`recvname_${i + 1}`] = data[i]['recvname'];
-      sendbulkData[`subject_${i + 1}`] = data[i]['subject'];
-      sendbulkData[`message_${i + 1}`] = data[i]['message']
-        .replaceAll('#{회사명}', COMPANY)
-        .replaceAll('#{고객명}', data[i]['고객명'])
-        .replaceAll('#{고객명}', data[i]['고객명'])
-        .replaceAll('#{주문번호}', data[i]['주문번호'])
-        .replaceAll('#{구/면}', data[i]['구/면'])
-        .replaceAll('#{동/리}', data[i]['동/리'])
-        .replaceAll('#{월일}', data[i]['월일'])
-        .replaceAll(
-          '#{결제금액}',
-          data[i]['결제금액']
-            .toLocaleString()
-            .replaceAll('#{택배회사명}', data[i]['택배회사명'])
-            .replaceAll('#{택배배송시간}', data[i]['택배배송시간'])
-            .replaceAll('#{송장번호}', data[i]['송장번호'])
-        );
+
+    let talkSendDatas = [];
+    let talkSendParams = [];
+    for (const data of datas) {
+      const { talkContentId, clientId, talkTemplateId, groupId } = data;
+
+      // clientId, talkContentId, talkTemplateId, groupId로 데이터 조회
+      const talkSendPromises = [
+        await this.clientRepository.getClientById({ clientId }),
+        await this.talkContentRepository.getTalkContentById({ talkContentId }),
+        await this.talkTemplateRepository.getTemplateById({ talkTemplateId }),
+        await this.groupRepository.findGroupId({ groupId }),
+      ];
+
+      // 관련 Promise 에러 핸들링
+      const talkSendPromiseData = await Promise.allSettled(talkSendPromises);
+      const rawResult = talkSendPromiseData.map((result, idx) => {
+        if (!result.value || result.status === 'rejected') {
+          throw new NotFoundError(
+            '클라이언트 or 전송내용 or 템플릿 조회를 실패하였습니다.'
+          );
+        }
+        return result;
+      });
+
+      const [client, talkcontent, talkTemplate, group] = talkSendPromises;
+
+      // 위 데이터로 알리고로 전송 요청을 위한 파라미터 만들기
+      const talksendAligoParams = {
+        talkTemplateCode: talkTemplate.talkTemplateCode,
+        receiver: client.contact,
+        recvname: client.clientName,
+        subject: group.groupName,
+        message: talkTemplate.talkTemplateContent,
+        talkSendData: talkcontent,
+      };
+      talkSendDatas.push(talksendAligoParams);
     }
-    console.log('sendbulkData: ', sendbulkData);
 
-    const params = new url.URLSearchParams({
-      ...authParams,
-      senderkey: process.env.ALIGO_SENDERKEY,
-      tpl_code: 'TM_2048',
-      sender: process.env.SENDER,
-      ...sendbulkData,
-    });
+    // 파라미터로 알리고에 알림톡 전송 요청
+    const aligoResult = await aligoService.sendAlimTalk(talkSendDatas);
 
-    const aligoRes = await instance.post(
-      '/akv10/alimtalk/send/',
-      params.toString()
-    );
-    console.log('aligoRes.data', aligoRes.data);
-    const { mid, scnt, fcnt } = aligoRes.data.info;
-    console.log('mid: ', mid, 'scnt: ', scnt, 'fcnt: ', fcnt);
+    // 요청 받은 응답 데이터와 알림톡 전송 파라미터 반환
+    for (const data of datas) {
+      const { talkContentId, clientId, talkTemplateId, groupId } = data;
+      const talkSend = { talkContentId, clientId, talkTemplateId, groupId };
+      talkSendParams.push(talkSend);
+    }
+    return { aligoResult, talkSend: [...talkSendParams] };
+  };
 
-    // 발송결과 DB에 저장
-    // await sendResult.create({ mid, scnt, fcnt });
-    return aligoRes.data;
+  // 알림톡 발송 요청 응답 데이터 저장
+  saveSendAlimTalkResult = async () => {
+    // const newTalkSend = await this.talkSendRepository.createTalkSend({
+    //   talkContentId,
+    //   clientId,
+    //   talkTemplateId,
+    //   groupId,
+    //   code: result.code,
+    //   message: result.message,
+    //   mid: result.info.mid ?? null,
+    //   scnt: result.info.scnt ?? null,
+    //   fcnt: result.info.fcnt ?? null,
+    // });
   };
 
   // 알림톡 전송 결과
@@ -152,6 +147,8 @@ module.exports = class AlimtalkService {
     // const dateFormat = new Date().toISOString().substring(0, 10).replaceAll('-',''); // yyyymmdd
     // const startdate = filter.startdate;
     // const enddate = filter.enddate;
+    return;
+
     const params = new url.URLSearchParams({
       ...authParams,
       //   page: filter.page ?? '1',
@@ -172,20 +169,6 @@ module.exports = class AlimtalkService {
       mbody,
       regdate
     );
-    // 발송결과 DB에 결과 개수만큼 N번 저장
-    // for (let list of aligoRes.data.list) {
-    //   const { mid, sender, msg_count, mbody, regdate } = list;
-    //   console.log(
-    //     'mid, sender, msg_count, mbody, regdate : ',
-    //     mid,
-    //     sender,
-    //     msg_count,
-    //     mbody,
-    //     regdate
-    //   );
-    // await alimTalkResult.create({ mid, sender, msg_count, mbody, regdate });
-    // }
-    return aligoRes.data;
   };
 
   // 알림톡 전송 결과 상세
@@ -213,20 +196,7 @@ module.exports = class AlimtalkService {
       rslt_message,
       message,
     } = aligoRes.data.list[0];
-    console.log(
-      'raligoReses : ',
-      msgid,
-      sender,
-      phone,
-      status,
-      reqdate,
-      sentdate,
-      rsltdate,
-      reportdate,
-      rslt,
-      rslt_message,
-      message
-    );
+
     // 발송결과 DB에 결과 개수만큼 N번 저장
     // for (let data of aligoRes.data.list) {
     // await alimTalkResult.create({ mid, sender, msg_count, mbody, regdate });

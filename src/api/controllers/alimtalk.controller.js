@@ -1,15 +1,17 @@
 const { logger } = require('../../middlewares/logger');
 const AlimtalkService = require('../services/alimtalk.service');
+const AligoService = require('../services/aligo.service');
 
 module.exports = class AlimtalkController {
   constructor() {
     this.alimtalkService = new AlimtalkService();
+    this.aligoService = new AligoService();
   }
   // 토큰 생성
   generateSendToken = async (_req, res, next) => {
     logger.info(`AlimtalkController.generateSendToken`);
     try {
-      const result = await this.alimtalkService.generateSendToken();
+      const result = await this.aligoService.generateSendToken();
       return res.status(200).json({ data: result });
     } catch (e) {
       next(e);
@@ -40,13 +42,34 @@ module.exports = class AlimtalkController {
     }
   };
 
-  // 알림톡 전송
+  // 알림톡 발송
   sendAlimTalk = async (req, res, next) => {
     logger.info(`AlimtalkController.sendAlimTalk`);
-    const { data } = req.body;
+    const datas = req.body.data;
     try {
-      const result = await this.alimtalkService.sendAlimTalk({ data });
-      return res.status(200).json({ data: result });
+      const result = await this.alimtalkService.sendAlimTalk(datas);
+      return res
+        .status(201)
+        .json({ message: '성공적으로 전송 하였습니다.', data: result });
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  // 알림톡 발송 요청 응답 데이터 저장
+  saveSendAlimTalkResult = async (req, res, next) => {
+    logger.info(`AlimtalkController.saveSendAlimTalkResult`);
+    const datas = req.body.data;
+    try {
+      // let result = [];
+      // for (const data of datas) {
+      //   const { talkContentId, clientId, talkTemplateId, groupId } = data;
+      const result = await this.alimtalkService.sendAlimTalk(datas);
+      // result.push(sendRequest);
+      // }
+      return res
+        .status(201)
+        .json({ message: '성공적으로 전송 하였습니다.', data: result });
     } catch (e) {
       next(e);
     }

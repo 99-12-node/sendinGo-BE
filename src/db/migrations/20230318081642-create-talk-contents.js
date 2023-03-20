@@ -25,8 +25,26 @@ module.exports = {
           model: 'TalkTemplates',
           key: 'talkTemplateId',
         },
-        onDelete: 'NO ACTION',
+        onDelete: 'RESTRICT',
       },
+      // userId: {
+      //   allowNull: false,
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //     model: 'Users',
+      //     key: 'userId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
+      // companyId: {
+      //   allowNull: false,
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //     model: 'Companies',
+      //     key: 'companyId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
       organizationName: {
         type: Sequelize.STRING,
         allowNull: true,
