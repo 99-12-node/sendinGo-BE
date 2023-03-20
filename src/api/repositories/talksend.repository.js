@@ -9,6 +9,7 @@ module.exports = class TalkSendRepository {
     talkContentId,
     talkTemplateId,
     groupId,
+    ...aligoData
   }) => {
     logger.info(`TalkSendRepository.createTalkSend Request`);
     try {
@@ -17,6 +18,7 @@ module.exports = class TalkSendRepository {
         talkContentId,
         talkTemplateId,
         groupId,
+        ...aligoData,
       });
       return newTalkSends;
     } catch (e) {

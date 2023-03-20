@@ -123,22 +123,35 @@ module.exports = class AlimtalkService {
       const talkSend = { talkContentId, clientId, talkTemplateId, groupId };
       talkSendParams.push(talkSend);
     }
-    return { aligoResult, talkSend: [...talkSendParams] };
+    return {
+      message: '성공적으로 전송요청 하였습니다.',
+      aligoResult,
+      talkSend: [...talkSendParams],
+    };
   };
 
   // 알림톡 발송 요청 응답 데이터 저장
-  saveSendAlimTalkResult = async () => {
-    // const newTalkSend = await this.talkSendRepository.createTalkSend({
-    //   talkContentId,
-    //   clientId,
-    //   talkTemplateId,
-    //   groupId,
-    //   code: result.code,
-    //   message: result.message,
-    //   mid: result.info.mid ?? null,
-    //   scnt: result.info.scnt ?? null,
-    //   fcnt: result.info.fcnt ?? null,
-    // });
+  saveSendAlimTalkResponse = async ({ data }) => {
+    logger.info(`AlimtalkService.saveSendAlimTalkResponse`);
+    const { aligoResult, talkSend } = data;
+    let result = [];
+    for (const send of talkSend) {
+      const { code, message } = aligoResult;
+      const { talkContentId, clientId, talkTemplateId, groupId } = send;
+      const newTalkSend = await this.talkSendRepository.createTalkSend({
+        talkContentId,
+        clientId,
+        talkTemplateId,
+        groupId,
+        code,
+        message,
+        mid: aligoResult.info.mid,
+        scnt: aligoResult.info.scnt,
+        fcnt: aligoResult.info.fcnt,
+      });
+      result.push(newTalkSend);
+    }
+    return result;
   };
 
   // 알림톡 전송 결과

@@ -28,6 +28,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'talkContentId',
         onDelete: 'RESTRICT',
       });
+      this.belongsTo(models.TalkContents, {
+        targetKey: 'clientId',
+        foreignKey: 'clientId',
+        onDelete: 'RESTRICT',
+      });
+      this.belongsTo(models.TalkContents, {
+        targetKey: 'talkTemplateId',
+        foreignKey: 'talkTemplateId',
+        onDelete: 'RESTRICT',
+      });
     }
   }
   TalkSends.init(
@@ -109,6 +119,24 @@ module.exports = (sequelize, DataTypes) => {
           key: 'talkContentId',
         },
         onDelete: 'NO ACTION',
+      },
+      clientId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Clients',
+          key: 'clientId',
+        },
+        onDelete: 'RESTRICT',
+      },
+      talkTemplateId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'TalkTemplates',
+          key: 'talkTemplateId',
+        },
+        onDelete: 'RESTRICT',
       },
       createdAt: {
         allowNull: false,
