@@ -18,6 +18,29 @@ module.exports = {
         // unique: true, true를 하는 것이 맞지만, 대량 발송 테스트를 위해 주석처리
         allowNull: false,
       },
+      clientEmail: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'userId',
+        },
+        onDelete: 'CASCADE',
+      },
+      companyId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'companyId',
+        },
+        onDelete: 'CASCADE',
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
