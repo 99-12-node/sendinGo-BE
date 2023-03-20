@@ -11,7 +11,10 @@ router.get('/auth', alimtalkController.generateSendToken);
 router.post('/contents', alimtalkController.saveTalkContents);
 
 // 알림톡 보내기
-router.post('/groups', alimtalkController.sendAlimTalk);
+router.post('/send', alimtalkController.sendAlimTalk);
+
+// 알림톡 발송 요청 응답 데이터 저장
+router.post('/send/request', alimtalkController.saveSendAlimTalkResult);
 
 // 알림톡 전송 결과
 router.get('/result/list', alimtalkController.getAlimTalkResult);
