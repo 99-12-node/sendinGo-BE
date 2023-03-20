@@ -104,7 +104,7 @@ module.exports = (sequelize, DataTypes) => {
       // },
       groupId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
           model: 'Groups',
           key: 'groupId',
