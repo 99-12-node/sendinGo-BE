@@ -1,5 +1,9 @@
 const { logger } = require('../../middlewares/logger');
-const { BadRequestError, Conflict } = require('../../exceptions/errors');
+const {
+  BadRequestError,
+  Conflict,
+  NotFoundError,
+} = require('../../exceptions/errors');
 const ClientRepository = require('../repositories/client.repository');
 
 module.exports = class ClientService {
@@ -36,12 +40,7 @@ module.exports = class ClientService {
   //클라이언트 수정
   editClientInfo = async ({ clientId, clientName, contact }) => {
     logger.info(`ClientService.editClientInfo Request`);
-    const existContact = await this.clientRepository.findOneContact({
-      contact,
-    });
-    if (existContact) {
-      throw new Conflict('이미 등록되어있는 번호입니다.');
-    }
+
     const editClientData = await this.clientRepository.editClientInfo({
       clientId,
       clientName,
