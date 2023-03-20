@@ -20,9 +20,14 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'RESTRICT',
       });
       this.hasMany(models.TalkSends, {
-        sourceKey: 'talkContentId',
-        foreignKey: 'talkContentId',
-        onDelete: 'NO ACTION',
+        sourceKey: 'talkTemplateId',
+        foreignKey: 'talkTemplateId',
+        onDelete: 'CASCADE',
+      });
+      this.hasMany(models.TalkSends, {
+        sourceKey: 'clientId',
+        foreignKey: 'clientId',
+        onDelete: 'CASCADE',
       });
       // this.belongsTo(models.Users, {
       //   targetKey: 'userId',
