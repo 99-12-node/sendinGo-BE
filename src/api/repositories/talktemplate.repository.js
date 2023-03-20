@@ -40,4 +40,15 @@ module.exports = class TalkTemplateRepository {
       throw new Error('템플릿에 맞는 변수 조회에 실패하였습니다.');
     }
   };
+  // 템플릿 Id로 조회
+  getTemplateById = async ({ talkTemplateId }) => {
+    logger.info(`TalkTemplateRepository.getTemplateById Request`);
+    const template = await TalkTemplates.findOne({
+      where: { talkTemplateId },
+      attributes: {
+        exclude: ['createdAt', 'updatedAt'],
+      },
+    });
+    return template;
+  };
 };
