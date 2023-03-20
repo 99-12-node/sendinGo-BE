@@ -16,6 +16,30 @@ module.exports = class AlimtalkController {
     }
   };
 
+  // 알림톡 전송 내용 저장
+  saveTalkContents = async (req, res, next) => {
+    logger.info(`AlimtalkController.saveTalkContents`);
+    const datas = req.body.data;
+    try {
+      let result = [];
+      for (const data of datas) {
+        const { clientId, templateCode, ...talkContentData } = data;
+        // 알림톡 전송 내용 저장
+        const createdData = await this.alimtalkService.saveTalkContents({
+          clientId,
+          talkTemplateCode: templateCode,
+          ...talkContentData,
+        });
+        result.push(createdData);
+      }
+      return res
+        .status(201)
+        .json({ message: '성공적으로 저장 하였습니다.', data: result });
+    } catch (e) {
+      next(e);
+    }
+  };
+
   // 알림톡 전송
   sendAlimTalk = async (req, res, next) => {
     logger.info(`AlimtalkController.sendAlimTalk`);
