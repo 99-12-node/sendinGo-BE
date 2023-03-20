@@ -70,7 +70,7 @@ module.exports = class AligoService {
       tpl_code: data[0].talkTemplateCode,
       sender: process.env.SENDER,
       ...sendbulkData,
-      testMode: 'Y',
+      // testMode: 'Y',
     });
 
     // 알리고 알림톡 전송 요청
