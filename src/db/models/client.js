@@ -13,6 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'clientId',
         onDelete: 'CASCADE',
       });
+      this.hasMany(models.TalkSends, {
+        sourceKey: 'clientId',
+        foreignKey: 'clientId',
+        onDelete: 'CASCADE',
+      });
     }
   }
   Clients.init(
@@ -29,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       contact: {
         type: DataTypes.STRING,
-        unique: true,
+        // unique: true, true를 하는 것이 맞지만, 대량 발송 테스트를 위해 주석처리
         allowNull: false,
       },
       createdAt: {

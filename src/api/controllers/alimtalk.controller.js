@@ -1,15 +1,20 @@
 const { logger } = require('../../middlewares/logger');
 const AlimtalkService = require('../services/alimtalk.service');
+const AligoService = require('../services/aligo.service');
+const axios = require('axios');
+require('dotenv').config();
+const { PORT } = process.env;
 
 module.exports = class AlimtalkController {
   constructor() {
     this.alimtalkService = new AlimtalkService();
+    this.aligoService = new AligoService();
   }
   // 토큰 생성
   generateSendToken = async (_req, res, next) => {
     logger.info(`AlimtalkController.generateSendToken`);
     try {
-      const result = await this.alimtalkService.generateSendToken();
+      const result = await this.aligoService.generateSendToken();
       return res.status(200).json({ data: result });
     } catch (e) {
       next(e);
@@ -40,13 +45,42 @@ module.exports = class AlimtalkController {
     }
   };
 
-  // 알림톡 전송
+  // 알림톡 발송
   sendAlimTalk = async (req, res, next) => {
     logger.info(`AlimtalkController.sendAlimTalk`);
-    const { data } = req.body;
+    const datas = req.body.data;
     try {
-      const result = await this.alimtalkService.sendAlimTalk({ data });
-      return res.status(200).json({ data: result });
+      const { message, ...data } = await this.alimtalkService.sendAlimTalk(
+        datas
+      );
+      const redirectSaveResponse = await axios.post(
+        `http://localhost:${PORT}/api/talk/sends/response`,
+        {
+          message,
+          data,
+        }
+      );
+      return res
+        .status(redirectSaveResponse.status)
+        .json(redirectSaveResponse.data);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  // 알림톡 발송 요청 응답 데이터 저장
+  saveSendAlimTalkResponse = async (req, res, next) => {
+    logger.info(`AlimtalkController.saveSendAlimTalkResponse`);
+    const { message, ...data } = req.body;
+    try {
+      if (!data) {
+        return res.status(400).json({ message });
+      }
+      const result = await this.alimtalkService.saveSendAlimTalkResponse(data);
+      return res.status(201).json({
+        message,
+        // data: result,
+      });
     } catch (e) {
       next(e);
     }

@@ -79,7 +79,7 @@ module.exports = {
           model: 'TalkContents',
           key: 'talkContentId',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       clientId: {
         type: Sequelize.INTEGER,
@@ -88,7 +88,7 @@ module.exports = {
           model: 'Clients',
           key: 'clientId',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       talkTemplateId: {
         type: Sequelize.INTEGER,
@@ -97,7 +97,7 @@ module.exports = {
           model: 'TalkTemplates',
           key: 'talkTemplateId',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'RESTRICT',
       },
       createdAt: {
         allowNull: false,
