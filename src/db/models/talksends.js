@@ -18,25 +18,15 @@ module.exports = (sequelize, DataTypes) => {
       //   foreignKey: 'companyId',
       //   onDelete: 'CASCADE',
       // });
-      this.belongsTo(models.TalkContents, {
-        targetKey: 'clientId',
-        foreignKey: 'clientId',
-        onDelete: 'NO ACTION',
-      });
       this.belongsTo(models.Groups, {
         targetKey: 'groupId',
         foreignKey: 'groupId',
-        onDelete: 'NO ACTION',
-      });
-      this.belongsTo(models.TalkContents, {
-        targetKey: 'talkTemplateId',
-        foreignKey: 'talkTemplateId',
-        onDelete: 'NO ACTION',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.TalkContents, {
         targetKey: 'talkContentId',
         foreignKey: 'talkContentId',
-        onDelete: 'NO ACTION',
+        onDelete: 'RESTRICT',
       });
     }
   }
@@ -117,24 +107,6 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: 'TalkContents',
           key: 'talkContentId',
-        },
-        onDelete: 'NO ACTION',
-      },
-      clientId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'TalkContents',
-          key: 'clientId',
-        },
-        onDelete: 'NO ACTION',
-      },
-      talkTemplateId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'TalkContents',
-          key: 'talkTemplateId',
         },
         onDelete: 'NO ACTION',
       },
