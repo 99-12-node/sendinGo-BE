@@ -19,16 +19,22 @@ module.exports = class AlimtalkController {
   // 알림톡 전송 내용 저장
   saveTalkContents = async (req, res, next) => {
     logger.info(`AlimtalkController.saveTalkContents`);
-    const { clientId, templateCode, ...talkContentData } = req.body;
-
+    const datas = req.body.data;
     try {
-      // 알림톡 전송 내용 저장
-      const result = await this.alimtalkService.saveTalkContents({
-        clientId,
-        talkTemplateCode: templateCode,
-        ...talkContentData,
-      });
-      return res.status(201).json(result);
+      let result = [];
+      for (const data of datas) {
+        const { clientId, templateCode, ...talkContentData } = data;
+        // 알림톡 전송 내용 저장
+        const createdData = await this.alimtalkService.saveTalkContents({
+          clientId,
+          talkTemplateCode: templateCode,
+          ...talkContentData,
+        });
+        result.push(createdData);
+      }
+      return res
+        .status(201)
+        .json({ message: '성공적으로 저장 하였습니다.', data: result });
     } catch (e) {
       next(e);
     }

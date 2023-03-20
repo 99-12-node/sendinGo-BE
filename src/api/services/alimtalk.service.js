@@ -69,15 +69,16 @@ module.exports = class AlimtalkService {
             talkTemplateId: template.talkTemplateId,
           });
         // 입력 데이터와 템플릿 변수 일치여부 확인
-        const result = variables.every((value) => {
+        const result = variables.every(async (value) => {
           const currentVariable = value['talkVariableEng'];
           const inputDataArray = Object.keys(talkContentData);
           return inputDataArray.includes(currentVariable);
         });
-        if (!result)
+        if (!result) {
           throw new BadRequestError(
             '입력 데이터가 템플릿과 일치하지 않습니다.'
           );
+        }
         return template.talkTemplateId;
       });
 
@@ -88,7 +89,11 @@ module.exports = class AlimtalkService {
         talkTemplateId,
         ...talkContentData,
       });
-      return { message: '성공적으로 저장 하였습니다.', data: result };
+      return {
+        talkContentId: result.talkContentId,
+        clientId: result.clientId,
+        talkTemplateId: result.talkTemplateId,
+      };
     }
   };
 
