@@ -14,6 +14,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'companyId',
         onDelete: 'CASCADE',
       });
+      this.hasMany(models.TalkSends, {
+        sourceKey: 'userId',
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+      });
+      this.hasMany(models.TalkSends, {
+        sourceKey: 'companyId',
+        foreignKey: 'companyId',
+        onDelete: 'CASCADE',
+      });
     }
   }
   Users.init(
