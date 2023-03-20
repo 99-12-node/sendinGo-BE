@@ -7,11 +7,11 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
       },
       clientId: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: 'Clients',
           key: 'clientId',
@@ -20,7 +20,7 @@ module.exports = {
       },
       talkTemplateId: {
         allowNull: false,
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         references: {
           model: 'TalkTemplates',
           key: 'talkTemplateId',
