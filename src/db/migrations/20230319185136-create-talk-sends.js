@@ -81,6 +81,24 @@ module.exports = {
         },
         onDelete: 'RESTRICT',
       },
+      clientId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Clients',
+          key: 'clientId',
+        },
+        onDelete: 'RESTRICT',
+      },
+      talkTemplateId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'TalkTemplates',
+          key: 'talkTemplateId',
+        },
+        onDelete: 'RESTRICT',
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
