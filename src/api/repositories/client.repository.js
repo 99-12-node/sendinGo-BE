@@ -50,7 +50,10 @@ module.exports = class ClientRepository {
   //클라이언트 Id로 조회
   getClientById = async ({ clientId }) => {
     logger.info(`ClientRepository.getClientById Request`);
-    const client = await Clients.findByPk(clientId);
+    const client = await Clients.findOne({
+      where: { clientId },
+      attributes: ['clientId', 'clientName', 'contact'],
+    });
     return client;
   };
 };
