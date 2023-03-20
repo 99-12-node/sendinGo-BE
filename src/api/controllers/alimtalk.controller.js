@@ -1,6 +1,9 @@
 const { logger } = require('../../middlewares/logger');
 const AlimtalkService = require('../services/alimtalk.service');
 const AligoService = require('../services/aligo.service');
+const axios = require('axios');
+require('dotenv').config();
+const { PORT } = process.env;
 
 module.exports = class AlimtalkController {
   constructor() {
@@ -47,29 +50,37 @@ module.exports = class AlimtalkController {
     logger.info(`AlimtalkController.sendAlimTalk`);
     const datas = req.body.data;
     try {
-      const result = await this.alimtalkService.sendAlimTalk(datas);
+      const { message, ...data } = await this.alimtalkService.sendAlimTalk(
+        datas
+      );
+      const redirectSaveResponse = await axios.post(
+        `http://localhost:${PORT}/api/talk/sends/response`,
+        {
+          message,
+          data,
+        }
+      );
       return res
-        .status(201)
-        .json({ message: '성공적으로 전송 하였습니다.', data: result });
+        .status(redirectSaveResponse.status)
+        .json(redirectSaveResponse.data);
     } catch (e) {
       next(e);
     }
   };
 
   // 알림톡 발송 요청 응답 데이터 저장
-  saveSendAlimTalkResult = async (req, res, next) => {
-    logger.info(`AlimtalkController.saveSendAlimTalkResult`);
-    const datas = req.body.data;
+  saveSendAlimTalkResponse = async (req, res, next) => {
+    logger.info(`AlimtalkController.saveSendAlimTalkResponse`);
+    const { message, ...data } = req.body;
     try {
-      // let result = [];
-      // for (const data of datas) {
-      //   const { talkContentId, clientId, talkTemplateId, groupId } = data;
-      const result = await this.alimtalkService.sendAlimTalk(datas);
-      // result.push(sendRequest);
-      // }
-      return res
-        .status(201)
-        .json({ message: '성공적으로 전송 하였습니다.', data: result });
+      if (!data) {
+        return res.status(400).json({ message });
+      }
+      const result = await this.alimtalkService.saveSendAlimTalkResponse(data);
+      return res.status(201).json({
+        message,
+        // data: result,
+      });
     } catch (e) {
       next(e);
     }
