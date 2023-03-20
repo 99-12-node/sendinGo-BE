@@ -13,8 +13,8 @@ class UserController {
   getUser = async (req, res, next) => {
     logger.info(`UserController.getUser Request`);
 
-    const userId = res.locals.user.userId;
-    const companyId = res.locals.user.companyId;
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const requestUserId = req.params.userId;
 
     if (userId !== requestUserId) {
