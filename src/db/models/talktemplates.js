@@ -8,7 +8,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.TalkTemplates, {
+      this.hasMany(models.TalkTemplatesVariables, {
+        sourceKey: 'talkTemplateId',
+        foreignKey: 'talkTemplateId',
+        onDelete: 'CASCADE',
+      });
+      this.hasOne(models.TalkContents, {
         sourceKey: 'talkTemplateId',
         foreignKey: 'talkTemplateId',
         onDelete: 'CASCADE',

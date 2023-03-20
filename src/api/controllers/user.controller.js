@@ -1,14 +1,38 @@
 const UserService = require('../services/user.service');
+const { logger } = require('../../middlewares/logger');
+const { UnauthorizedError } = require('../../exceptions/errors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY, EXPIRE_IN } = process.env;
 
-class UserCotroller {
+class UserController {
   constructor() {
     this.userService = new UserService();
   }
 
+  getUser = async (req, res, next) => {
+    logger.info(`UserController.getUser Request`);
+
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+    const requestUserId = req.params.userId;
+
+    if (userId !== requestUserId) {
+      throw new UnauthorizedError(
+        '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
+      );
+    }
+
+    const data = await this.userService.getUser({
+      userId,
+      companyId,
+    });
+
+    res.status(200).json({ data });
+  };
+
   createUser = async (req, res, next) => {
+    logger.info(`UserController.createUser Request`);
     const user = req.body;
     try {
       await this.userService.createUser(user);
@@ -18,7 +42,16 @@ class UserCotroller {
     }
   };
 
+  checkUserEmail = async (req, res, next) => {
+    logger.info(`UserController.checkUserEmail Request`);
+    const { email } = req.body;
+    await this.userService.checkUserEmail({ email });
+
+    res.stutus(200).json({ message: '사용가능 한 이메일 입니다.' });
+  };
+
   loginUser = async (req, res, next) => {
+    logger.info(`UserController.loginUser Request`);
     const { email, password } = req.body;
     try {
       const user = await this.userService.loginUser({ email, password });
@@ -26,18 +59,32 @@ class UserCotroller {
       let expires = new Date();
       expires.setMinutes(expires.getMinutes() + 60);
 
-      const token = jwt.sign({ userId: user.email }, KEY, {
-        expiresIn: EXPIRE_IN,
-      });
-
-      res.cookie('authorization', `Bearer ${token}`, {
-        expires: expires,
-      });
+      const token = jwt.sign(
+        { userId: user.userId, companyId: user.companyId },
+        KEY,
+        {
+          expiresIn: EXPIRE_IN,
+        }
+      );
+      res.cookie('authorization', `Bearer ${token}`, { expires });
       res.status(200).json({ message: '로그인이 정상적으로 처리되었습니다.' });
     } catch (e) {
       next(e);
     }
   };
+
+  editUser = async (req, res, next) => {
+    logger.info(`UserController.editUser Request`);
+    const { userId } = res.locals.user;
+    const user = { ...req.body, userId };
+    try {
+      await this.userService.editUser(user);
+
+      res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
-module.exports = UserCotroller;
+module.exports = UserController;

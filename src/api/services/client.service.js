@@ -1,5 +1,9 @@
 const { logger } = require('../../middlewares/logger');
-const { BadRequestError, Conflict } = require('../../exceptions/errors');
+const {
+  BadRequestError,
+  Conflict,
+  NotFoundError,
+} = require('../../exceptions/errors');
 const ClientRepository = require('../repositories/client.repository');
 
 module.exports = class ClientService {
