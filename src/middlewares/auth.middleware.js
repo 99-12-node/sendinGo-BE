@@ -30,7 +30,8 @@ module.exports = async (req, res, next) => {
       throw new UnauthorizedError('토큰에 해당하는 소속이 존재하지 않습니다.');
     }
     logger.info(`auth.middleware.user.company Request`);
-    res.locals.user = { user, company };
+    res.locals.user = user;
+    res.locals.company = company;
     next();
   } catch (error) {
     res.clearCookie('authorization');
