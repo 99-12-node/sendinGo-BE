@@ -7,11 +7,11 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
       },
       clientId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'Clients',
           key: 'clientId',
@@ -20,13 +20,31 @@ module.exports = {
       },
       talkTemplateId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         references: {
           model: 'TalkTemplates',
           key: 'talkTemplateId',
         },
-        onDelete: 'NO ACTION',
+        onDelete: 'RESTRICT',
       },
+      // userId: {
+      //   allowNull: false,
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //     model: 'Users',
+      //     key: 'userId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
+      // companyId: {
+      //   allowNull: false,
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //     model: 'Companies',
+      //     key: 'companyId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
       organizationName: {
         type: Sequelize.STRING,
         allowNull: true,

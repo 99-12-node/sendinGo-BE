@@ -17,23 +17,23 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.TalkTemplates, {
         targetKey: 'talkTemplateId',
         foreignKey: 'talkTemplateId',
-        onDelete: 'CASCADE',
+        onDelete: 'RESTRICT',
       });
       this.hasMany(models.TalkSends, {
         sourceKey: 'talkContentId',
         foreignKey: 'talkContentId',
         onDelete: 'NO ACTION',
       });
-      this.hasMany(models.TalkSends, {
-        sourceKey: 'clientId',
-        foreignKey: 'clientId',
-        onDelete: 'NO ACTION',
-      });
-      this.hasMany(models.TalkSends, {
-        sourceKey: 'talkTemplateId',
-        foreignKey: 'talkTemplateId',
-        onDelete: 'NO ACTION',
-      });
+      // this.belongsTo(models.Users, {
+      //   targetKey: 'userId',
+      //   foreignKey: 'userId',
+      //   onDelete: 'CASCADE',
+      // });
+      // this.belongsTo(models.Companies, {
+      //   targetKey: 'companyId',
+      //   foreignKey: 'companyId',
+      //   onDelete: 'CASCADE',
+      // });
     }
   }
   TalkContents.init(
@@ -60,8 +60,26 @@ module.exports = (sequelize, DataTypes) => {
           model: 'TalkTemplates',
           key: 'talkTemplateId',
         },
-        onDelete: 'NO ACTION',
+        onDelete: 'RESTRICT',
       },
+      // userId: {
+      //   allowNull: false,
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //     model: 'Users',
+      //     key: 'userId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
+      // companyId: {
+      //   allowNull: false,
+      //   type: DataTypes.INTEGER,
+      //   references: {
+      //     model: 'Companies',
+      //     key: 'companyId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
       organizationName: {
         type: DataTypes.STRING,
         allowNull: true,
