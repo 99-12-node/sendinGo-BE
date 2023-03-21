@@ -22,7 +22,7 @@ class UserRepository {
     companyId,
   }) => {
     logger.info(`UserRepository.createUser Request`);
-    await Users.create({
+    const newUser = await Users.create({
       email,
       password,
       phoneNumber,
@@ -32,7 +32,7 @@ class UserRepository {
       status,
       companyId,
     });
-    return;
+    return newUser;
   };
 
   createNewUserAndCompany = async ({
@@ -46,6 +46,7 @@ class UserRepository {
     provider,
     role,
   }) => {
+    logger.info(`UserRepository.createNewUserAndCompany Request`);
     try {
       const result = await sequelize.transaction(async (t) => {
         const newCompany = await Companies.create(
@@ -64,11 +65,11 @@ class UserRepository {
           },
           { transaction: t }
         );
+        return newUser;
       });
-
       return result;
     } catch (e) {
-      throw new Error(e.message);
+      console.error(e);
     }
   };
 
