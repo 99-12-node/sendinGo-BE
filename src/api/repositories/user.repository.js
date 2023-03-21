@@ -87,10 +87,10 @@ class UserRepository {
     return user;
   };
 
-  editUser = async ({ email, password, phoneNumber, name, userId }) => {
+  editUser = async ({ email, password, phoneNumber, name, role, userId }) => {
     logger.info(`UserRepository.editUser Request`);
     const updatedUser = await Users.update(
-      { email, password, phoneNumber, name },
+      { email, password, phoneNumber, name, role },
       { where: { userId } }
     );
     return updatedUser;
