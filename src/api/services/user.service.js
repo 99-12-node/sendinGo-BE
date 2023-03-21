@@ -34,6 +34,7 @@ class UserService {
   }) => {
     try {
       logger.info(`UserService.createUser Request`);
+      let result;
       const salt = await bcrypt.genSalt(SALT);
       const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -42,7 +43,7 @@ class UserService {
       });
 
       if (!existCompany) {
-        await this.userRepository.createNewUserAndCompany({
+        result = await this.userRepository.createNewUserAndCompany({
           email,
           password: hashedPassword,
           companyName,
@@ -54,7 +55,7 @@ class UserService {
           role,
         });
       } else {
-        await this.userRepository.createUser({
+        result = await this.userRepository.createUser({
           email,
           password: hashedPassword,
           phoneNumber,
@@ -64,12 +65,15 @@ class UserService {
           companyId: existCompany.companyId,
         });
       }
-      return;
-    } catch (e) {
-      console.error(e);
-      if (e.message === 'Validation error') {
-        throw new BadRequestError(e.errors[0].message);
+      if (!result) {
+        throw new BadRequestError(result);
       }
+      return result;
+    } catch (e) {
+      console.error(e.errors);
+      throw new BadRequestError(
+        '입력값을 다시 확인해주세요. (가입 이메일이나 소속명, 소속 이메일은 필수이며 중복이 불가합니다.)'
+      );
     }
   };
 
