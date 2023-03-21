@@ -39,6 +39,7 @@ class UserRepository {
     email,
     password,
     companyName,
+    companyEmail,
     companyNumber,
     phoneNumber,
     name,
@@ -48,7 +49,7 @@ class UserRepository {
     try {
       const result = await sequelize.transaction(async (t) => {
         const newCompany = await Companies.create(
-          { companyName, companyNumber },
+          { companyName, companyNumber, companyEmail },
           { transaction: t }
         );
         const newUser = await Users.create(
@@ -91,6 +92,13 @@ class UserRepository {
       { where: { userId } }
     );
     return updatedUser;
+  };
+
+  deleteUser = async ({ userId }) => {
+    logger.info(`UserRepository.deleteUser Request`);
+
+    await Users.destroy({ where: { userId } });
+    return;
   };
 }
 
