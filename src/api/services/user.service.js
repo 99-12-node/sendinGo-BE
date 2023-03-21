@@ -128,6 +128,17 @@ class UserService {
 
     return;
   };
+
+  deleteUser = async (user) => {
+    if (user.role === 0) {
+      await this.userRepository.deleteUser({ userId: user.userId });
+      await this.companyRepository.deleteCompany({ companyId: user.companyId });
+    } else {
+      await this.userRepository.deleteUser({ userId: user.userId });
+    }
+
+    return;
+  };
 }
 
 module.exports = UserService;
