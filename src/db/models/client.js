@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       clientEmail: {
         type: DataTypes.STRING,
-        unique: true,
+        // unique: true, true를 하는 것이 맞지만, 대량 발송 테스트를 위해 주석처리
         allowNull: false,
       },
       // userId: {
