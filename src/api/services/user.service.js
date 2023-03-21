@@ -91,11 +91,13 @@ class UserService {
   loginUser = async ({ email, password }) => {
     logger.info(`UserService.loginUser Request`);
     const user = await this.userRepository.findUserByEmail({ email });
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-    if (!user) {
+    if (user === null) {
       throw new BadRequestError('이메일이 존재하지 않습니다.');
     }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
     if (!isPasswordCorrect) {
       throw new BadRequestError('비밀번호가 일치하지 않습니다.');
     }
