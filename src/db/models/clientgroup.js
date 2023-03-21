@@ -47,9 +47,11 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
       },
     },
+
     {
       sequelize,
       modelName: 'ClientGroups',
+      timestamps: false,
     }
   );
   return ClientGroups;
