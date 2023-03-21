@@ -48,7 +48,7 @@ class UserService {
           phoneNumber,
           provider: 0,
           name,
-          role: 0,
+          role,
         });
       } else {
         await this.userRepository.createUser({
@@ -57,7 +57,7 @@ class UserService {
           phoneNumber,
           provider: 0,
           name,
-          role: 0,
+          role,
           companyId: existCompany.companyId,
         });
       }
@@ -73,7 +73,7 @@ class UserService {
 
   checkUserEmail = async ({ email }) => {
     logger.info(`UserService.checkUserEmail Request`);
-    const user = await this.userRepository.findUser({ email });
+    const user = await this.userRepository.findUserByEmail({ email });
 
     if (user) {
       throw new Conflict('중복 된 이메일이 존재합니다.');
@@ -84,7 +84,7 @@ class UserService {
 
   loginUser = async ({ email, password }) => {
     logger.info(`UserService.loginUser Request`);
-    const user = await this.userRepository.findUser({ email });
+    const user = await this.userRepository.findUserByEmail({ email });
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!user) {
