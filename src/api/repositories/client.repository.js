@@ -8,12 +8,14 @@ module.exports = class ClientRepository {
     //userId,
     clientName,
     contact,
+    clientEmail,
   }) => {
     logger.info(`ClientRepository.createClient Request`);
     const createData = await Clients.create({
       //userId,
       clientName,
       contact,
+      clientEmail,
     });
     return createData;
   };

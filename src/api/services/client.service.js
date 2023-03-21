@@ -15,12 +15,14 @@ module.exports = class ClientService {
     //userId,
     clientName,
     contact,
+    clientEmail,
   }) => {
     logger.info(`ClientService.createClient Request`);
     const createData = await this.clientRepository.createClient({
       //userId
       clientName,
       contact,
+      clientEmail,
     });
     if (!createData) {
       throw new BadRequestError('클라이언트 등록에 실패하였습니다.');
@@ -65,5 +67,31 @@ module.exports = class ClientService {
     // }
 
     return deleteData;
+  };
+
+  // 클라이언트 대량등록
+  createClientBulk = async ({
+    //userId,
+    clientArray,
+  }) => {
+    logger.info(`ClientService.createClientBulk Request`);
+    try {
+      let createClients = [];
+      for (const client of clientArray) {
+        const { clientName, contact, clientEmail } = client;
+        const newClient = await this.clientRepository.createClient({
+          clientName,
+          contact,
+          clientEmail,
+        });
+        if (!newClient) {
+          throw new BadRequestError('클라이언트 대량 등록에 실패하였습니다.');
+        }
+        createClients.push(newClient.clientId);
+      }
+      return createClients;
+    } catch (e) {
+      console.error(e);
+    }
   };
 };
