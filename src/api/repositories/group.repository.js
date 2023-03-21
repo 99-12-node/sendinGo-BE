@@ -1,22 +1,21 @@
 const { logger } = require('../../middlewares/logger');
-const { Groups, Clients } = require('../../db/models');
+const { Groups } = require('../../db/models');
 
 module.exports = class GroupRepository {
   constructor() {}
-  // 클라이언트 그룹 생성
+  //빈 Group 생성
   createGroup = async ({
     //userId,
-    clientId,
     groupName,
     groupDescription,
   }) => {
-    const findClientId = await Clients.findOne({ clientId });
-    const createData = await Groups.create({
-      //userId,
+    const createGroup = await Groups.create({
+      // userId,
       groupName,
       groupDescription,
     });
-    return findClientId, createData;
+
+    return createGroup;
   };
 
   //그룹 전체 조회
@@ -37,7 +36,6 @@ module.exports = class GroupRepository {
 
   //그룹 삭제시, 삭제할 groupId 있는지 찾아보기
   findGroupId = async ({ groupId }) => {
-    logger.info(`GroupRepository.findGroupId Request`);
     const findGroupData = await Groups.findOne({ where: { groupId } });
     return findGroupData;
   };
