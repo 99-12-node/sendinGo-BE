@@ -27,8 +27,10 @@ class UserService {
     password,
     companyName,
     companyNumber,
+    companyEmail,
     phoneNumber,
     name,
+    role,
   }) => {
     try {
       logger.info(`UserService.createUser Request`);
@@ -45,10 +47,11 @@ class UserService {
           password: hashedPassword,
           companyName,
           companyNumber,
+          companyEmail,
           phoneNumber,
           provider: 0,
           name,
-          role: 0,
+          role,
         });
       } else {
         await this.userRepository.createUser({
@@ -57,14 +60,13 @@ class UserService {
           phoneNumber,
           provider: 0,
           name,
-          role: 0,
+          role,
           companyId: existCompany.companyId,
         });
       }
       return;
     } catch (e) {
-      console.error(e.errors[0].message);
-      console.error(e.parent.message);
+      console.error(e);
       if (e.message === 'Validation error') {
         throw new BadRequestError(e.errors[0].message);
       }
@@ -73,7 +75,7 @@ class UserService {
 
   checkUserEmail = async ({ email }) => {
     logger.info(`UserService.checkUserEmail Request`);
-    const user = await this.userRepository.findUser({ email });
+    const user = await this.userRepository.findUserByEmail({ email });
 
     if (user) {
       throw new Conflict('중복 된 이메일이 존재합니다.');
@@ -84,7 +86,7 @@ class UserService {
 
   loginUser = async ({ email, password }) => {
     logger.info(`UserService.loginUser Request`);
-    const user = await this.userRepository.findUser({ email });
+    const user = await this.userRepository.findUserByEmail({ email });
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!user) {

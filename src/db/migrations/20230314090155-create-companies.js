@@ -14,6 +14,11 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      companyEmail: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
       companyNumber: {
         type: Sequelize.STRING,
         allowNull: true,
