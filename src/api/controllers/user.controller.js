@@ -46,9 +46,13 @@ class UserController {
   checkUserEmail = async (req, res, next) => {
     logger.info(`UserController.checkUserEmail Request`);
     const { email } = req.body;
-    await this.userService.checkUserEmail({ email });
+    try {
+      await this.userService.checkUserEmail({ email });
 
-    res.stutus(200).json({ message: '사용가능 한 이메일 입니다.' });
+      res.status(200).json({ message: '사용가능 한 이메일 입니다.' });
+    } catch (e) {
+      next(e);
+    }
   };
 
   loginUser = async (req, res, next) => {
@@ -76,15 +80,13 @@ class UserController {
 
   editUser = async (req, res, next) => {
     logger.info(`UserController.editUser Request`);
-    const { userId } = res.locals.user;
-    const user = { ...req.body, userId };
-    try {
-      await this.userService.editUser(user);
+    const user = res.locals.user;
+    const updateInfo = { ...req.body };
+    const requestData = { user, updateInfo };
 
-      res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
-    } catch (e) {
-      next(e);
-    }
+    await this.userService.editUser(requestData);
+
+    res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
   };
 
   deleteUser = async (req, res, next) => {
