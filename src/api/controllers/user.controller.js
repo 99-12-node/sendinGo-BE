@@ -17,7 +17,7 @@ class UserController {
     const { companyId } = res.locals.company;
     const requestUserId = req.params.userId;
 
-    if (userId !== requestUserId) {
+    if (userId != requestUserId) {
       throw new UnauthorizedError(
         '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
       );
