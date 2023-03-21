@@ -85,17 +85,20 @@ module.exports = class ClientController {
   // 클라이언트 대량등록
   createClientBulk = async (req, res, next) => {
     logger.info(`ClientController.createClientBulk Request`);
-    // const { userId } = res.locals.users;
-    const clientArray = req.body.data;
-
     try {
+      // const { userId } = res.locals.users;
+      const { data } = req.body;
+      if (!data || Object.keys(data).length === 0) {
+        throw new BadRequestError('입력 값을 확인해주세요.');
+      }
+
       const newClients = await this.clientService.createClientBulk({
         //userId,
-        clientArray,
+        data,
       });
 
       return res.status(201).json({
-        clientIds: newClients,
+        newClients,
         message: '대량 등록이 완료되었습니다.',
       });
     } catch (error) {
