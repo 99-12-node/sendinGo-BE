@@ -40,6 +40,7 @@ class UserRepository {
     password,
     companyName,
     companyNumber,
+    companyEmail,
     phoneNumber,
     name,
     provider,
@@ -48,7 +49,7 @@ class UserRepository {
     try {
       const result = await sequelize.transaction(async (t) => {
         const newCompany = await Companies.create(
-          { companyName, companyNumber },
+          { companyName, companyNumber, companyEmail },
           { transaction: t }
         );
         const newUser = await Users.create(

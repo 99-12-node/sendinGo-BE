@@ -27,8 +27,10 @@ class UserService {
     password,
     companyName,
     companyNumber,
+    companyEmail,
     phoneNumber,
     name,
+    role,
   }) => {
     try {
       logger.info(`UserService.createUser Request`);
@@ -45,6 +47,7 @@ class UserService {
           password: hashedPassword,
           companyName,
           companyNumber,
+          companyEmail,
           phoneNumber,
           provider: 0,
           name,
@@ -63,8 +66,7 @@ class UserService {
       }
       return;
     } catch (e) {
-      console.error(e.errors[0].message);
-      console.error(e.parent.message);
+      console.error(e);
       if (e.message === 'Validation error') {
         throw new BadRequestError(e.errors[0].message);
       }
