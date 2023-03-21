@@ -41,7 +41,6 @@ class UserRepository {
     companyName,
     companyEmail,
     companyNumber,
-    companyEmail,
     phoneNumber,
     name,
     provider,
