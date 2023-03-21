@@ -74,13 +74,14 @@ class UserRepository {
   };
 
   findUserByEmail = async ({ email }) => {
-    logger.info(`UserRepository.findUser Request`);
+    logger.info(`UserRepository.findUserByEmail Request`);
     const user = await Users.findOne({ where: { email } });
 
     return user;
   };
+
   findByUserId = async ({ userId }) => {
-    logger.info(`UserRepository.findUser Request`);
+    logger.info(`UserRepository.findByUserId Request`);
     const user = await Users.findOne({ where: { userId } });
 
     return user;
