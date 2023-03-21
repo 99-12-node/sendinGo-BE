@@ -34,6 +34,7 @@ class UserController {
   createUser = async (req, res, next) => {
     logger.info(`UserController.createUser Request`);
     const user = req.body;
+
     try {
       await this.userService.createUser(user);
       res.status(201).json({ message: '회원가입이 완료 되었습니다.' });
@@ -81,14 +82,15 @@ class UserController {
       await this.userService.editUser(user);
 
       res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
-    } catch (error) {
-      next(error);
+    } catch (e) {
+      next(e);
     }
   };
 
   deleteUser = async (req, res, next) => {
     logger.info(`UserController.deleteUser Request`);
-    await this.userService.deleteUser({ userId });
+    const user = res.locals.user;
+    await this.userService.deleteUser(user);
 
     res.status(200).json({ message: '회원 탈퇴가 완료 되었습니다.' });
   };

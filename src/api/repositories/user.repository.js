@@ -39,8 +39,8 @@ class UserRepository {
     email,
     password,
     companyName,
-    companyNumber,
     companyEmail,
+    companyNumber,
     phoneNumber,
     name,
     provider,
@@ -93,6 +93,13 @@ class UserRepository {
       { where: { userId } }
     );
     return updatedUser;
+  };
+
+  deleteUser = async ({ userId }) => {
+    logger.info(`UserRepository.deleteUser Request`);
+
+    await Users.destroy({ where: { userId } });
+    return;
   };
 }
 

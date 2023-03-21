@@ -37,6 +37,12 @@ class CompanyRepository {
 
     return;
   };
+
+  deleteCompany = async ({ companyId }) => {
+    await Companies.destory({ where: { companyId } });
+
+    return;
+  };
 }
 
 module.exports = CompanyRepository;
