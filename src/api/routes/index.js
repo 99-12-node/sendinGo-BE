@@ -5,11 +5,13 @@ const userRouter = require('./user.route');
 const clientRouter = require('./client.route');
 const alimtalkRouter = require('./alimtalk.route');
 const groupRouter = require('./group.route');
+const clientGroupRouter = require('./clientGroup.route');
 
 router.use('/talk', [alimtalkRouter]);
 router.use('/clients', [clientRouter]);
 router.use('/users', [userRouter]);
 router.use('/groups', [groupRouter]);
+router.use('/batch', [clientGroupRouter]);
 
 router.get('/', (_req, res) => {
   res.send('정상적으로 요청되었습니다.');

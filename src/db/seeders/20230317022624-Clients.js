@@ -3,20 +3,22 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkInsert('Groups', [
+    await queryInterface.bulkInsert('Clients', [
       {
-        groupName: '회사1 관리자 테스트',
-        groupDescription: '테스트1',
+        clientName: '일고객',
+        contact: '01012121212',
+        clientEmail: 'client1@clinet.com',
         // userId: 1,
         // companyId: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        groupName: '회사2 관리자 테스트',
-        groupDescription: '회원2 회사2 테스트',
-        // userId: 2,
-        // companyId: 2,
+        clientName: '이고객',
+        contact: '01021212121',
+        clientEmail: 'client2@clinet.com',
+        // userId: 1,
+        // companyId: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -24,6 +26,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Groups', null, {});
+    await queryInterface.bulkDelete('Clients', null, {});
   },
 };
