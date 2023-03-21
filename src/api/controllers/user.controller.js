@@ -83,10 +83,13 @@ class UserController {
     const user = res.locals.user;
     const updateInfo = { ...req.body };
     const requestData = { user, updateInfo };
+    try {
+      await this.userService.editUser(requestData);
 
-    await this.userService.editUser(requestData);
-
-    res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
+      res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
+    } catch (e) {
+      next(e);
+    }
   };
 
   deleteUser = async (req, res, next) => {
