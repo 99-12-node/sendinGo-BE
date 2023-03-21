@@ -17,6 +17,7 @@ class CompanyRepository {
     const newCompany = await Companies.create({
       companyName,
       companyNumber,
+      companyEmail,
     });
     return newCompany;
   };
@@ -28,10 +29,15 @@ class CompanyRepository {
     return company;
   };
 
-  editCompany = async ({ companyName, companyNumber, companyId }) => {
+  editCompany = async ({
+    companyName,
+    companyNumber,
+    companyEmail,
+    companyId,
+  }) => {
     logger.info(`CompanyRepository.editCompany Request`);
     await Companies.update(
-      { companyName, companyNumber },
+      { companyName, companyNumber, companyEmail },
       { where: { companyId } }
     );
 
