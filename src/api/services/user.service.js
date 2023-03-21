@@ -27,6 +27,7 @@ class UserService {
     password,
     companyName,
     companyNumber,
+    companyEmail,
     phoneNumber,
     name,
   }) => {
@@ -45,6 +46,7 @@ class UserService {
           password: hashedPassword,
           companyName,
           companyNumber,
+          companyEmail,
           phoneNumber,
           provider: 0,
           name,
