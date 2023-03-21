@@ -43,11 +43,11 @@ class UserController {
     }
   };
 
-  checkExistEmail = async (req, res, next) => {
+  checkUserEmail = async (req, res, next) => {
     logger.info(`UserController.checkUserEmail Request`);
     const { email } = req.body;
     try {
-      await this.userService.checkExistEmail({ email });
+      await this.userService.checkUserEmail({ email });
 
       res.status(200).json({ message: '사용가능 한 이메일 입니다.' });
     } catch (e) {
