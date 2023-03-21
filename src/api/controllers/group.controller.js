@@ -6,17 +6,17 @@ module.exports = class GroupController {
     this.groupService = new GroupService();
   }
 
-  // 클라이언트 그룹 생성
+  //빈 Group 생성 //groupId 반환
   createGroup = async (req, res, next) => {
-    //const {userId} = res.locals.users;
-    const { clientId, groupName, gruopDescription } = req.body;
+    logger.info(`GroupController.createGroup Request`);
+    // const { userId } = res.locals.users;
+    const { groupName, groupDescription } = req.body;
 
     try {
       await this.groupService.createGroup({
-        //userId
-        clientId,
+        // userId,
         groupName,
-        gruopDescription,
+        groupDescription,
       });
       res.status(201).json({ message: '그룹 생성이 완료되었습니다.' });
     } catch (error) {
