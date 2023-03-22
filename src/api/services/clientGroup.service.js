@@ -1,6 +1,5 @@
 const { logger } = require('../../middlewares/logger');
 const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
-
 const ClientGroupRepository = require('../repositories/clientGroup.repository');
 const GroupRepository = require('../repositories/group.repository');
 const ClientReposiory = require('../repositories/client.repository');
@@ -103,23 +102,21 @@ module.exports = class ClientGroupService {
     return result;
   };
 
-  //ClientGroup 클라이언트의 이동
-  //ClientGroup1의 clientId를 찾아서 있으면 ClientGroup1 삭제
-  //ClientGroup.clientId를 요청받은 groupId와 ClientGroup2 생성!
-  moveClientId = async ({ clientId, groupId }) => {
-    logger.info(`ClientGrouopService.moveClientId Request`);
-    const existClientId = await this.clientGroupRepository.findClientId({
-      clientId,
-    });
-
-    if (!existClientId) {
-      throw new error('이동실패');
-      await this.ClientGroupRepository.deleteClientGroup({ clientId });
-      await this.clientGroupRepository.createClientGroup({
+  // ClientGroup 복사
+  copyClientGroup = async ({ clientId, groupId }) => {
+    logger.info(`ClientGrouopService.copyClientGroup Request`);
+    const existClientGroup =
+      await this.clientGroupRepository.getClientGroupById({
         clientId,
         groupId,
       });
-      return '됐다';
+    if (existClientGroup) {
+      throw new BadRequestError('이미 존재하는 그룹입니다.');
+    } else {
+      const newClientGroup = await this.clientGroupRepository.createClientGroup(
+        { clientId, groupId }
+      );
+      return newClientGroup;
     }
   };
 
