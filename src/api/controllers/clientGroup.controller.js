@@ -13,14 +13,19 @@ module.exports = class ClientGroupController {
     const { groupId, clientId } = req.params;
 
     try {
-      const newGroup = await this.clientGroupService.createClientGroup({
+      const result = await this.clientGroupService.createClientGroup({
         groupId,
         clientId,
       });
 
+      if (!result.groupId) {
+        return res.status(200).json({
+          message: '그룹 해제가 완료되었습니다.',
+        });
+      }
       return res.status(201).json({
-        groupId: newGroup.groupId,
-        message: '등록이 완료되었습니다.',
+        groupId: result.groupId,
+        message: '그룹 추가가 완료되었습니다.',
       });
     } catch (error) {
       next(error);
