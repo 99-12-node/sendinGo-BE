@@ -5,20 +5,11 @@ class CompanyRepository {
   findCompanyByCompanyId = async ({ companyId }) => {
     logger.info(`CompanyRepository.findCompanyByCompanyId Request`);
     const company = await Companies.findOne({
-      attributes: ['companyName', 'companyNumber'],
+      attributes: ['companyName', 'companyNumber', 'companyEmail'],
       where: { companyId },
     });
 
     return company;
-  };
-
-  createCompany = async ({ companyName, companyNumber }) => {
-    logger.info(`CompanyRepository.createCompany Request`);
-    const newCompany = await Companies.create({
-      companyName,
-      companyNumber,
-    });
-    return newCompany;
   };
 
   findCompanyByName = async ({ companyName }) => {
@@ -28,10 +19,15 @@ class CompanyRepository {
     return company;
   };
 
-  editCompany = async ({ companyName, companyNumber, companyId }) => {
+  editCompany = async ({
+    companyName,
+    companyNumber,
+    companyEmail,
+    companyId,
+  }) => {
     logger.info(`CompanyRepository.editCompany Request`);
     await Companies.update(
-      { companyName, companyNumber },
+      { companyName, companyNumber, companyEmail },
       { where: { companyId } }
     );
 
@@ -39,7 +35,7 @@ class CompanyRepository {
   };
 
   deleteCompany = async ({ companyId }) => {
-    await Companies.destory({ where: { companyId } });
+    await Companies.destroy({ where: { companyId } });
 
     return;
   };

@@ -74,22 +74,23 @@ class UserRepository {
   };
 
   findUserByEmail = async ({ email }) => {
-    logger.info(`UserRepository.findUser Request`);
+    logger.info(`UserRepository.findUserByEmail Request`);
     const user = await Users.findOne({ where: { email } });
 
     return user;
   };
+
   findByUserId = async ({ userId }) => {
-    logger.info(`UserRepository.findUser Request`);
+    logger.info(`UserRepository.findByUserId Request`);
     const user = await Users.findOne({ where: { userId } });
 
     return user;
   };
 
-  editUser = async ({ email, password, phoneNumber, name, userId }) => {
+  editUser = async ({ email, password, phoneNumber, name, role, userId }) => {
     logger.info(`UserRepository.editUser Request`);
     const updatedUser = await Users.update(
-      { email, password, phoneNumber, name },
+      { email, password, phoneNumber, name, role },
       { where: { userId } }
     );
     return updatedUser;
