@@ -94,7 +94,7 @@ module.exports = class ClientController {
 
       const newClients = await this.clientService.createClientBulk({
         //userId,
-        data,
+        clientArray: data,
       });
 
       return res.status(201).json({
