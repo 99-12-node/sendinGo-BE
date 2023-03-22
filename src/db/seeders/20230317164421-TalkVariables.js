@@ -41,7 +41,7 @@ module.exports = {
         talkVariableKor: '송장번호',
       },
       {
-        talkVariableEng: 'name',
+        talkVariableEng: 'customerName',
         talkVariableKor: '고객명',
       },
     ]);

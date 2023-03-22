@@ -48,7 +48,7 @@ module.exports = class AligoService {
       sendbulkData[`subject_${i + 1}`] = data[i].subject;
       sendbulkData[`message_${i + 1}`] = data[i].message
         .replaceAll('#{회사명}', talkVariableValue.organizationName)
-        .replaceAll('#{고객명}', talkVariableValue.clientName)
+        .replaceAll('#{고객명}', talkVariableValue.customerName)
         .replaceAll('#{주문번호}', talkVariableValue.orderNumber)
         .replaceAll('#{구/면}', talkVariableValue.region)
         .replaceAll('#{동/리}', talkVariableValue.regionDetail)
@@ -56,10 +56,11 @@ module.exports = class AligoService {
         .replaceAll(
           '#{결제금액}',
           talkVariableValue.paymentPrice
-            .toLocaleString()
-            .replaceAll('#{택배회사명}', talkVariableValue.deliveryCompany)
-            .replaceAll('#{택배배송시간}', talkVariableValue.deliveryTime)
-            .replaceAll('#{송장번호}', talkVariableValue.deliveryNumber)
+            ? talkVariableValue.paymentPrice.toLocaleString()
+            : ''
+                .replaceAll('#{택배회사명}', talkVariableValue.deliveryCompany)
+                .replaceAll('#{택배배송시간}', talkVariableValue.deliveryTime)
+                .replaceAll('#{송장번호}', talkVariableValue.deliveryNumber)
         );
     }
 
