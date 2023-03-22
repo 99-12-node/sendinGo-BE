@@ -49,6 +49,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      customerName: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       orderNumber: {
         type: Sequelize.STRING,
         allowNull: true,

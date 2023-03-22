@@ -91,11 +91,13 @@ class UserService {
   loginUser = async ({ email, password }) => {
     logger.info(`UserService.loginUser Request`);
     const user = await this.userRepository.findUserByEmail({ email });
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-    if (!user) {
+    if (user === null) {
       throw new BadRequestError('이메일이 존재하지 않습니다.');
     }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
     if (!isPasswordCorrect) {
       throw new BadRequestError('비밀번호가 일치하지 않습니다.');
     }
@@ -103,39 +105,44 @@ class UserService {
     return user;
   };
 
-  editUser = async ({
-    email,
-    password,
-    companyName,
-    companyNumber,
-    phoneNumber,
-    name,
-    userId,
-  }) => {
-    logger.info(`UserService.editUser ${email}Request`);
+  editUser = async (requestData) => {
+    logger.info(`UserService.editUser Request`);
+
+    const { user, updateInfo } = requestData;
+
     const salt = await bcrypt.genSalt(SALT);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    await this.userRepository.editUser({
-      email,
-      password: hashedPassword,
-      phoneNumber,
-      name,
-      userId,
-    });
-
-    const updatedUser = await this.userRepository.findByUserId({ userId });
-
-    await this.companyRepository.editCompany({
-      companyName,
-      companyNumber,
-      companyId: updatedUser.companyId,
-    });
-
+    const hashedPassword = await bcrypt.hash(updateInfo.password, salt);
+    if (user.role === 0) {
+      await this.userRepository.editUser({
+        userId: user.userId,
+        name: updateInfo.name,
+        email: updateInfo.email,
+        password: hashedPassword,
+        phoneNumber: updateInfo.phoneNumber,
+        role: updateInfo.role,
+      });
+      await this.companyRepository.editCompany({
+        companyId: user.companyId,
+        companyName: updateInfo.companyName,
+        companyNumber: updateInfo.companyNumber,
+        companyEmail: updateInfo.companyEmail,
+      });
+    } else {
+      await this.userRepository.editUser({
+        userId: user.userId,
+        name: updateInfo.name,
+        email: updateInfo.email,
+        password: hashedPassword,
+        phoneNumber: updateInfo.phoneNumber,
+        role: updateInfo.role,
+      });
+    }
     return;
   };
 
   deleteUser = async (user) => {
+    logger.info(`UserService.deleteUser Request`);
+
     if (user.role === 0) {
       await this.userRepository.deleteUser({ userId: user.userId });
       await this.companyRepository.deleteCompany({ companyId: user.companyId });
