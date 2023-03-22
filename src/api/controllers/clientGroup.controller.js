@@ -61,4 +61,22 @@ module.exports = class ClientGroupController {
       next(error);
     }
   };
+  // ClientGroup 복사
+  copyClientGroup = async (req, res, next) => {
+    logger.info(`ClientGroupController.copyClientGroup Request`);
+    const { clientId, groupId } = req.params;
+
+    try {
+      await this.clientGroupService.copyClientGroup({
+        clientId,
+        groupId,
+      });
+
+      return res.status(201).json({
+        message: '클라이언트 복사가 완료되었습니다.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 };

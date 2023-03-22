@@ -9,6 +9,11 @@ router.post(
   clientGroupController.createClientGroup
 );
 
+router.post(
+  '/clients/:clientId/groups/:groupId/copy',
+  clientGroupController.copyClientGroup
+);
+
 router.post('/groups/:groupId', clientGroupController.createClientGroupBulk);
 
 module.exports = router;

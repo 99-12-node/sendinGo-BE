@@ -1,11 +1,10 @@
 const { logger } = require('../../middlewares/logger');
 const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
-
 const ClientGroupRepository = require('../repositories/clientGroup.repository');
 const GroupRepository = require('../repositories/group.repository');
 const ClientReposiory = require('../repositories/client.repository');
 
-module.exports = class ClientCroupService {
+module.exports = class ClientGroupService {
   constructor() {
     this.clientGroupRepository = new ClientGroupRepository();
     this.groupRepository = new GroupRepository();
@@ -101,5 +100,35 @@ module.exports = class ClientCroupService {
     }
 
     return result;
+  };
+
+  // ClientGroup 복사
+  copyClientGroup = async ({ clientId, groupId }) => {
+    logger.info(`ClientGrouopService.copyClientGroup Request`);
+    const existClientGroup =
+      await this.clientGroupRepository.getClientGroupById({
+        clientId,
+        groupId,
+      });
+    if (existClientGroup) {
+      throw new BadRequestError('이미 존재하는 그룹입니다.');
+    } else {
+      const newClientGroup = await this.clientGroupRepository.createClientGroup(
+        { clientId, groupId }
+      );
+      return newClientGroup;
+    }
+  };
+
+  // ClientGroup 삭제
+  deleteClientGroup = async ({ groupId, clientId }) => {
+    logger.info(`ClientGroupService.deleteClientGroup Request`);
+    const clientGroupData = await this.clientGroupRepository.deleteClientGroup({
+      groupId,
+      clientId,
+    });
+    if (!clientGroupData) {
+      throw new BadRequestError('기존 그룹에서 삭제에 실패하였습니다.”');
+    }
   };
 };
