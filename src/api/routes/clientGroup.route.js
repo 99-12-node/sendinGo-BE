@@ -10,5 +10,14 @@ router.post(
 );
 
 router.post('/groups/:groupId', clientGroupController.createClientGroupBulk);
+router.post(
+  '/clients/:clientId/groups/:groupId/move',
+  clientGroupController.moveClientId
+);
+
+router.delete(
+  '/clients/:clientId/groups/:groupId',
+  clientGroupController.deleteClientGroup
+);
 
 module.exports = router;
