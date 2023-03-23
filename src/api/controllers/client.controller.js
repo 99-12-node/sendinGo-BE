@@ -42,6 +42,16 @@ module.exports = class ClientController {
     }
   };
 
+  //그룹별 클라이언트 조회
+  getClientByGroup = async (req, res, next) => {
+    logger.info(`ClientController.getClientByGroup Request`);
+    const { groupId } = req.query;
+
+    const result = await this.clientService.getClientByGroup({ groupId });
+
+    res.status(200).json({ data: result });
+  };
+
   //클라이언트 수정
   editClientInfo = async (req, res, next) => {
     logger.info(`ClientController.editClientInfo Request`);
