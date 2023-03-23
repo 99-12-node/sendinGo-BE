@@ -7,8 +7,8 @@ const { KEY } = process.env;
 
 module.exports = async (req, res, next) => {
   logger.info(`auth.middleware.module.exports Request`);
-  const { authorization } = req.cookies;
-  const [tokenType, token] = (authorization ?? '').split(' ');
+  const { Authorization } = req.cookies;
+  const [tokenType, token] = (Authorization ?? '').split(' ');
 
   if (tokenType !== 'Bearer' || !token) {
     throw new UnauthorizedError(
