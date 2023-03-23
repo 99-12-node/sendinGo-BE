@@ -1,6 +1,6 @@
 const { logger } = require('../../middlewares/logger');
 const ClientGroupService = require('../services/clientGroup.service');
-const { BadRequestError } = require('../../middlewares/error.middleware');
+const { BadRequestError } = require('../../exceptions/errors');
 
 module.exports = class ClientGroupController {
   constructor() {
@@ -75,6 +75,39 @@ module.exports = class ClientGroupController {
       return res.status(201).json({
         message: '클라이언트 복사가 완료되었습니다.',
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // 신규 그룹에 ClientGroup 대량등록 / 해제
+  createNewClientGroupBulk = async (req, res, next) => {
+    logger.info(`ClientGroupController.createNewClientGroupBulk Request`);
+    // const { userId } = res.locals.user;
+    const { clientIds, groupName, groupDescription } = req.body;
+    console.log('req.body:', req.body);
+
+    try {
+      if (!(clientIds && groupName) || clientIds.length < 1) {
+        throw new BadRequestError('입력 값을 확인해주세요.');
+      }
+
+      const result = await this.clientGroupService.createNewClientGroupBulk({
+        // userId,
+        clientIds,
+        groupName,
+        groupDescription,
+      });
+      if (!result.groupId) {
+        return res.status(200).json({
+          message: '신규 그룹에 클라이언트 해제가 완료되었습니다.',
+        });
+      } else {
+        return res.status(201).json({
+          groupId: result.groupId,
+          message: '신규 그룹에 클라이언트 추가가 완료되었습니다.',
+        });
+      }
     } catch (error) {
       next(error);
     }
