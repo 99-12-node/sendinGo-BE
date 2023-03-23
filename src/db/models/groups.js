@@ -21,9 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'groupId',
         onDelete: 'NO ACTION',
       });
-      this.belongsToMany(models.Clients, {
-        through: 'ClientGroups',
+      this.hasMany(models.ClientGroups, {
+        sourceKey: 'groupId',
         foreignKey: 'groupId',
+        onDelete: 'CASCADE',
       });
     }
   }

@@ -1,6 +1,6 @@
 const { logger } = require('../../middlewares/logger');
 const { Groups, Clients, ClientGroups } = require('../../db/models');
-const GroupRepository = require('./group.repository');
+const parseSequelizePrettier = require('../../helpers/parse.sequelize');
 
 module.exports = class ClientRepository {
   constructor() {}
@@ -22,35 +22,54 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 전체 조회
-  getAllClient = async () => {
-    logger.info(`ClientRepository.getAllClient Request`);
+  getAllClients = async () => {
+    logger.info(`ClientRepository.getAllClients Request`);
     const allData = await Clients.findAll({
-      attributes: ['clientId', 'clientName', 'contact', 'createdAt'],
-    });
+      attributes: {
+        exclude: ['updatedAt'],
+      },
+      include: [
+        {
+          model: ClientGroups,
+          attributes: ['groupId'],
+          include: [
+            {
+              model: Groups,
+              attributes: ['groupName'],
+            },
+          ],
+        },
+      ],
+      order: [['clientName', 'ASC']],
+      raw: true,
+    }).then((model) => model.map(parseSequelizePrettier));
     return allData;
   };
 
-  //ClientGroup안에그룹Id있는지
-  getGroupId = async ({ groupId }) => {
-    logger.info(`ClientRepository.getGroupId Request`);
-    const result = await ClientGroups.findOne({
-      where: { groupId },
-    });
-    return result;
-  };
-
-  //그룹별 클라이언트 조회
-  getClientByGroup = async ({ groupId }) => {
-    logger.info(`ClientRepository.getClientByGroup Request`);
-    const clientList = await Groups.findOne({
-      where: { groupId },
-      attributes: ['groupDescription'],
-      include: {
-        model: Clients,
-        attributes: ['clientName', 'contact', 'createdAt'],
+  //클라이언트 그룹별 조회
+  getClientsByGroup = async ({ groupId }) => {
+    logger.info(`ClientRepository.getClientsByGroup Request`);
+    const allData = await Clients.findAll({
+      attributes: {
+        exclude: ['updatedAt'],
       },
-    });
-    return clientList;
+      include: [
+        {
+          model: ClientGroups,
+          attributes: ['groupId'],
+          where: { groupId },
+          include: [
+            {
+              model: Groups,
+              attributes: ['groupName'],
+            },
+          ],
+        },
+      ],
+      order: [['clientName', 'ASC']],
+      raw: true,
+    }).then((model) => model.map(parseSequelizePrettier));
+    return allData;
   };
 
   //클라이언트 수정
