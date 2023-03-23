@@ -131,4 +131,63 @@ module.exports = class ClientGroupService {
       throw new BadRequestError('기존 그룹에서 삭제에 실패하였습니다.”');
     }
   };
+
+  // 신규 그룹에 ClientGroup 대량등록
+  createNewClientGroupBulk = async ({
+    // userId,
+    clientIds,
+    groupName,
+    groupDescription,
+  }) => {
+    logger.info(`ClientGrouopService.createNewClientGroupBulk Request`);
+
+    // 신규 그룹 생성
+    const newGroup = await this.groupRepository.createGroup({
+      //userId,
+      groupName,
+      groupDescription,
+    });
+    const groupId = newGroup.groupId;
+    console.log('groupId : ', groupId);
+
+    let result;
+    for (const clientId of clientIds) {
+      // clientId 존재여부 확인
+      const existClient = await this.clientRepository.getClientById({
+        clientId,
+      });
+      if (!existClient) {
+        throw new NotFoundError('클라이언트 조회에 실패했습니다.');
+      }
+
+      // 기존 등록 여부 확인
+      const existClientGroup =
+        await this.clientGroupRepository.getClientGroupById({
+          groupId,
+          clientId,
+        });
+
+      // 등록된 경우, 해제
+      if (existClientGroup) {
+        const destoryResult =
+          await this.clientGroupRepository.deleteClientGroup({
+            groupId,
+            clientId,
+          });
+
+        result = { destoryResult };
+      } else {
+        // 등록되지 않은 경우, 추가
+        const clientGroupData =
+          await this.clientGroupRepository.createClientGroup({
+            groupId,
+            clientId,
+          });
+
+        result = { groupId };
+      }
+    }
+
+    return result;
+  };
 };
