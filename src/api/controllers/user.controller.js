@@ -71,7 +71,7 @@ class UserController {
           expiresIn: EXPIRE_IN,
         }
       );
-      res.cookie('authorization', `Bearer ${token}`, { expires });
+      res.cookie('Authorization', `Bearer ${token}`, { expires });
       res.status(200).json({ message: '로그인이 정상적으로 처리되었습니다.' });
     } catch (e) {
       next(e);
