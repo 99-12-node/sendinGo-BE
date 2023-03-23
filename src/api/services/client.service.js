@@ -39,6 +39,19 @@ module.exports = class ClientService {
     return allData;
   };
 
+  //그룹별 클라이언트 조회
+  getClientByGroup = async ({ groupId }) => {
+    logger.info(`ClientService.getClientByGroup Request`);
+
+    const clientList = await this.clientRepository.getClientByGroup({
+      groupId,
+    });
+    if (!clientList) {
+      throw new BadRequestError('그룹 상세 조회에 실패하였습니다.');
+    }
+    return { clientList };
+  };
+
   //클라이언트 수정
   editClientInfo = async ({ clientId, clientName, contact }) => {
     logger.info(`ClientService.editClientInfo Request`);

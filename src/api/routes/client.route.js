@@ -6,7 +6,10 @@ const clientController = new ClientController();
 
 router.post('/', clientController.createClient);
 router.post('/bulk', clientController.createClientBulk);
+
 router.get('/', clientController.getAllClient);
+router.get('/', clientController.getClientByGroup);
+
 router.patch('/:clientId', clientController.editClientInfo);
 router.delete('/:clientId', clientController.deleteClient);
 

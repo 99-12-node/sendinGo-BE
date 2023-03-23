@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'groupId',
         onDelete: 'NO ACTION',
       });
+      this.belongsToMany(models.Clients, {
+        through: 'ClientGroups',
+        foreignKey: 'groupId',
+      });
     }
   }
   Groups.init(
