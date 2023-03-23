@@ -5,7 +5,7 @@ const { Op } = require('sequelize');
 module.exports = class ClientGroupRepository {
   constructor() {}
 
-  //ClientGroup 생성
+  // ClientGroup 생성
   createClientGroup = async ({ groupId, clientId }) => {
     logger.info(`ClientGroupRepository.createClientGroup Request`);
     const clientGroupData = await ClientGroups.create({

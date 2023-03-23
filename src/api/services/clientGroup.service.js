@@ -1,11 +1,10 @@
 const { logger } = require('../../middlewares/logger');
 const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
-
 const ClientGroupRepository = require('../repositories/clientGroup.repository');
 const GroupRepository = require('../repositories/group.repository');
 const ClientReposiory = require('../repositories/client.repository');
 
-module.exports = class ClientCroupService {
+module.exports = class ClientGroupService {
   constructor() {
     this.clientGroupRepository = new ClientGroupRepository();
     this.groupRepository = new GroupRepository();
@@ -98,6 +97,76 @@ module.exports = class ClientCroupService {
 
         result = { groupId };
       }
+    }
+
+    return result;
+  };
+
+  // ClientGroup 복사
+  copyClientGroup = async ({ clientId, groupId }) => {
+    logger.info(`ClientGrouopService.copyClientGroup Request`);
+    const existClientGroup =
+      await this.clientGroupRepository.getClientGroupById({
+        clientId,
+        groupId,
+      });
+    if (existClientGroup) {
+      throw new BadRequestError('이미 존재하는 그룹입니다.');
+    } else {
+      const newClientGroup = await this.clientGroupRepository.createClientGroup(
+        { clientId, groupId }
+      );
+      return newClientGroup;
+    }
+  };
+
+  // ClientGroup 삭제
+  deleteClientGroup = async ({ groupId, clientId }) => {
+    logger.info(`ClientGroupService.deleteClientGroup Request`);
+    const clientGroupData = await this.clientGroupRepository.deleteClientGroup({
+      groupId,
+      clientId,
+    });
+    if (!clientGroupData) {
+      throw new BadRequestError('기존 그룹에서 삭제에 실패하였습니다.”');
+    }
+  };
+
+  // 신규 그룹에 ClientGroup 대량등록
+  createNewClientGroupBulk = async ({
+    // userId,
+    clientIds,
+    groupName,
+    groupDescription,
+  }) => {
+    logger.info(`ClientGrouopService.createNewClientGroupBulk Request`);
+
+    // 신규 그룹 생성
+    const newGroup = await this.groupRepository.createGroup({
+      //userId,
+      groupName,
+      groupDescription,
+    });
+    const groupId = newGroup.groupId;
+
+    let result;
+    for (const clientId of clientIds) {
+      // clientId 존재여부 확인
+      const existClient = await this.clientRepository.getClientById({
+        clientId,
+      });
+      if (!existClient) {
+        throw new NotFoundError('클라이언트 조회에 실패했습니다.');
+      }
+
+      // 새로운 그룹에 클라이언트 추가
+      const clientGroupData =
+        await this.clientGroupRepository.createClientGroup({
+          groupId,
+          clientId,
+        });
+
+      result = { groupId };
     }
 
     return result;

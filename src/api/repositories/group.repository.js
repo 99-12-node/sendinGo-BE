@@ -3,6 +3,7 @@ const { Groups } = require('../../db/models');
 
 module.exports = class GroupRepository {
   constructor() {}
+
   //빈 Group 생성
   createGroup = async ({
     //userId,
