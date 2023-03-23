@@ -160,32 +160,14 @@ module.exports = class ClientGroupService {
         throw new NotFoundError('클라이언트 조회에 실패했습니다.');
       }
 
-      // 기존 등록 여부 확인
-      const existClientGroup =
-        await this.clientGroupRepository.getClientGroupById({
+      // 새로운 그룹에 클라이언트 추가
+      const clientGroupData =
+        await this.clientGroupRepository.createClientGroup({
           groupId,
           clientId,
         });
 
-      // 등록된 경우, 해제
-      if (existClientGroup) {
-        const destoryResult =
-          await this.clientGroupRepository.deleteClientGroup({
-            groupId,
-            clientId,
-          });
-
-        result = { destoryResult };
-      } else {
-        // 등록되지 않은 경우, 추가
-        const clientGroupData =
-          await this.clientGroupRepository.createClientGroup({
-            groupId,
-            clientId,
-          });
-
-        result = { groupId };
-      }
+      result = { groupId };
     }
 
     return result;

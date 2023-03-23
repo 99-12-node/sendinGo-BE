@@ -80,7 +80,7 @@ module.exports = class ClientGroupController {
     }
   };
 
-  // 신규 그룹에 ClientGroup 대량등록 / 해제
+  // 신규 그룹에 ClientGroup 대량 등록
   createNewClientGroupBulk = async (req, res, next) => {
     logger.info(`ClientGroupController.createNewClientGroupBulk Request`);
     // const { userId } = res.locals.user;
@@ -98,16 +98,11 @@ module.exports = class ClientGroupController {
         groupName,
         groupDescription,
       });
-      if (!result.groupId) {
-        return res.status(200).json({
-          message: '신규 그룹에 클라이언트 해제가 완료되었습니다.',
-        });
-      } else {
-        return res.status(201).json({
-          groupId: result.groupId,
-          message: '신규 그룹에 클라이언트 추가가 완료되었습니다.',
-        });
-      }
+
+      return res.status(201).json({
+        groupId: result.groupId,
+        message: '신규 그룹에 클라이언트 추가가 완료되었습니다.',
+      });
     } catch (error) {
       next(error);
     }
