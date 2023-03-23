@@ -16,8 +16,8 @@ module.exports = class GroupService {
     if (!groupName) {
       throw new BadRequestError('그룹 이름은 필수 항목입니다.');
     }
-    if (groupName.trim().length < 2 || groupDescription.length < 2) {
-      throw new BadRequestError('그룹이름과 설명은 2글자 이상 입력해주세요.');
+    if (groupName.trim().length < 2) {
+      throw new BadRequestError('그룹이름은 2글자 이상 입력해주세요.');
     }
     const groupData = await this.groupRepository.createGroup({
       // userId,
@@ -35,7 +35,9 @@ module.exports = class GroupService {
   getAllGroup = async () => {
     logger.info(`GroupService.getAllGroup Request`);
     const allGroupData = await this.groupRepository.getAllGroup();
-
+    if (!allGroupData) {
+      throw new BadRequestError('그룹 조회에 실패하였습니다.');
+    }
     return allGroupData;
   };
 
@@ -44,7 +46,7 @@ module.exports = class GroupService {
     logger.info(`GroupService.deleteGroup Request`);
     const findGroupData = await this.groupRepository.findGroupId({ groupId });
     if (!findGroupData) {
-      throw new NotFoundError('그룹 조회에 실패하였습니다.');
+      throw new NotFoundError('그룹 삭제에 실패하였습니다.');
     }
     const deleteGroupData = await this.groupRepository.deleteGroup({
       groupId,

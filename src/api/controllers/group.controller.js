@@ -1,3 +1,4 @@
+const { BadRequestError } = require('../../exceptions/errors');
 const { logger } = require('../../middlewares/logger');
 const GroupService = require('../services/group.service');
 
@@ -18,12 +19,10 @@ module.exports = class GroupController {
         groupName,
         groupDescription,
       });
-      res
-        .status(201)
-        .json({
-          groupId: groupData.groupId,
-          message: '그룹 생성이 완료되었습니다.',
-        });
+      res.status(201).json({
+        groupId: groupData.groupId,
+        message: '그룹 생성이 완료되었습니다.',
+      });
     } catch (error) {
       next(error);
     }
@@ -45,6 +44,9 @@ module.exports = class GroupController {
   deleteGroup = async (req, res, next) => {
     logger.info(`GroupController.deleteGroup Request`);
     const { groupId } = req.params;
+    if (!/^\d+$/.test(groupId)) {
+      throw new BadRequestError('유효하지않은 파라미터 요청입니다.');
+    }
 
     try {
       await this.groupService.deleteGroup({ groupId });
