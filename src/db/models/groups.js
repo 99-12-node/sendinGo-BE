@@ -21,6 +21,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'groupId',
         onDelete: 'NO ACTION',
       });
+      this.hasMany(models.ClientGroups, {
+        sourceKey: 'groupId',
+        foreignKey: 'groupId',
+        onDelete: 'CASCADE',
+      });
     }
   }
   Groups.init(

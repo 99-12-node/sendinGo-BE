@@ -30,11 +30,14 @@ module.exports = class ClientController {
     }
   };
 
-  //클라이언트 전체 조회
-  getAllClient = async (req, res, next) => {
-    logger.info(`ClientController.getAllClient Request`);
+  //클라이언트 조회 (쿼리로 조건 조회)
+  getClients = async (req, res, next) => {
+    logger.info(`ClientController.getClients Request`);
+    // const { userId } = res.locals.user;
+    // const { companyId } = res.locals.company;
+    const { groupId } = req.query;
     try {
-      const allData = await this.clientService.getAllClient();
+      const allData = await this.clientService.getClients({ groupId });
 
       return res.status(200).json({ data: allData });
     } catch (error) {

@@ -5,10 +5,12 @@ const {
   NotFoundError,
 } = require('../../exceptions/errors');
 const ClientRepository = require('../repositories/client.repository');
+const GroupRepository = require('../repositories/group.repository');
 
 module.exports = class ClientService {
   constructor() {
     this.clientRepository = new ClientRepository();
+    this.groupRepository = new GroupRepository();
   }
   // 클라이언트 등록
   createClient = async ({
@@ -30,12 +32,19 @@ module.exports = class ClientService {
     return createData;
   };
 
-  //클라이언트 전체 조회
-  getAllClient = async () => {
-    logger.info(`ClientService.getAllClient Request`);
+  //클라이언트 조회 (쿼리로 조건 조회)
+  getClients = async ({ groupId }) => {
+    logger.info(`ClientService.getClients Request`);
 
-    const allData = await this.clientRepository.getAllClient();
-
+    if (!groupId) {
+      const allData = await this.clientRepository.getAllClients();
+      return allData;
+    }
+    const existGroup = await this.groupRepository.findGroupId({ groupId });
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패하였습니다.');
+    }
+    const allData = await this.clientRepository.getClientsByGroup({ groupId });
     return allData;
   };
 
