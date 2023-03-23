@@ -89,9 +89,15 @@ module.exports = class AlimtalkController {
   // 알림톡 전송 결과
   getAlimTalkResult = async (req, res, next) => {
     logger.info(`AlimtalkController.getAlimTalkResult`);
-    // const filter = req.query;
+    const { page, limit, startdate, enddate } = req.query;
+
     try {
-      const result = await this.alimtalkService.getAlimTalkResult();
+      const result = await this.aligoService.getAlimTalkResult({
+        page: page ?? 1,
+        limit: limit ?? 50,
+        startdate: startdate ?? '',
+        enddate: enddate ?? '',
+      });
       return res.status(200).json({ data: result });
     } catch (e) {
       next(e);

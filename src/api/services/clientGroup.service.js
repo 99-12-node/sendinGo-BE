@@ -148,7 +148,6 @@ module.exports = class ClientGroupService {
       groupDescription,
     });
     const groupId = newGroup.groupId;
-    console.log('groupId : ', groupId);
 
     let result;
     for (const clientId of clientIds) {
