@@ -1,5 +1,6 @@
 const { logger } = require('../../middlewares/logger');
-const { Clients } = require('../../db/models');
+const { Groups, Clients, ClientGroups } = require('../../db/models');
+const GroupRepository = require('./group.repository');
 
 module.exports = class ClientRepository {
   constructor() {}
@@ -27,6 +28,29 @@ module.exports = class ClientRepository {
       attributes: ['clientId', 'clientName', 'contact', 'createdAt'],
     });
     return allData;
+  };
+
+  //ClientGroup안에그룹Id있는지
+  getGroupId = async ({ groupId }) => {
+    logger.info(`ClientRepository.getGroupId Request`);
+    const result = await ClientGroups.findOne({
+      where: { groupId },
+    });
+    return result;
+  };
+
+  //그룹별 클라이언트 조회
+  getClientByGroup = async ({ groupId }) => {
+    logger.info(`ClientRepository.getClientByGroup Request`);
+    const clientList = await Groups.findOne({
+      where: { groupId },
+      attributes: ['groupDescription'],
+      include: {
+        model: Clients,
+        attributes: ['clientName', 'contact', 'createdAt'],
+      },
+    });
+    return clientList;
   };
 
   //클라이언트 수정
