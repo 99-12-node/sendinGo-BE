@@ -13,6 +13,12 @@ module.exports = class GroupService {
     groupDescription,
   }) => {
     logger.info(`GroupService.createGroup Request`);
+    if (!groupName) {
+      throw new BadRequestError('그룹 이름은 필수 항목입니다.');
+    }
+    if (groupName.trim().length < 2 || groupDescription.length < 2) {
+      throw new BadRequestError('그룹이름과 설명은 2글자 이상 입력해주세요.');
+    }
     const groupData = await this.groupRepository.createGroup({
       // userId,
       groupName,

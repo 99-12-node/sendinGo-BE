@@ -13,12 +13,17 @@ module.exports = class GroupController {
     const { groupName, groupDescription } = req.body;
 
     try {
-      await this.groupService.createGroup({
+      const groupData = await this.groupService.createGroup({
         // userId,
         groupName,
         groupDescription,
       });
-      res.status(201).json({ message: '그룹 생성이 완료되었습니다.' });
+      res
+        .status(201)
+        .json({
+          groupId: groupData.groupId,
+          message: '그룹 생성이 완료되었습니다.',
+        });
     } catch (error) {
       next(error);
     }
