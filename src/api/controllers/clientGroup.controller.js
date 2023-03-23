@@ -85,7 +85,6 @@ module.exports = class ClientGroupController {
     logger.info(`ClientGroupController.createNewClientGroupBulk Request`);
     // const { userId } = res.locals.user;
     const { clientIds, groupName, groupDescription } = req.body;
-    console.log('req.body:', req.body);
 
     try {
       if (!(clientIds && groupName) || clientIds.length < 1) {
