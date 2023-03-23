@@ -16,4 +16,6 @@ router.post(
 
 router.post('/groups/:groupId', clientGroupController.createClientGroupBulk);
 
+router.post('/groups', clientGroupController.createNewClientGroupBulk);
+
 module.exports = router;
