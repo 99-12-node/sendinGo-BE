@@ -1,5 +1,5 @@
 const { logger } = require('../../middlewares/logger');
-const { Groups } = require('../../db/models');
+const { Groups, ClientGroups, sequelize } = require('../../db/models');
 
 module.exports = class GroupRepository {
   constructor() {}
@@ -23,7 +23,19 @@ module.exports = class GroupRepository {
   getAllGroup = async () => {
     logger.info(`GroupRepository.getAllGroup Request`);
     const allGroupData = await Groups.findAll({
-      attributes: ['groupId', 'groupName', 'createdAt'],
+      attributes: [
+        'groupId',
+        'groupName',
+        'createdAt',
+        [sequelize.fn('COUNT', sequelize.col('clientId')), 'clientCount'],
+      ],
+      include: [
+        {
+          model: ClientGroups,
+          attributes: [],
+        },
+      ],
+      group: ['Groups.groupId'],
     });
     return allGroupData;
   };
