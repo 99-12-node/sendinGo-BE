@@ -38,7 +38,8 @@ module.exports = class ClientService {
 
     if (!groupId) {
       const allData = await this.clientRepository.getAllClients();
-      return allData;
+      const clientCount = await this.clientRepository.getAllClientsCount();
+      return { clients: allData, clientCount };
     }
     const existGroup = await this.groupRepository.findGroupId({ groupId });
     if (!existGroup) {
