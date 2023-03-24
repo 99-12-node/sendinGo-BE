@@ -12,6 +12,13 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY, EXPIRE_IN } = process.env;
 
+const emailValidation =
+  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const passwordValidation =
+  /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,20}$/;
+const nameValidation = /^[a-zA-Z가-힣\s]+$/;
+const phoneNumberValidation = /^[0-9]{10,11}$/;
+
 class UserController {
   constructor() {
     this.userService = new UserService();
@@ -50,12 +57,6 @@ class UserController {
   createUser = async (req, res, next) => {
     logger.info(`UserController.createUser Request`);
     const user = req.body;
-    const emailValidation =
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const passwordValidation =
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,20}$/;
-    const nameValidation = /^[a-zA-Z가-힣\s]+$/;
-    const phoneNumberValidation = /^[0-9]{10,11}$/;
 
     try {
       if (
@@ -102,6 +103,9 @@ class UserController {
     logger.info(`UserController.checkUserEmail Request`);
     const { email } = req.body;
     try {
+      if (!emailValidation.test(email)) {
+        throw new BadRequestError('이메일 형식에 맞춰 입력 바랍니다.');
+      }
       await this.userService.checkUserEmail({ email });
 
       res.status(200).json({ message: '사용가능 한 이메일 입니다.' });
@@ -114,6 +118,17 @@ class UserController {
     logger.info(`UserController.loginUser Request`);
     const { email, password } = req.body;
     try {
+      if (!email || !password) {
+        throw new BadRequestError('이메일 비밀번호를 모두 입력해야 합니다.');
+      }
+      if (!emailValidation.test(email)) {
+        throw new BadRequestError('이메일 형식에 맞춰 입력 바랍니다.');
+      }
+      if (!passwordValidation.test(password)) {
+        throw new BadRequestError(
+          '비밀번호는 영문 대/소문자, 숫자 각 1자리 이상 포함한 8~20자리 조합입니다.'
+        );
+      }
       const user = await this.userService.loginUser({ email, password });
 
       let expires = new Date();
