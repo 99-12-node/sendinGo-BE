@@ -200,8 +200,15 @@ class UserController {
   deleteUser = async (req, res, next) => {
     logger.info(`UserController.deleteUser Request`);
     const user = res.locals.user;
+    const requestUserId = parseInt(req.params.userId);
 
     try {
+      if (user.userId !== requestUserId) {
+        throw new ForbiddenError(
+          '요청하신 회원의 정보와 토큰의 정보가 일치 하지않아 탈퇴가 불가합니다.'
+        );
+      }
+
       await this.userService.deleteUser(user);
 
       res.status(200).json({ message: '회원 탈퇴가 완료 되었습니다.' });
