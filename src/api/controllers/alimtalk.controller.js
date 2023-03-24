@@ -2,6 +2,7 @@ const { logger } = require('../../middlewares/logger');
 const AlimtalkService = require('../services/alimtalk.service');
 const AligoService = require('../services/aligo.service');
 const axios = require('axios');
+const { BadRequestError } = require('../../exceptions/errors');
 require('dotenv').config();
 const { PORT } = process.env;
 
@@ -106,7 +107,6 @@ module.exports = class AlimtalkController {
         }
       );
 
-      // return res.status(200).json({ data: result });
       return res
         .status(redirectSaveResult.status)
         .json(redirectSaveResult.data);
@@ -137,10 +137,14 @@ module.exports = class AlimtalkController {
     }
   };
 
+  // 알림톡 전송 결과 상세
   getAlimTalkDetailResult = async (req, res, next) => {
     logger.info(`AlimtalkController.getAlimTalkDetailResult`);
     const { mid } = req.query;
     try {
+      if (!mid) {
+        throw new BadRequestError('입력값을 확인해주세요.');
+      }
       const result = await this.aligoService.getAlimTalkDetailResult({
         mid,
       });
