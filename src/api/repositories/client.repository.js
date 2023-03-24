@@ -1,5 +1,5 @@
 const { logger } = require('../../middlewares/logger');
-const { Groups, Clients, ClientGroups } = require('../../db/models');
+const { Groups, Clients, ClientGroups, sequelize } = require('../../db/models');
 const parseSequelizePrettier = require('../../helpers/parse.sequelize');
 
 module.exports = class ClientRepository {
@@ -100,5 +100,12 @@ module.exports = class ClientRepository {
       attributes: ['clientId', 'clientName', 'contact'],
     });
     return client;
+  };
+
+  //클라이언트 전체 인원 조회
+  getAllClientsCount = async () => {
+    logger.info(`ClientRepository.getAllClientsCount Request`);
+    const count = await Clients.count({});
+    return count;
   };
 };
