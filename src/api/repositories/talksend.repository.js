@@ -1,5 +1,6 @@
 const { logger } = require('../../middlewares/logger');
-const { TalkSends } = require('../../db/models');
+const { TalkSends, Groups } = require('../../db/models');
+const parseSequelizePrettier = require('../../helpers/parse.sequelize');
 
 module.exports = class TalkSendRepository {
   constructor() {}
@@ -53,8 +54,29 @@ module.exports = class TalkSendRepository {
     logger.info(`TalkSendRepository.saveTalkSendById Request`);
     const talkSend = await TalkSends.findOne({
       where: { mid },
-      attributes: { exclude: ['companyId', 'userId'] },
-    });
+      attributes: {
+        // 필요 컬럼: talkSendId, groupId, groupName, mid, scnt, fcnt, msgCount, sendState, sendDate
+        exclude: [
+          'code',
+          'message',
+          'msgContent',
+          'talkContentId',
+          'companyId',
+          'userId',
+          'createdAt',
+          'updatedAt',
+          'clientId',
+          'talkTemplateId',
+        ],
+      },
+      include: [
+        {
+          model: Groups,
+          attributes: ['groupName'],
+        },
+      ],
+      raw: true,
+    }).then((model) => (model ? parseSequelizePrettier(model) : null));
     return talkSend;
   };
 };
