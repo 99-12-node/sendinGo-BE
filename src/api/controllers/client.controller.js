@@ -15,7 +15,7 @@ module.exports = class ClientController {
 
     try {
       const newClient = await this.clientService.createClient({
-        //userId,
+        // userId,
         clientName,
         contact,
         clientEmail,
@@ -49,16 +49,14 @@ module.exports = class ClientController {
   editClientInfo = async (req, res, next) => {
     logger.info(`ClientController.editClientInfo Request`);
     const { clientId } = req.params;
-    const { clientName, contact } = req.body;
+    const { clientName, contact, clientEmail } = req.body;
 
     try {
-      if (!clientName || !contact) {
-        throw new BadRequestError('정보를 입력해주세요.');
-      }
       await this.clientService.editClientInfo({
         clientId,
         clientName,
         contact,
+        clientEmail,
       });
 
       return res.status(200).json({ message: '수정이 완료되었습니다.' });

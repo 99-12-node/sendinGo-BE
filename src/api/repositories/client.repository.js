@@ -13,7 +13,7 @@ module.exports = class ClientRepository {
   }) => {
     logger.info(`ClientRepository.createClient Request`);
     const createData = await Clients.create({
-      //userId,
+      // userId,
       clientName,
       contact,
       clientEmail,
@@ -73,10 +73,10 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 수정
-  editClientInfo = async ({ clientId, clientName, contact }) => {
+  editClientInfo = async ({ clientId, clientName, contact, clientEmail }) => {
     logger.info(`ClientRepository.editClientInfo Request`);
     const editClientData = await Clients.update(
-      { clientName, contact },
+      { clientName, contact, clientEmail },
       { where: { clientId } }
     );
 
