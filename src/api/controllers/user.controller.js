@@ -1,6 +1,13 @@
 const UserService = require('../services/user.service');
+const _ = require('lodash');
 const { logger } = require('../../middlewares/logger');
-const { UnauthorizedError } = require('../../exceptions/errors');
+const {
+  BadRequestError,
+  UnauthorizedError,
+  ForbiddenError,
+  NotFoundError,
+  Conflict,
+} = require('../../exceptions/errors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY, EXPIRE_IN } = process.env;
@@ -18,15 +25,21 @@ class UserController {
     const requestUserId = parseInt(req.params.userId);
     try {
       if (userId !== requestUserId) {
-        throw new UnauthorizedError(
+        throw new ForbiddenError(
           '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
         );
       }
-
+      if (!userId) {
+        throw new UnauthorizedError('로그인이 필요합니다.');
+      }
       const data = await this.userService.getUser({
         userId,
         companyId,
       });
+
+      if (!data) {
+        throw new NotFoundError('요청한 사용자 정보가 존재하지 않습니다.');
+      }
 
       res.status(200).json({ data });
     } catch (e) {
@@ -37,8 +50,47 @@ class UserController {
   createUser = async (req, res, next) => {
     logger.info(`UserController.createUser Request`);
     const user = req.body;
+    const emailValidation =
+      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const passwordValidation =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,20}$/;
+    const nameValidation = /^[a-zA-Z가-힣\s]+$/;
+    const phoneNumberValidation = /^[0-9]{10,11}$/;
 
     try {
+      if (
+        _.isEmpty(user) ||
+        _.some(
+          [
+            'email',
+            'password',
+            'name',
+            'phoneNumber',
+            'companyName',
+            'companyEmail',
+            'companyNumber',
+          ],
+          (field) => !user[field]
+        )
+      ) {
+        throw new BadRequestError('필수 정보를 모두 입력해주세요.');
+      }
+      if (!emailValidation.test(user.email)) {
+        throw new BadRequestError('이메일 형식에 맞춰 입력 바랍니다.');
+      }
+      if (!passwordValidation.test(user.password)) {
+        throw new BadRequestError(
+          '비밀번호는 영문 대/소문자, 숫자 각 1자리 이상 포함한 8~20자리 조합입니다.'
+        );
+      }
+      if (!nameValidation.test(user.name)) {
+        throw new BadRequestError('이름 입력란을 다시 확인해주세요.');
+      }
+      if (!phoneNumberValidation.test(user.phoneNumber)) {
+        throw new BadRequestError(
+          '핸드폰 번호는 - 를 제외한 10~11 자리 입니다.'
+        );
+      }
       await this.userService.createUser(user);
       res.status(201).json({ message: '회원가입이 완료 되었습니다.' });
     } catch (e) {
