@@ -53,15 +53,10 @@ module.exports = class AligoService {
         .replaceAll('#{구/면}', talkVariableValue.region)
         .replaceAll('#{동/리}', talkVariableValue.regionDetail)
         .replaceAll('#{월일}', talkVariableValue.deliveryDate)
-        .replaceAll(
-          '#{결제금액}',
-          talkVariableValue.paymentPrice
-            ? talkVariableValue.paymentPrice.toLocaleString()
-            : ''
-                .replaceAll('#{택배회사명}', talkVariableValue.deliveryCompany)
-                .replaceAll('#{택배배송시간}', talkVariableValue.deliveryTime)
-                .replaceAll('#{송장번호}', talkVariableValue.deliveryNumber)
-        );
+        .replaceAll('#{결제금액}', talkVariableValue.paymentPrice)
+        .replaceAll('#{택배회사명}', talkVariableValue.deliveryCompany)
+        .replaceAll('#{택배배송시간}', talkVariableValue.deliveryTime)
+        .replaceAll('#{송장번호}', talkVariableValue.deliveryNumber);
     }
 
     // 알리고 알림톡 전송 API Parameter 만들기
