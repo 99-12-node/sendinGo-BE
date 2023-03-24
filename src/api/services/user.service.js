@@ -156,6 +156,14 @@ class UserService {
   deleteUser = async (user) => {
     logger.info(`UserService.deleteUser Request`);
 
+    const findByUserId = await this.userRepository.findByUserId({
+      userId: user.userId,
+    });
+
+    if (!findByUserId) {
+      throw new NotFoundError('요청한 사용자 정보가 존재하지 않습니다.');
+    }
+
     if (user.role === 0) {
       await this.userRepository.deleteUser({ userId: user.userId });
       await this.companyRepository.deleteCompany({ companyId: user.companyId });
