@@ -13,23 +13,31 @@ module.exports = class ClientService {
     this.groupRepository = new GroupRepository();
   }
   // 클라이언트 등록
-  createClient = async ({
-    //userId,
-    clientName,
-    contact,
-    clientEmail,
-  }) => {
+  //유저 검증, 권한
+  createClient = async ({ userId, clientName, contact, clientEmail }) => {
     logger.info(`ClientService.createClient Request`);
-    const createData = await this.clientRepository.createClient({
-      //userId
+    const existClientContact = await this.clientRepository.existClientContact({
+      contact,
+    });
+    if (existClientContact) {
+      throw new BadRequestError('이미 등록된 번호입니다.');
+    }
+    const existClientEmail = await this.clientRepository.existClientEmail({
+      clientEmail,
+    });
+    if (existClientEmail) {
+      throw new BadRequestError('이미 등록된 이메일입니다.');
+    }
+    const createClient = await this.clientRepository.createClient({
+      // userId,
       clientName,
       contact,
       clientEmail,
     });
-    if (!createData) {
+    if (!createClient) {
       throw new BadRequestError('클라이언트 등록에 실패하였습니다.');
     }
-    return createData;
+    return createClient;
   };
 
   //클라이언트 조회 (쿼리로 조건 조회)
@@ -50,14 +58,31 @@ module.exports = class ClientService {
   };
 
   //클라이언트 수정
-  editClientInfo = async ({ clientId, clientName, contact }) => {
+  editClientInfo = async ({ clientId, clientName, contact, clientEmail }) => {
     logger.info(`ClientService.editClientInfo Request`);
+
+    const existClientContact = await this.clientRepository.existClientContact({
+      contact,
+    });
+    if (existClientContact) {
+      throw new BadRequestError('이미 등록된 번호입니다.');
+    }
+    const existClientEmail = await this.clientRepository.existClientEmail({
+      clientEmail,
+    });
+    if (existClientEmail) {
+      throw new BadRequestError('이미 등록된 메일입니다.');
+    }
 
     const editClientData = await this.clientRepository.editClientInfo({
       clientId,
       clientName,
       contact,
+      clientEmail,
     });
+    if (!editClientData) {
+      throw new BadRequestError('클라이언트 수정을 실패하였습니다.');
+    }
 
     return editClientData;
   };

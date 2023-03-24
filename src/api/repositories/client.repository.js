@@ -13,12 +13,23 @@ module.exports = class ClientRepository {
   }) => {
     logger.info(`ClientRepository.createClient Request`);
     const createData = await Clients.create({
-      //userId,
+      // userId,
       clientName,
       contact,
       clientEmail,
     });
     return createData;
+  };
+
+  //클라이언트 번호 조회
+  existClientContact = async ({ contact }) => {
+    const result = await Clients.findOne({ where: { contact } });
+    return result;
+  };
+  //클라이언트 이메일 조회
+  existClientEmail = async ({ clientEmail }) => {
+    const result = await Clients.findOne({ where: { clientEmail } });
+    return result;
   };
 
   //클라이언트 전체 조회
@@ -73,10 +84,10 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 수정
-  editClientInfo = async ({ clientId, clientName, contact }) => {
+  editClientInfo = async ({ clientId, clientName, contact, clientEmail }) => {
     logger.info(`ClientRepository.editClientInfo Request`);
     const editClientData = await Clients.update(
-      { clientName, contact },
+      { clientName, contact, clientEmail },
       { where: { clientId } }
     );
 
