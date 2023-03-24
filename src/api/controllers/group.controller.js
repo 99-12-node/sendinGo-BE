@@ -44,9 +44,6 @@ module.exports = class GroupController {
   deleteGroup = async (req, res, next) => {
     logger.info(`GroupController.deleteGroup Request`);
     const { groupId } = req.params;
-    if (!/^\d+$/.test(groupId)) {
-      throw new BadRequestError('유효하지않은 파라미터 요청입니다.');
-    }
 
     try {
       await this.groupService.deleteGroup({ groupId });
