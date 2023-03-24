@@ -21,17 +21,6 @@ module.exports = class ClientRepository {
     return createData;
   };
 
-  //클라이언트 번호 조회
-  existClientContact = async ({ contact }) => {
-    const result = await Clients.findOne({ where: { contact } });
-    return result;
-  };
-  //클라이언트 이메일 조회
-  existClientEmail = async ({ clientEmail }) => {
-    const result = await Clients.findOne({ where: { clientEmail } });
-    return result;
-  };
-
   //클라이언트 전체 조회
   getAllClients = async () => {
     logger.info(`ClientRepository.getAllClients Request`);

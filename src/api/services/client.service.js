@@ -14,7 +14,12 @@ module.exports = class ClientService {
   }
   // 클라이언트 등록
   //유저 검증, 권한
-  createClient = async ({ userId, clientName, contact, clientEmail }) => {
+  createClient = async ({
+    //userId,
+    clientName,
+    contact,
+    clientEmail,
+  }) => {
     logger.info(`ClientService.createClient Request`);
     const existClientContact = await this.clientRepository.existClientContact({
       contact,
@@ -58,22 +63,10 @@ module.exports = class ClientService {
   };
 
   //클라이언트 수정
+  //이메일은 1개 번호느 2개쓰는 클라이언트
+  //이메일은 2개 번호는 1개쓰는 클라이언트
   editClientInfo = async ({ clientId, clientName, contact, clientEmail }) => {
     logger.info(`ClientService.editClientInfo Request`);
-
-    const existClientContact = await this.clientRepository.existClientContact({
-      contact,
-    });
-    if (existClientContact) {
-      throw new BadRequestError('이미 등록된 번호입니다.');
-    }
-    const existClientEmail = await this.clientRepository.existClientEmail({
-      clientEmail,
-    });
-    if (existClientEmail) {
-      throw new BadRequestError('이미 등록된 메일입니다.');
-    }
-
     const editClientData = await this.clientRepository.editClientInfo({
       clientId,
       clientName,
