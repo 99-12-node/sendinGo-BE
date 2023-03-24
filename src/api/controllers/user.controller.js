@@ -36,17 +36,11 @@ class UserController {
           '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
         );
       }
-      if (!userId) {
-        throw new UnauthorizedError('로그인이 필요합니다.');
-      }
+
       const data = await this.userService.getUser({
         userId,
         companyId,
       });
-
-      if (!data) {
-        throw new NotFoundError('요청한 사용자 정보가 존재하지 않습니다.');
-      }
 
       res.status(200).json({ data });
     } catch (e) {
@@ -151,9 +145,50 @@ class UserController {
   editUser = async (req, res, next) => {
     logger.info(`UserController.editUser Request`);
     const user = res.locals.user;
-    const updateInfo = { ...req.body };
-    const requestData = { user, updateInfo };
+    const updateInfo = req.body;
+    const requestUserId = parseInt(req.params.userId);
     try {
+      if (user.userId !== requestUserId) {
+        throw new ForbiddenError(
+          '요청하신 회원의 정보와 토큰의 정보가 일치 하지않아 수정이 불가합니다.'
+        );
+      }
+
+      if (
+        _.isEmpty(updateInfo) ||
+        _.some(
+          [
+            'email',
+            'password',
+            'name',
+            'phoneNumber',
+            'companyName',
+            'companyEmail',
+            'companyNumber',
+          ],
+          (field) => !updateInfo[field]
+        )
+      ) {
+        throw new BadRequestError('필수 정보를 모두 입력해주세요.');
+      }
+      if (!emailValidation.test(updateInfo.email)) {
+        throw new BadRequestError('이메일 형식에 맞춰 입력 바랍니다.');
+      }
+      if (!passwordValidation.test(updateInfo.password)) {
+        throw new BadRequestError(
+          '비밀번호는 영문 대/소문자, 숫자 각 1자리 이상 포함한 8~20자리 조합입니다.'
+        );
+      }
+      if (!nameValidation.test(updateInfo.name)) {
+        throw new BadRequestError('이름 입력란을 다시 확인해주세요.');
+      }
+      if (!phoneNumberValidation.test(updateInfo.phoneNumber)) {
+        throw new BadRequestError(
+          '핸드폰 번호는 - 를 제외한 10~11 자리 입니다.'
+        );
+      }
+      const requestData = { user, updateInfo };
+
       await this.userService.editUser(requestData);
 
       res.status(200).json({ message: '회원 정보 수정이 완료되었습니다.' });
