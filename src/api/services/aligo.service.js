@@ -84,13 +84,16 @@ module.exports = class AligoService {
   // 알림톡 전송 결과
   getAlimTalkResult = async ({ page, limit, startdate, enddate }) => {
     logger.info(`AlimtalkService.getAlimTalkResult`);
-    // const dateFormat = new Date().toISOString().substring(0, 10).replaceAll('-',''); // yyyymmdd
+
+    const today = new Date();
+    const formatToday = today.toISOString().slice(0, 10).replace(/-/g, ''); // yyyymmdd
+
     const params = new url.URLSearchParams({
       ...authParams,
-      page,
-      limit,
-      startdate,
-      enddate,
+      page: page ?? 1,
+      limit: limit ?? 50,
+      startdate: startdate ?? formatToday - 7,
+      enddate: enddate ?? formatToday, // 이전일을 기본값,
     });
 
     const aligoRes = await instance.post(
