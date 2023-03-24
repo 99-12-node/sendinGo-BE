@@ -2,7 +2,11 @@ const UserRepository = require('../repositories/user.repository');
 const CompanyRepository = require('../repositories/company.repository');
 const { logger } = require('../../middlewares/logger');
 const bcrypt = require('bcrypt');
-const { BadRequestError, Conflict } = require('../../exceptions/errors');
+const {
+  BadRequestError,
+  Conflict,
+  NotFoundError,
+} = require('../../exceptions/errors');
 require('dotenv').config();
 const SALT = parseInt(process.env.SALT);
 
@@ -19,9 +23,7 @@ class UserService {
       companyId,
     });
     if (!user || !company) {
-      throw new BadRequestError(
-        '해당하는 사용자 정보 또는 사용자의 회사 정보를 불러올 수 없습니다.'
-      );
+      throw new NotFoundError('요청한 사용자 정보가 존재하지 않습니다.');
     }
     return { user, company };
   };
@@ -113,6 +115,13 @@ class UserService {
     logger.info(`UserService.editUser Request`);
 
     const { user, updateInfo } = requestData;
+
+    const findByUserId = await this.userRepository.findByUserId({
+      userId: user.userId,
+    });
+    if (!findByUserId) {
+      throw new NotFoundError('요청한 사용자 정보가 존재하지 않습니다.');
+    }
 
     const salt = await bcrypt.genSalt(SALT);
     const hashedPassword = await bcrypt.hash(updateInfo.password, salt);
