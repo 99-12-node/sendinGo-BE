@@ -16,19 +16,22 @@ class UserController {
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
     const requestUserId = parseInt(req.params.userId);
+    try {
+      if (userId !== requestUserId) {
+        throw new UnauthorizedError(
+          '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
+        );
+      }
 
-    if (userId !== requestUserId) {
-      throw new UnauthorizedError(
-        '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
-      );
+      const data = await this.userService.getUser({
+        userId,
+        companyId,
+      });
+
+      res.status(200).json({ data });
+    } catch (e) {
+      next(e);
     }
-
-    const data = await this.userService.getUser({
-      userId,
-      companyId,
-    });
-
-    res.status(200).json({ data });
   };
 
   createUser = async (req, res, next) => {
@@ -95,9 +98,14 @@ class UserController {
   deleteUser = async (req, res, next) => {
     logger.info(`UserController.deleteUser Request`);
     const user = res.locals.user;
-    await this.userService.deleteUser(user);
 
-    res.status(200).json({ message: '회원 탈퇴가 완료 되었습니다.' });
+    try {
+      await this.userService.deleteUser(user);
+
+      res.status(200).json({ message: '회원 탈퇴가 완료 되었습니다.' });
+    } catch (e) {
+      next(e);
+    }
   };
 }
 

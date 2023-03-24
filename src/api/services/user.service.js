@@ -18,7 +18,11 @@ class UserService {
     const company = await this.companyRepository.findCompanyByCompanyId({
       companyId,
     });
-
+    if (!user || !company) {
+      throw new BadRequestError(
+        '해당하는 사용자 정보 또는 사용자의 회사 정보를 불러올 수 없습니다.'
+      );
+    }
     return { user, company };
   };
 
