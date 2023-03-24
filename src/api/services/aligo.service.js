@@ -82,45 +82,47 @@ module.exports = class AligoService {
   };
 
   // 알림톡 전송 결과
-  getAlimTalkResult = async () => {
+  getAlimTalkResult = async ({ page, limit, startdate, enddate }) => {
     logger.info(`AlimtalkService.getAlimTalkResult`);
-    // const dateFormat = new Date().toISOString().substring(0, 10).replaceAll('-',''); // yyyymmdd
-    // const startdate = filter.startdate;
-    // const enddate = filter.enddate;
+
+    const today = new Date();
+    const formatToday = today.toISOString().slice(0, 10).replace(/-/g, ''); // yyyymmdd
+
     const params = new url.URLSearchParams({
       ...authParams,
-      //   page: filter.page ?? '1',
-      //   limit: filter.limit ?? '10',
+      page: page ?? 1,
+      limit: limit ?? 50,
+      startdate: startdate ?? formatToday - 7,
+      enddate: enddate ?? formatToday, // 이전일을 기본값,
     });
 
     const aligoRes = await instance.post(
       '/akv10/history/list/',
       params.toString()
     );
-    console.log('aligoRes.data:', aligoRes.data);
-    const { mid, sender, msg_count, mbody, regdate } = aligoRes.data.list[0];
-    console.log(
-      'mid, sender, msg_count, mbody, regdate : ',
-      mid,
-      sender,
-      msg_count,
-      mbody,
-      regdate
-    );
-    // 발송결과 DB에 결과 개수만큼 N번 저장
-    // for (let list of aligoRes.data.list) {
-    //   const { mid, sender, msg_count, mbody, regdate } = list;
-    //   console.log(
-    //     'mid, sender, msg_count, mbody, regdate : ',
-    //     mid,
-    //     sender,
-    //     msg_count,
-    //     mbody,
-    //     regdate
-    //   );
-    // await alimTalkResult.create({ mid, sender, msg_count, mbody, regdate });
-    // }
-    return aligoRes.data;
+
+    const result = [];
+    // 에러 코드인 경우
+    if (aligoRes.data.code < 0) {
+      throw new Error(aligoRes.data.message);
+    }
+    // 결과가 없는 경우
+    if (!aligoRes.data.list.length) {
+      return aligoRes.data.list;
+    }
+
+    // 결과가 1개 이상인 경우, 발송결과 DB에 결과 개수만큼 N번 저장
+    for (const data of aligoRes.data.list) {
+      const { mid, msg_count, mbody, reserve_state, regdate } = data;
+      result.push({
+        mid,
+        msgCount: msg_count,
+        msgContent: mbody,
+        sendState: reserve_state,
+        sendDate: regdate,
+      });
+    }
+    return result;
   };
 
   // 알림톡 전송 결과 상세

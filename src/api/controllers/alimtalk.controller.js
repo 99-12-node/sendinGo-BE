@@ -93,12 +93,45 @@ module.exports = class AlimtalkController {
 
     try {
       const result = await this.aligoService.getAlimTalkResult({
-        page: page ?? 1,
-        limit: limit ?? 50,
+        page,
+        limit,
         startdate: startdate ?? '',
-        enddate: enddate ?? '',
+        enddate,
       });
-      return res.status(200).json({ data: result });
+
+      const redirectSaveResult = await axios.post(
+        `http://localhost:${PORT}/api/talk/results/list/save`,
+        {
+          data: result,
+        }
+      );
+
+      // return res.status(200).json({ data: result });
+      return res
+        .status(redirectSaveResult.status)
+        .json(redirectSaveResult.data);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  // 알림톡 전송 결과 리스트 DB 저장
+  saveSendAlimTalkResult = async (req, res, next) => {
+    logger.info(`AlimtalkController.saveSendAlimTalkResult`);
+
+    const { data } = req.body;
+    try {
+      if (!data) {
+        return res.status(400).json({ message: '결과 조회에 실패하였습니다.' });
+      }
+
+      const result = await this.alimtalkService.saveAlimTalkResult(data);
+      return res.status(201).json({
+        data: {
+          message: '결과조회 성공하였습니다.',
+          list: result,
+        },
+      });
     } catch (e) {
       next(e);
     }
@@ -108,7 +141,7 @@ module.exports = class AlimtalkController {
     logger.info(`AlimtalkController.getAlimTalkDetailResult`);
     const { mid } = req.query;
     try {
-      const result = await this.alimtalkService.getAlimTalkDetailResult({
+      const result = await this.aligoService.getAlimTalkDetailResult({
         mid,
       });
       return res.status(200).json({ data: result });

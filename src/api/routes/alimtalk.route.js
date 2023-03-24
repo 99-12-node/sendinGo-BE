@@ -17,9 +17,12 @@ router.post('/sends', alimtalkController.sendAlimTalk);
 router.post('/sends/response', alimtalkController.saveSendAlimTalkResponse);
 
 // 알림톡 전송 결과
-router.get('/result/list', alimtalkController.getAlimTalkResult);
+router.get('/results/list', alimtalkController.getAlimTalkResult);
+
+// 알림톡 전송 결과 데이터 저장
+router.post('/results/list/save', alimtalkController.saveSendAlimTalkResult);
 
 // 알림톡 전송 결과 상세
-router.get('/result/detail', alimtalkController.getAlimTalkDetailResult);
+router.get('/results/detail', alimtalkController.getAlimTalkDetailResult);
 
 module.exports = router;

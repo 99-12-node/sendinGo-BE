@@ -154,66 +154,41 @@ module.exports = class AlimtalkService {
     return result;
   };
 
-  // 알림톡 전송 결과
-  getAlimTalkResult = async () => {
-    logger.info(`AlimtalkService.getAlimTalkResult`);
-    // const dateFormat = new Date().toISOString().substring(0, 10).replaceAll('-',''); // yyyymmdd
-    // const startdate = filter.startdate;
-    // const enddate = filter.enddate;
-    return;
+  // 알림톡 전송 결과 저장
+  saveAlimTalkResult = async (results) => {
+    logger.info(`AlimtalkService.saveAlimTalkResult`);
 
-    const params = new url.URLSearchParams({
-      ...authParams,
-      //   page: filter.page ?? '1',
-      //   limit: filter.limit ?? '10',
-    });
+    try {
+      let response = [];
+      for (const result of results) {
+        const { mid, msgCount, msgContent, sendState, sendDate } = result;
+        // 존재하는 전송 결과인지 확인
+        const existTalkSend = await this.talkSendRepository.getTalkSendById({
+          mid,
+        });
+        // 존재하는 경우에만 해당 전송 결과 데이터 업데이트
+        if (existTalkSend) {
+          const updatedDataCount =
+            await this.talkSendRepository.updateTalkSendResult({
+              mid: existTalkSend.mid,
+              msgCount,
+              msgContent,
+              sendState,
+              sendDate,
+            });
 
-    const aligoRes = await instance.post(
-      '/akv10/history/list/',
-      params.toString()
-    );
-    console.log('aligoRes.data:', aligoRes.data);
-    const { mid, sender, msg_count, mbody, regdate } = aligoRes.data.list[0];
-    console.log(
-      'mid, sender, msg_count, mbody, regdate : ',
-      mid,
-      sender,
-      msg_count,
-      mbody,
-      regdate
-    );
+          response.push(existTalkSend);
+        }
+      }
+      return response;
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   // 알림톡 전송 결과 상세
   getAlimTalkDetailResult = async ({ mid }) => {
     logger.info(`AlimtalkService.getAlimTalkDetailResult`);
-    const params = new url.URLSearchParams({
-      ...authParams,
-      mid,
-    });
-
-    const aligoRes = await instance.post(
-      '/akv10/history/detail/',
-      params.toString()
-    );
-    const {
-      msgid,
-      sender,
-      phone,
-      status,
-      reqdate,
-      sentdate,
-      rsltdate,
-      reportdate,
-      rslt,
-      rslt_message,
-      message,
-    } = aligoRes.data.list[0];
-
-    // 발송결과 DB에 결과 개수만큼 N번 저장
-    // for (let data of aligoRes.data.list) {
-    // await alimTalkResult.create({ mid, sender, msg_count, mbody, regdate });
-    // }
-    return aligoRes.data;
+    return { mid };
   };
 };
