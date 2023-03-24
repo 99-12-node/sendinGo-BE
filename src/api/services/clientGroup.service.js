@@ -2,13 +2,13 @@ const { logger } = require('../../middlewares/logger');
 const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
 const ClientGroupRepository = require('../repositories/clientGroup.repository');
 const GroupRepository = require('../repositories/group.repository');
-const ClientReposiory = require('../repositories/client.repository');
+const ClientRepository = require('../repositories/client.repository');
 
 module.exports = class ClientGroupService {
   constructor() {
     this.clientGroupRepository = new ClientGroupRepository();
     this.groupRepository = new GroupRepository();
-    this.clientRepository = new ClientReposiory();
+    this.clientRepository = new ClientRepository();
   }
   // ClientGroup 등록
   createClientGroup = async ({ groupId, clientId }) => {
@@ -105,6 +105,16 @@ module.exports = class ClientGroupService {
   // ClientGroup 복사
   copyClientGroup = async ({ clientId, groupId }) => {
     logger.info(`ClientGrouopService.copyClientGroup Request`);
+    const existClientId = await this.clientRepository.getClientById({
+      clientId,
+    });
+    if (!existClientId) {
+      throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+    }
+    const existGroupId = await this.groupRepository.findGroupId({ groupId });
+    if (!existGroupId) {
+      throw new NotFoundError('그룹 조회에 실패하였습니다.');
+    }
     const existClientGroup =
       await this.clientGroupRepository.getClientGroupById({
         clientId,
