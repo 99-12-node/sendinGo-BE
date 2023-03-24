@@ -92,13 +92,27 @@ module.exports = class AlimtalkController {
     const { page, limit, startdate, enddate } = req.query;
 
     try {
+      const today = new Date();
+      const formatToday = today.toISOString().slice(0, 10).replace(/-/g, ''); // yyyymmdd
+
       const result = await this.aligoService.getAlimTalkResult({
         page: page ?? 1,
         limit: limit ?? 50,
         startdate: startdate ?? '',
-        enddate: enddate ?? '',
+        enddate: enddate ?? formatToday - 1, // 이전일을 기본값
       });
-      return res.status(200).json({ data: result });
+
+      const redirectSaveResult = await axios.post(
+        `http://localhost:${PORT}/api/talk/results/list/save`,
+        {
+          data: result,
+        }
+      );
+
+      // return res.status(200).json({ data: result });
+      return res
+        .status(redirectSaveResult.status)
+        .json(redirectSaveResult.data);
     } catch (e) {
       next(e);
     }
@@ -108,7 +122,7 @@ module.exports = class AlimtalkController {
     logger.info(`AlimtalkController.getAlimTalkDetailResult`);
     const { mid } = req.query;
     try {
-      const result = await this.alimtalkService.getAlimTalkDetailResult({
+      const result = await this.aligoService.getAlimTalkDetailResult({
         mid,
       });
       return res.status(200).json({ data: result });
