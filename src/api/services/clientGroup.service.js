@@ -106,15 +106,25 @@ module.exports = class ClientGroupService {
   //이동하려는 곳에 이미 존재하면 에러
   moveClientGroup = async ({ clientId, existGroupId, newGroupId }) => {
     logger.info(`ClientGrouopService.moveClientGroup Request`);
+    const existClientGroup =
+      await this.clientGroupRepository.getClientGroupById({
+        clientId,
+        groupId: existGroupId,
+      });
+    if (!existClientGroup) {
+      throw new BadRequestError('존재하지 않는 그룹입니다.');
+    }
 
-    try {
-      // clientId + existGroupId = deleteClientGroup
+    const movedClientGroup =
+      await this.clientGroupRepository.getClientGroupById({
+        clientId,
+        groupId: newGroupId,
+      });
+    if (movedClientGroup) {
+      throw new BadRequestError('이미 존재하는 그룹입니다.');
+    } else {
       await this.deleteClientGroup({ clientId, groupId: existGroupId });
-
-      // clientId + newGroupId = createClientGroup
       await this.createClientGroup({ clientId, groupId: newGroupId });
-    } catch (error) {
-      throw new NotFoundError('그룹 이동에 실패하였습니다.');
     }
   };
 
