@@ -61,6 +61,27 @@ module.exports = class ClientGroupController {
       next(error);
     }
   };
+
+  // ClientGroup 클라이언트 이동
+  moveClientGroup = async (req, res, next) => {
+    logger.info(`ClientGroupController.moveClientGroup Request`);
+    const { clientId, existGroupId, newGroupId } = req.params;
+
+    try {
+      await this.clientGroupService.moveClientGroup({
+        clientId,
+        existGroupId,
+        newGroupId,
+      });
+
+      return res.status(201).json({
+        message: '클라이언트 이동이 완료되었습니다.',
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   // ClientGroup 복사
   copyClientGroup = async (req, res, next) => {
     logger.info(`ClientGroupController.copyClientGroup Request`);
