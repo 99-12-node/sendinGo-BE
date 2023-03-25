@@ -112,7 +112,7 @@ module.exports = class ClientGroupService {
         groupId: existGroupId,
       });
     if (!existClientGroup) {
-      throw new BadRequestError('존재하지 않는 그룹입니다.');
+      throw new NotFoundError('존재하지 않는 그룹입니다.');
     }
 
     const movedClientGroup =
