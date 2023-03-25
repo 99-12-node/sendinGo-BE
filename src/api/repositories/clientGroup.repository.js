@@ -1,6 +1,7 @@
 const { logger } = require('../../middlewares/logger');
 const { ClientGroups } = require('../../db/models');
 const { Op } = require('sequelize');
+const { NotFoundError } = require('../../exceptions/errors');
 
 module.exports = class ClientGroupRepository {
   constructor() {}
@@ -34,6 +35,7 @@ module.exports = class ClientGroupRepository {
         [Op.and]: [{ groupId }, { clientId }],
       },
     });
+
     return clientGroup;
   };
 };

@@ -85,12 +85,13 @@ module.exports = class ClientGroupController {
   // ClientGroup 복사
   copyClientGroup = async (req, res, next) => {
     logger.info(`ClientGroupController.copyClientGroup Request`);
-    const { clientId, groupId } = req.params;
+    const { clientId, existGroupId, newGroupId } = req.params;
 
     try {
       await this.clientGroupService.copyClientGroup({
         clientId,
-        groupId,
+        existGroupId,
+        newGroupId,
       });
 
       return res.status(201).json({
