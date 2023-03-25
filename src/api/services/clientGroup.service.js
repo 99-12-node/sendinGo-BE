@@ -102,6 +102,21 @@ module.exports = class ClientGroupService {
     return result;
   };
 
+  // ClientGroup 클라이언트 이동
+  moveClientGroup = async ({ clientId, existGroupId, newGroupId }) => {
+    logger.info(`ClientGrouopService.moveClientGroup Request`);
+
+    try {
+      // clientId + existGroupId = deleteClientGroup
+      await this.deleteClientGroup({ clientId, groupId: existGroupId });
+
+      // clientId + newGroupId = createClientGroup
+      await this.createClientGroup({ clientId, groupId: newGroupId });
+    } catch (error) {
+      throw new Error('그룹 이동에 실패하였습니다.');
+    }
+  };
+
   // ClientGroup 복사
   copyClientGroup = async ({ clientId, groupId }) => {
     logger.info(`ClientGrouopService.copyClientGroup Request`);
@@ -124,7 +139,10 @@ module.exports = class ClientGroupService {
       throw new BadRequestError('이미 존재하는 그룹입니다.');
     } else {
       const newClientGroup = await this.clientGroupRepository.createClientGroup(
-        { clientId, groupId }
+        {
+          clientId,
+          groupId,
+        }
       );
       return newClientGroup;
     }

@@ -8,9 +8,13 @@ router.post(
   '/clients/:clientId/groups/:groupId',
   clientGroupController.createClientGroup
 );
+router.post(
+  '/clients/:clientId/groups/:existGroupId/move/:newGroupId',
+  clientGroupController.moveClientGroup
+);
 
 router.post(
-  '/clients/:clientId/groups/:groupId/copy',
+  '/clients/:clientId/groups/:existGroupId/copy/:newGroupId',
   clientGroupController.copyClientGroup
 );
 
