@@ -12,8 +12,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY, EXPIRE_IN } = process.env;
 
-const emailValidation =
-  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const emailValidation = /^[A-Za-z0-9]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordValidation =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9]{8,20}$/;
 const nameValidation = /^[a-zA-Z가-힣\s]+$/;
