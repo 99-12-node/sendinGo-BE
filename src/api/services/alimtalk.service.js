@@ -197,34 +197,26 @@ module.exports = class AlimtalkService {
     let response = [];
     for (const result of results) {
       const { msgid } = result;
+
       const existTalkResult =
         await this.talkResultRepository.getExistTalkResult({
           msgid,
         });
-      if (!existTalkResult) {
-        // 원하는 데이터만 찾아서 push
+      // 이미 상세 결과가 DB에 있는 경우, 원하는 컬럼만 조회
+      if (existTalkResult) {
         const talkResult = await this.talkResultRepository.getTalkResultByMsgId(
-          {
-            msgid: talkResultData.msgid,
-          }
+          { msgid }
         );
         response.push(talkResult);
       } else {
-        // talkResult 생성
-
+        // DB에 없다면, 전송 상세 결과 DB에 생성
         const talkResultData = await this.talkResultRepository.createTalkResult(
           {
             ...result,
             talkSendId,
+            clientId,
           }
         );
-        // talkResultClient 생성
-        const newTalkResultClient =
-          await this.talkResultRepository.createTalkResultClient({
-            clientId,
-            talkResultDetailId: talkResultData.talkResultDetailId,
-            talkSendId,
-          });
 
         const talkResult = await this.talkResultRepository.getTalkResultByMsgId(
           {
@@ -237,7 +229,7 @@ module.exports = class AlimtalkService {
     return response;
   };
 
-  // mid로 전송 데이터 FK 조회
+  // groupId로 전송 데이터 조회
   getTalkSendByGroupId = async ({ groupId }) => {
     logger.info(`AlimtalkService.getTalkSendByGroupId`);
 
@@ -255,16 +247,5 @@ module.exports = class AlimtalkService {
       mid: talkSend.mid,
     };
     return talkSendResultData;
-  };
-
-  // msgid로 결과 상세 데이터 조회
-  getExistedTalkResult = async ({ msgid }) => {
-    logger.info(`AlimtalkService.getExistedTalkResult`);
-
-    const talkResult = await this.talkResultRepository.getExistTalkResult({
-      msgid,
-    });
-
-    return talkResult;
   };
 };
