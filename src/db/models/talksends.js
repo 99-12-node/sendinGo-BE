@@ -38,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'talkTemplateId',
         onDelete: 'RESTRICT',
       });
+      this.hasMany(models.TalkResultDetails, {
+        sourceKey: 'talkSendId',
+        foreignKey: 'talkSendId',
+        onDelete: 'CASCADE',
+      });
     }
   }
   TalkSends.init(

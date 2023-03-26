@@ -83,7 +83,7 @@ module.exports = class AligoService {
 
   // 알림톡 전송 결과
   getAlimTalkResult = async ({ page, limit, startdate, enddate }) => {
-    logger.info(`AlimtalkService.getAlimTalkResult`);
+    logger.info(`AligoService.getAlimTalkResult`);
 
     const today = new Date();
     const formatToday = today.toISOString().slice(0, 10).replace(/-/g, ''); // yyyymmdd
@@ -126,8 +126,8 @@ module.exports = class AligoService {
   };
 
   // 알림톡 전송 결과 상세
-  getAlimTalkDetailResult = async ({ mid }) => {
-    logger.info(`AlimtalkService.getAlimTalkDetailResult`);
+  getAlimTalkResultDetail = async ({ mid }) => {
+    logger.info(`AligoService.getAlimTalkDetailResult`);
     const params = new url.URLSearchParams({
       ...authParams,
       mid,
@@ -137,37 +137,9 @@ module.exports = class AligoService {
       '/akv10/history/detail/',
       params.toString()
     );
-    const {
-      msgid,
-      sender,
-      phone,
-      status,
-      reqdate,
-      sentdate,
-      rsltdate,
-      reportdate,
-      rslt,
-      rslt_message,
-      message,
-    } = aligoRes.data.list[0];
-    console.log(
-      'raligoReses : ',
-      msgid,
-      sender,
-      phone,
-      status,
-      reqdate,
-      sentdate,
-      rsltdate,
-      reportdate,
-      rslt,
-      rslt_message,
-      message
-    );
-    // 발송결과 DB에 결과 개수만큼 N번 저장
-    // for (let data of aligoRes.data.list) {
-    // await alimTalkResult.create({ mid, sender, msg_count, mbody, regdate });
-    // }
-    return aligoRes.data;
+
+    if (!aligoRes.data.list || aligoRes.data.code < 0) return aligoRes.data;
+
+    return aligoRes.data.list;
   };
 };
