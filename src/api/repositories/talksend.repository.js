@@ -49,11 +49,11 @@ module.exports = class TalkSendRepository {
     return updatedTalkSends;
   };
 
-  // 톡 전송 ID로 조회
-  getTalkSendById = async ({ mid }) => {
-    logger.info(`TalkSendRepository.saveTalkSendById Request`);
+  // 톡 전송 groupId로 조회
+  getTalkSendByGroupId = async ({ groupId }) => {
+    logger.info(`TalkSendRepository.getTalkSendById Request`);
     const talkSend = await TalkSends.findOne({
-      where: { mid },
+      where: { groupId },
       attributes: {
         // 필요 컬럼: talkSendId, groupId, groupName, mid, scnt, fcnt, msgCount, sendState, sendDate
         exclude: [
@@ -65,8 +65,6 @@ module.exports = class TalkSendRepository {
           'userId',
           'createdAt',
           'updatedAt',
-          'clientId',
-          'talkTemplateId',
         ],
       },
       include: [
