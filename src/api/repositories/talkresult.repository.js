@@ -1,9 +1,5 @@
 const { logger } = require('../../middlewares/logger');
-const {
-  TalkResultDetails,
-  Clients,
-  TalkResultsClients,
-} = require('../../db/models');
+const { TalkResultDetails, Clients } = require('../../db/models');
 const parseSequelizePrettier = require('../../helpers/parse.sequelize');
 
 module.exports = class TalkResultRepository {
@@ -20,6 +16,8 @@ module.exports = class TalkResultRepository {
     reportdate,
     rslt_message,
     talkSendId,
+    clientId,
+    // userId, companyId
   }) => {
     logger.info(`TalkResultRepository.createTalkResult Request`);
     const newTalkSends = await TalkResultDetails.create({
@@ -33,6 +31,8 @@ module.exports = class TalkResultRepository {
       lastReportDate: reportdate,
       resultMessage: rslt_message,
       talkSendId,
+      clientId,
+      // userId, companyId
     });
     return newTalkSends;
   };
@@ -41,6 +41,30 @@ module.exports = class TalkResultRepository {
   getExistTalkResult = async ({ msgid }) => {
     logger.info(`TalkResultRepository.isExistTalkResultByMsgId Request`);
     const talkResult = await TalkResultDetails.findOne({ where: { msgid } });
+    return talkResult;
+  };
+
+  // 톡 상세결과 ID로 컬럼 데이터 조회
+  getTalkResultByMsgId = async ({ msgid }) => {
+    logger.info(`TalkResultRepository.getTalkResultByMsgId Request`);
+    const talkResult = await TalkResultDetails.findOne({
+      where: { msgid },
+      attributes: [
+        'talkResultDetailId',
+        'msgid',
+        'phone',
+        'sendDate',
+        'resultState',
+        'resultMessage',
+        'resultDate',
+        'clientId',
+      ],
+      include: {
+        model: Clients,
+        attributes: ['clientName'],
+      },
+      raw: true,
+    }).then((model) => parseSequelizePrettier(model));
     return talkResult;
   };
 };
