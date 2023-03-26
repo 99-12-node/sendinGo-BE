@@ -140,16 +140,18 @@ module.exports = class AlimtalkController {
   // 알림톡 전송 결과 상세
   getAlimTalkResultDetail = async (req, res, next) => {
     logger.info(`AlimtalkController.getAlimTalkResultDetail`);
-    const { mid } = req.query;
+    const { groupId } = req.params;
     try {
-      if (!mid) {
+      if (!groupId) {
         throw new BadRequestError('입력값을 확인해주세요.');
       }
-      const talkSendData = await this.alimtalkService.getTalkSendById({ mid });
+      const talkSendData = await this.alimtalkService.getTalkSendByGroupId({
+        groupId,
+      });
 
       // mid 있는 경우,결과 상세 조회 요청
       const results = await this.aligoService.getAlimTalkResultDetail({
-        mid,
+        mid: talkSendData.mid,
       });
 
       const saveResultDetails = await axios
@@ -168,7 +170,7 @@ module.exports = class AlimtalkController {
     }
   };
 
-  // 알림톡 전송 결과 상세
+  // 알림톡 전송 결과 상세 DB 저장
   saveTalkResultDetail = async (req, res, next) => {
     logger.info(`AlimtalkController.saveTalkResultDetail`);
     const { results, talkSendData } = req.body.data;
@@ -182,7 +184,9 @@ module.exports = class AlimtalkController {
         talkSendData,
       });
 
-      return res.status(200).json({ data: response });
+      return res
+        .status(200)
+        .json({ message: '상세결과 조회에 성공하였습니다.', data: response });
     } catch (e) {
       next(e);
     }
