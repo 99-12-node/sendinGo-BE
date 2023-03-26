@@ -238,11 +238,13 @@ module.exports = class AlimtalkService {
   };
 
   // mid로 전송 데이터 FK 조회
-  getTalkSendById = async ({ mid }) => {
-    logger.info(`AlimtalkService.getTalkSendById`);
+  getTalkSendByGroupId = async ({ groupId }) => {
+    logger.info(`AlimtalkService.getTalkSendByGroupId`);
 
     // talkTemplateId, ClientId, talkSendId 찾기
-    const talkSend = await this.talkSendRepository.getTalkSendById({ mid });
+    const talkSend = await this.talkSendRepository.getTalkSendByGroupId({
+      groupId,
+    });
     if (!talkSend) {
       throw new NotFoundError('해당하는 전송 데이터를 찾을 수 없습니다.');
     }
@@ -250,6 +252,7 @@ module.exports = class AlimtalkService {
       talkSendId: talkSend.talkSendId,
       clientId: talkSend.clientId,
       talkTemplateId: talkSend.talkTemplateId,
+      mid: talkSend.mid,
     };
     return talkSendResultData;
   };
