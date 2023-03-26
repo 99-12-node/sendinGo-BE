@@ -23,6 +23,12 @@ router.get('/results/list', alimtalkController.getAlimTalkResult);
 router.post('/results/list/save', alimtalkController.saveSendAlimTalkResult);
 
 // 알림톡 전송 결과 상세
-router.get('/results/detail', alimtalkController.getAlimTalkDetailResult);
+router.get(
+  '/results/detail/:groupId',
+  alimtalkController.getAlimTalkResultDetail
+);
+
+// 알림톡 전송 결과 상세 데이터 저장
+router.post('/results/detail/save', alimtalkController.saveTalkResultDetail);
 
 module.exports = router;
