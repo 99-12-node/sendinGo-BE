@@ -13,7 +13,7 @@ module.exports = {
     {
       name: 'sendingo-app-2',
       script: './app.js',
-      env_development: {
+      env_production: {
         NODE_ENV: 'production',
         PORT: process.env.PORT_2,
       },
