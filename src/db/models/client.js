@@ -31,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'clientId',
         onDelete: 'CASCADE',
       });
+      this.hasMany(models.TalkResultDetails, {
+        sourceKey: 'clientId',
+        foreignKey: 'clientId',
+      });
     }
   }
   Clients.init(

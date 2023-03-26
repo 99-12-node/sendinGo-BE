@@ -122,7 +122,7 @@ module.exports = class AlimtalkController {
     const { data } = req.body;
     try {
       if (!data) {
-        return res.status(400).json({ message: '결과 조회에 실패하였습니다.' });
+        throw new BadRequestError('결과 조회에 실패하였습니다.');
       }
 
       const result = await this.alimtalkService.saveAlimTalkResult(data);
@@ -138,17 +138,51 @@ module.exports = class AlimtalkController {
   };
 
   // 알림톡 전송 결과 상세
-  getAlimTalkDetailResult = async (req, res, next) => {
-    logger.info(`AlimtalkController.getAlimTalkDetailResult`);
+  getAlimTalkResultDetail = async (req, res, next) => {
+    logger.info(`AlimtalkController.getAlimTalkResultDetail`);
     const { mid } = req.query;
     try {
       if (!mid) {
         throw new BadRequestError('입력값을 확인해주세요.');
       }
-      const result = await this.aligoService.getAlimTalkDetailResult({
+      const talkSendData = await this.alimtalkService.getTalkSendById({ mid });
+
+      // mid 있는 경우,결과 상세 조회 요청
+      const results = await this.aligoService.getAlimTalkResultDetail({
         mid,
       });
-      return res.status(200).json({ data: result });
+
+      const saveResultDetails = await axios
+        .post(`http://localhost:${PORT}/api/talk/results/detail/save`, {
+          data: { results, talkSendData },
+        })
+        .catch((err) => {
+          console.error(err.response.data);
+          return err.response;
+        });
+
+      // return res.status(200).json({ data: results });
+      return res.status(saveResultDetails.status).json(saveResultDetails.data);
+    } catch (e) {
+      next(e);
+    }
+  };
+
+  // 알림톡 전송 결과 상세
+  saveTalkResultDetail = async (req, res, next) => {
+    logger.info(`AlimtalkController.saveTalkResultDetail`);
+    const { results, talkSendData } = req.body.data;
+    try {
+      if (!results.length) {
+        throw new BadRequestError('상세결과 조회에 실패하였습니다.');
+      }
+
+      const response = await this.alimtalkService.saveTalkResultDetail({
+        results,
+        talkSendData,
+      });
+
+      return res.status(200).json({ data: response });
     } catch (e) {
       next(e);
     }
