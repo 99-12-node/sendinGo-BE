@@ -42,6 +42,14 @@ module.exports = {
           key: 'clientId',
         },
       },
+      groupId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Groups',
+          key: 'groupId',
+        },
+      },
       msgid: {
         type: Sequelize.INTEGER,
         allowNull: true,

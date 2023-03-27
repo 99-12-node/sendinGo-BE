@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'clientId',
         foreignKey: 'clientId',
       });
+      this.belongsTo(models.Groups, {
+        targetKey: 'groupId',
+        foreignKey: 'groupId',
+      });
     }
     // this.belongsTo(models.Users, {
     //   targetKey: 'userId',
@@ -66,6 +70,14 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: 'Clients',
           key: 'clientId',
+        },
+      },
+      groupId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Groups',
+          key: 'groupId',
         },
       },
       msgid: {

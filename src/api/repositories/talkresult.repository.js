@@ -17,6 +17,7 @@ module.exports = class TalkResultRepository {
     rslt_message,
     talkSendId,
     clientId,
+    groupId,
     // userId, companyId
   }) => {
     logger.info(`TalkResultRepository.createTalkResult Request`);
@@ -32,6 +33,7 @@ module.exports = class TalkResultRepository {
       resultMessage: rslt_message,
       talkSendId,
       clientId,
+      groupId,
       // userId, companyId
     });
     return newTalkSends;
@@ -58,6 +60,7 @@ module.exports = class TalkResultRepository {
         'resultMessage',
         'resultDate',
         'clientId',
+        'groupId',
       ],
       include: {
         model: Clients,

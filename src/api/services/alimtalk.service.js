@@ -192,7 +192,7 @@ module.exports = class AlimtalkService {
   saveTalkResultDetail = async ({ results, talkSendData }) => {
     logger.info(`AlimtalkService.saveTalkResultDetail`);
 
-    const { talkSendId, clientId } = talkSendData;
+    const { talkSendId, clientId, groupId } = talkSendData;
 
     let response = [];
     for (const result of results) {
@@ -215,6 +215,7 @@ module.exports = class AlimtalkService {
             ...result,
             talkSendId,
             clientId,
+            groupId,
           }
         );
 
@@ -237,7 +238,6 @@ module.exports = class AlimtalkService {
     const talkSend = await this.talkSendRepository.getTalkSendByGroupId({
       groupId,
     });
-    console.log('talkSend :', talkSend);
     if (!talkSend) {
       throw new NotFoundError('해당하는 전송 데이터를 찾을 수 없습니다.');
     }
@@ -245,6 +245,7 @@ module.exports = class AlimtalkService {
       talkSendId: talkSend.talkSendId,
       clientId: talkSend.clientId,
       talkTemplateId: talkSend.talkTemplateId,
+      groupId: talkSend.groupId,
       mid: talkSend.mid,
     };
     return talkSendResultData;
