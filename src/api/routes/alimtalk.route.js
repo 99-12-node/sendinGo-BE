@@ -16,15 +16,15 @@ router.post('/sends', alimtalkController.sendAlimTalk);
 // 알림톡 발송 요청 응답 데이터 저장
 router.post('/sends/response', alimtalkController.saveSendAlimTalkResponse);
 
-// 알림톡 전송 결과
+// 알림톡 전송 결과 목록(리스트) 조회
 router.get('/results/list', alimtalkController.getAlimTalkResult);
 
 // 알림톡 전송 결과 데이터 저장
 router.post('/results/list/save', alimtalkController.saveSendAlimTalkResult);
 
-// 알림톡 전송 결과 상세
+// 알림톡 전송 결과 상세 조회
 router.get(
-  '/results/detail/:groupId',
+  '/results/detail/:talkSendId',
   alimtalkController.getAlimTalkResultDetail
 );
 
