@@ -53,14 +53,15 @@ module.exports = class TalkResultRepository {
       where: { msgid },
       attributes: [
         'talkResultDetailId',
-        'msgid',
+        'talkSendId',
         'phone',
+        'msgContent',
         'sendDate',
         'resultState',
         'resultMessage',
         'resultDate',
-        'clientId',
         'groupId',
+        'clientId',
       ],
       include: {
         model: Clients,
