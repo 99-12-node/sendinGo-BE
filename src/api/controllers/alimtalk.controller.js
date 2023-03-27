@@ -94,7 +94,7 @@ module.exports = class AlimtalkController {
   // 알림톡 전송 결과
   getAlimTalkResult = async (req, res, next) => {
     logger.info(`AlimtalkController.getAlimTalkResult`);
-    const { page, limit, startdate, enddate } = req.query;
+    const { page, limit, startdate, enddate, groupId } = req.query;
 
     try {
       const result = await this.aligoService.getAlimTalkResult({
@@ -108,6 +108,7 @@ module.exports = class AlimtalkController {
         `http://localhost:${PORT}/api/talk/results/list/save`,
         {
           data: result,
+          groupId,
         }
       );
 
@@ -123,13 +124,16 @@ module.exports = class AlimtalkController {
   saveSendAlimTalkResult = async (req, res, next) => {
     logger.info(`AlimtalkController.saveSendAlimTalkResult`);
 
-    const { data } = req.body;
+    const { data, groupId } = req.body;
     try {
       if (!data) {
         throw new BadRequestError('결과 조회에 실패하였습니다.');
       }
 
-      const result = await this.alimtalkResultService.saveAlimTalkResult(data);
+      const result = await this.alimtalkResultService.saveAlimTalkResult(
+        data,
+        groupId
+      );
       return res.status(201).json({
         data: {
           message: '결과조회 성공하였습니다.',
