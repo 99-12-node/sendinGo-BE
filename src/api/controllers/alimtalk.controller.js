@@ -148,15 +148,17 @@ module.exports = class AlimtalkController {
   // 알림톡 전송 결과 상세
   getAlimTalkResultDetail = async (req, res, next) => {
     logger.info(`AlimtalkController.getAlimTalkResultDetail`);
-    const { groupId } = req.params;
+    const { talkSendId } = req.params;
     try {
-      if (!groupId) {
+      if (!talkSendId) {
         throw new BadRequestError('입력값을 확인해주세요.');
       }
-      const talkSendData =
-        await this.alimtalkResultService.getTalkSendByGroupId({
-          groupId,
-        });
+      // talkSendId로 전송 데이터 존재 여부 확인
+      const talkSendData = await this.alimtalkResultService.getTalkSendBySendId(
+        {
+          talkSendId,
+        }
+      );
 
       // mid 있는 경우,결과 상세 조회 요청
       const results = await this.aligoService.getAlimTalkResultDetail({
