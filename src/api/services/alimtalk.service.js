@@ -192,7 +192,7 @@ module.exports = class AlimtalkService {
   saveTalkResultDetail = async ({ results, talkSendData }) => {
     logger.info(`AlimtalkService.saveTalkResultDetail`);
 
-    const { talkSendId, clientId } = talkSendData;
+    const { talkSendId, clientId, groupId } = talkSendData;
 
     let response = [];
     for (const result of results) {
@@ -215,6 +215,7 @@ module.exports = class AlimtalkService {
             ...result,
             talkSendId,
             clientId,
+            groupId,
           }
         );
 
@@ -245,6 +246,7 @@ module.exports = class AlimtalkService {
       talkSendId: talkSend.talkSendId,
       clientId: talkSend.clientId,
       talkTemplateId: talkSend.talkTemplateId,
+      groupId: talkSend.groupId,
       mid: talkSend.mid,
     };
     return talkSendResultData;
