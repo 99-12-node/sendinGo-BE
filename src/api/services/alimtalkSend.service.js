@@ -8,7 +8,7 @@ const AligoService = require('./aligo.service');
 const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
 const aligoService = new AligoService();
 
-module.exports = class AlimtalkService {
+module.exports = class AlimtalkSendService {
   constructor() {
     this.clientRepository = new ClientRepository();
     this.talkContentRepository = new TalkContentRepository();
@@ -23,7 +23,7 @@ module.exports = class AlimtalkService {
     talkTemplateCode,
     ...talkContentData
   }) => {
-    logger.info(`AlimtalkService.saveTalkContents`);
+    logger.info(`AlimtalkSendService.saveTalkContents`);
     // 클라이언트 존재 확인
     const existClient = await this.clientRepository.getClientById({
       clientId,
@@ -74,7 +74,7 @@ module.exports = class AlimtalkService {
 
   // 알림톡 발송
   sendAlimTalk = async (datas) => {
-    logger.info(`AlimtalkService.sendAlimTalk`);
+    logger.info(`AlimtalkSendService.sendAlimTalk`);
 
     let talkSendDatas = [];
     let talkSendParams = [];
@@ -132,7 +132,7 @@ module.exports = class AlimtalkService {
 
   // 알림톡 발송 요청 응답 데이터 저장
   saveSendAlimTalkResponse = async ({ data }) => {
-    logger.info(`AlimtalkService.saveSendAlimTalkResponse`);
+    logger.info(`AlimtalkSendService.saveSendAlimTalkResponse`);
     const { aligoResult, talkSend } = data;
     let result = [];
     for (const send of talkSend) {
@@ -152,43 +152,5 @@ module.exports = class AlimtalkService {
       result.push(newTalkSend);
     }
     return result;
-  };
-
-  // 알림톡 전송 결과 저장
-  saveAlimTalkResult = async (results) => {
-    logger.info(`AlimtalkService.saveAlimTalkResult`);
-
-    try {
-      let response = [];
-      for (const result of results) {
-        const { mid, msgCount, msgContent, sendState, sendDate } = result;
-        // 존재하는 전송 결과인지 확인
-        const existTalkSend = await this.talkSendRepository.getTalkSendById({
-          mid,
-        });
-        // 존재하는 경우에만 해당 전송 결과 데이터 업데이트
-        if (existTalkSend) {
-          const updatedDataCount =
-            await this.talkSendRepository.updateTalkSendResult({
-              mid: existTalkSend.mid,
-              msgCount,
-              msgContent,
-              sendState,
-              sendDate,
-            });
-
-          response.push(existTalkSend);
-        }
-      }
-      return response;
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  // 알림톡 전송 결과 상세
-  getAlimTalkDetailResult = async ({ mid }) => {
-    logger.info(`AlimtalkService.getAlimTalkDetailResult`);
-    return { mid };
   };
 };
