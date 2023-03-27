@@ -1,5 +1,6 @@
 const { logger } = require('../../middlewares/logger');
-const AlimtalkService = require('../services/alimtalk.service');
+const AlimtalkSendService = require('../services/alimtalkSend.service');
+const AlimtalkResultService = require('../services/alimitalkResult.service');
 const AligoService = require('../services/aligo.service');
 const axios = require('axios');
 const { BadRequestError } = require('../../exceptions/errors');
@@ -8,7 +9,8 @@ const { PORT } = process.env;
 
 module.exports = class AlimtalkController {
   constructor() {
-    this.alimtalkService = new AlimtalkService();
+    this.alimtalkSendService = new AlimtalkSendService();
+    this.alimtalkResultService = new AlimtalkResultService();
     this.aligoService = new AligoService();
   }
   // 토큰 생성
@@ -31,7 +33,7 @@ module.exports = class AlimtalkController {
       for (const data of datas) {
         const { clientId, templateCode, ...talkContentData } = data;
         // 알림톡 전송 내용 저장
-        const createdData = await this.alimtalkService.saveTalkContents({
+        const createdData = await this.alimtalkSendService.saveTalkContents({
           clientId,
           talkTemplateCode: templateCode,
           ...talkContentData,
@@ -51,7 +53,7 @@ module.exports = class AlimtalkController {
     logger.info(`AlimtalkController.sendAlimTalk`);
     const datas = req.body.data;
     try {
-      const { message, ...data } = await this.alimtalkService.sendAlimTalk(
+      const { message, ...data } = await this.alimtalkSendService.sendAlimTalk(
         datas
       );
       const redirectSaveResponse = await axios.post(
@@ -77,7 +79,9 @@ module.exports = class AlimtalkController {
       if (!data) {
         return res.status(400).json({ message });
       }
-      const result = await this.alimtalkService.saveSendAlimTalkResponse(data);
+      const result = await this.alimtalkSendService.saveSendAlimTalkResponse(
+        data
+      );
       return res.status(201).json({
         message,
         // data: result,
@@ -125,7 +129,7 @@ module.exports = class AlimtalkController {
         throw new BadRequestError('결과 조회에 실패하였습니다.');
       }
 
-      const result = await this.alimtalkService.saveAlimTalkResult(data);
+      const result = await this.alimtalkResultService.saveAlimTalkResult(data);
       return res.status(201).json({
         data: {
           message: '결과조회 성공하였습니다.',
@@ -145,9 +149,10 @@ module.exports = class AlimtalkController {
       if (!groupId) {
         throw new BadRequestError('입력값을 확인해주세요.');
       }
-      const talkSendData = await this.alimtalkService.getTalkSendByGroupId({
-        groupId,
-      });
+      const talkSendData =
+        await this.alimtalkResultService.getTalkSendByGroupId({
+          groupId,
+        });
 
       // mid 있는 경우,결과 상세 조회 요청
       const results = await this.aligoService.getAlimTalkResultDetail({
@@ -179,7 +184,7 @@ module.exports = class AlimtalkController {
         throw new BadRequestError('상세결과 조회에 실패하였습니다.');
       }
 
-      const response = await this.alimtalkService.saveTalkResultDetail({
+      const response = await this.alimtalkResultService.saveTalkResultDetail({
         results,
         talkSendData,
       });
