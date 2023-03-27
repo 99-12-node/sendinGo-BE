@@ -35,16 +35,15 @@ module.exports = class ClientController {
     logger.info(`ClientController.getClients Request`);
     // const { userId } = res.locals.user;
     // const { companyId } = res.locals.company;
-    const { groupId } = req.query;
+    const { groupId, index } = req.query;
     try {
-      const allData = await this.clientService.getClients({ groupId });
+      const allData = await this.clientService.getClients({ groupId, index });
 
       return res.status(200).json({ data: allData });
     } catch (error) {
       next(error);
     }
   };
-
   //클라이언트 수정
   editClientInfo = async (req, res, next) => {
     logger.info(`ClientController.editClientInfo Request`);

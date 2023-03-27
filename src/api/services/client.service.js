@@ -34,12 +34,18 @@ module.exports = class ClientService {
     return createClient;
   };
 
+  //offset: 필요한 데이터 일부분만 가져오기
+  //한 페이지당 보여질 client 수: 14개
+  //index=1
+
   //클라이언트 조회 (쿼리로 조건 조회)
-  getClients = async ({ groupId }) => {
+  getClients = async ({ groupId, index }) => {
     logger.info(`ClientService.getClients Request`);
 
+    const offset = index ? parseInt(index - 1) : 0;
+
     if (!groupId) {
-      const allData = await this.clientRepository.getAllClients();
+      const allData = await this.clientRepository.getAllClients({ offset });
       const clientCount = await this.clientRepository.getAllClientsCount();
       return { clients: allData, clientCount };
     }
