@@ -49,11 +49,11 @@ module.exports = class TalkSendRepository {
     return updatedTalkSends;
   };
 
-  // 톡 전송 groupId로 조회
-  getTalkSendByGroupId = async ({ groupId }) => {
-    logger.info(`TalkSendRepository.getTalkSendById Request`);
+  // mid로 전송 데이터 컬럼 조회
+  getTalkSendByMid = async ({ mid }) => {
+    logger.info(`TalkSendRepository.getTalkSendByMid Request`);
     const talkSend = await TalkSends.findOne({
-      where: { groupId },
+      where: { mid },
       attributes: {
         // 필요 컬럼: talkSendId, groupId, groupName, mid, scnt, fcnt, msgCount, sendState, sendDate
         exclude: [
@@ -65,6 +65,8 @@ module.exports = class TalkSendRepository {
           'userId',
           'createdAt',
           'updatedAt',
+          'clientId',
+          'talkTemplateId',
         ],
       },
       include: [
@@ -72,6 +74,25 @@ module.exports = class TalkSendRepository {
           model: Groups,
           attributes: ['groupName'],
         },
+      ],
+      raw: true,
+    }).then((model) => (model ? parseSequelizePrettier(model) : null));
+    return talkSend;
+  };
+
+  // groupId로 전송 데이터 컬럼 조회
+  getTalkSendByGroupId = async ({ groupId }) => {
+    logger.info(`TalkSendRepository.getTalkSendByGroupId Request`);
+    const talkSend = await TalkSends.findOne({
+      where: { groupId },
+      attributes: [
+        // 필요 컬럼: talkSendId, , mid, groupId, talkContentId, clientId, talkTemplateId
+        'talkSendId',
+        'mid',
+        'groupId',
+        'talkContentId',
+        'clientId',
+        'talkTemplateId',
       ],
       raw: true,
     }).then((model) => (model ? parseSequelizePrettier(model) : null));
