@@ -165,7 +165,7 @@ module.exports = class AlimtalkService {
       for (const result of results) {
         const { mid, msgCount, msgContent, sendState, sendDate } = result;
         // 존재하는 전송 결과인지 확인
-        const existTalkSend = await this.talkSendRepository.getTalkSendById({
+        const existTalkSend = await this.talkSendRepository.getTalkSendByMid({
           mid,
         });
         // 존재하는 경우에만 해당 전송 결과 데이터 업데이트
@@ -237,6 +237,7 @@ module.exports = class AlimtalkService {
     const talkSend = await this.talkSendRepository.getTalkSendByGroupId({
       groupId,
     });
+    console.log('talkSend :', talkSend);
     if (!talkSend) {
       throw new NotFoundError('해당하는 전송 데이터를 찾을 수 없습니다.');
     }
