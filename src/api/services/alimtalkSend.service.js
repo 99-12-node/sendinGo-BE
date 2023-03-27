@@ -6,17 +6,15 @@ const TalkSendRepository = require('../repositories/talksend.repository');
 const GroupRepository = require('../repositories/group.repository');
 const AligoService = require('./aligo.service');
 const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
-const TalkResultRepository = require('../repositories/talkresult.repository');
 const aligoService = new AligoService();
 
-module.exports = class AlimtalkService {
+module.exports = class AlimtalkSendService {
   constructor() {
     this.clientRepository = new ClientRepository();
     this.talkContentRepository = new TalkContentRepository();
     this.talkTemplateRepository = new TalkTemplateRepository();
     this.talkSendRepository = new TalkSendRepository();
     this.groupRepository = new GroupRepository();
-    this.talkResultRepository = new TalkResultRepository();
   }
 
   // 알림톡 전송 내용 저장
@@ -25,7 +23,7 @@ module.exports = class AlimtalkService {
     talkTemplateCode,
     ...talkContentData
   }) => {
-    logger.info(`AlimtalkService.saveTalkContents`);
+    logger.info(`AlimtalkSendService.saveTalkContents`);
     // 클라이언트 존재 확인
     const existClient = await this.clientRepository.getClientById({
       clientId,
@@ -76,7 +74,7 @@ module.exports = class AlimtalkService {
 
   // 알림톡 발송
   sendAlimTalk = async (datas) => {
-    logger.info(`AlimtalkService.sendAlimTalk`);
+    logger.info(`AlimtalkSendService.sendAlimTalk`);
 
     let talkSendDatas = [];
     let talkSendParams = [];
@@ -134,7 +132,7 @@ module.exports = class AlimtalkService {
 
   // 알림톡 발송 요청 응답 데이터 저장
   saveSendAlimTalkResponse = async ({ data }) => {
-    logger.info(`AlimtalkService.saveSendAlimTalkResponse`);
+    logger.info(`AlimtalkSendService.saveSendAlimTalkResponse`);
     const { aligoResult, talkSend } = data;
     let result = [];
     for (const send of talkSend) {
@@ -154,101 +152,5 @@ module.exports = class AlimtalkService {
       result.push(newTalkSend);
     }
     return result;
-  };
-
-  // 알림톡 전송 결과 저장
-  saveAlimTalkResult = async (results) => {
-    logger.info(`AlimtalkService.saveAlimTalkResult`);
-
-    try {
-      let response = [];
-      for (const result of results) {
-        const { mid, msgCount, msgContent, sendState, sendDate } = result;
-        // 존재하는 전송 결과인지 확인
-        const existTalkSend = await this.talkSendRepository.getTalkSendByMid({
-          mid,
-        });
-        // 존재하는 경우에만 해당 전송 결과 데이터 업데이트
-        if (existTalkSend) {
-          const updatedDataCount =
-            await this.talkSendRepository.updateTalkSendResult({
-              mid: existTalkSend.mid,
-              msgCount,
-              msgContent,
-              sendState,
-              sendDate,
-            });
-
-          response.push(existTalkSend);
-        }
-      }
-      return response;
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  // 알림톡 전송 상세 결과 저장
-  saveTalkResultDetail = async ({ results, talkSendData }) => {
-    logger.info(`AlimtalkService.saveTalkResultDetail`);
-
-    const { talkSendId, clientId, groupId } = talkSendData;
-
-    let response = [];
-    for (const result of results) {
-      const { msgid } = result;
-
-      const existTalkResult =
-        await this.talkResultRepository.getExistTalkResult({
-          msgid,
-        });
-      // 이미 상세 결과가 DB에 있는 경우, 원하는 컬럼만 조회
-      if (existTalkResult) {
-        const talkResult = await this.talkResultRepository.getTalkResultByMsgId(
-          { msgid }
-        );
-        response.push(talkResult);
-      } else {
-        // DB에 없다면, 전송 상세 결과 DB에 생성
-        const talkResultData = await this.talkResultRepository.createTalkResult(
-          {
-            ...result,
-            talkSendId,
-            clientId,
-            groupId,
-          }
-        );
-
-        const talkResult = await this.talkResultRepository.getTalkResultByMsgId(
-          {
-            msgid: talkResultData.msgid,
-          }
-        );
-        response.push(talkResult);
-      }
-    }
-    return response;
-  };
-
-  // groupId로 전송 데이터 조회
-  getTalkSendByGroupId = async ({ groupId }) => {
-    logger.info(`AlimtalkService.getTalkSendByGroupId`);
-
-    // talkTemplateId, ClientId, talkSendId 찾기
-    const talkSend = await this.talkSendRepository.getTalkSendByGroupId({
-      groupId,
-    });
-    console.log('talkSend :', talkSend);
-    if (!talkSend) {
-      throw new NotFoundError('해당하는 전송 데이터를 찾을 수 없습니다.');
-    }
-    const talkSendResultData = {
-      talkSendId: talkSend.talkSendId,
-      clientId: talkSend.clientId,
-      talkTemplateId: talkSend.talkTemplateId,
-      groupId: talkSend.groupId,
-      mid: talkSend.mid,
-    };
-    return talkSendResultData;
   };
 };
