@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'groupId',
         onDelete: 'CASCADE',
       });
+      this.hasMany(models.TalkResultDetails, {
+        sourceKey: 'groupId',
+        foreignKey: 'groupId',
+      });
     }
   }
   Groups.init(
