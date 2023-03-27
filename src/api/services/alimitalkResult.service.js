@@ -10,7 +10,7 @@ module.exports = class AlimtalkResultService {
   }
 
   // 알림톡 전송 결과 저장
-  saveAlimTalkResult = async (results) => {
+  saveAlimTalkResult = async (results, groupId) => {
     logger.info(`AlimtalkResultService.saveAlimTalkResult`);
 
     try {
@@ -20,6 +20,7 @@ module.exports = class AlimtalkResultService {
         // 존재하는 전송 결과인지 확인
         const existTalkSend = await this.talkSendRepository.getTalkSendByMid({
           mid,
+          groupId,
         });
         // 존재하는 경우에만 해당 전송 결과 데이터 업데이트
         if (existTalkSend) {
@@ -31,8 +32,8 @@ module.exports = class AlimtalkResultService {
               sendState,
               sendDate,
             });
-
-          response.push(existTalkSend);
+          const { mid, ...talkSendData } = existTalkSend;
+          response.push(talkSendData);
         }
       }
       return response;
