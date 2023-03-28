@@ -34,10 +34,6 @@ module.exports = class ClientService {
     return createClient;
   };
 
-  //offset: 필요한 데이터 일부분만 가져오기
-  //한 페이지당 보여질 client 수: 14개
-  //index=1
-
   //클라이언트 조회 (쿼리로 조건 조회)
   getClients = async ({ groupId, index }) => {
     logger.info(`ClientService.getClients Request`);
@@ -53,7 +49,10 @@ module.exports = class ClientService {
     if (!existGroup) {
       throw new NotFoundError('그룹 조회에 실패하였습니다.');
     }
-    const allData = await this.clientRepository.getClientsByGroup({ groupId });
+    const allData = await this.clientRepository.getClientsByGroup({
+      groupId,
+      offset,
+    });
     return allData;
   };
 
@@ -67,7 +66,7 @@ module.exports = class ClientService {
       clientEmail,
     });
     if (!editClientData) {
-      throw new BadRequestError('클라이언트 수정을 실패하였습니다.');
+      throw new BadRequestError('수정을 실패하였습니다.');
     }
 
     return editClientData;
@@ -81,7 +80,7 @@ module.exports = class ClientService {
     logger.info(`ClientService.deleteClient Request`);
     const deleteData = await this.clientRepository.deleteClient({ clientId });
     if (!deleteData) {
-      throw new BadRequestError('클라이언트 삭제에 실패하였습니다.');
+      throw new BadRequestError('삭제에 실패하였습니다.');
     }
     // if (deleteData.userId !== userId) {
     //   throw new Error('권한이 없습니다.');
