@@ -1,7 +1,7 @@
-const { logger } = require('../../middlewares/logger');
-const { ClientGroups } = require('../../db/models');
+const { logger } = require('../middlewares/logger');
+const { ClientGroups } = require('../db/models');
 const { Op } = require('sequelize');
-const { NotFoundError } = require('../../exceptions/errors');
+const { NotFoundError } = require('../exceptions/errors');
 
 module.exports = class ClientGroupRepository {
   constructor() {}

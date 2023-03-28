@@ -1,6 +1,6 @@
-const { logger } = require('../../middlewares/logger');
-const { TalkSends, Groups } = require('../../db/models');
-const parseSequelizePrettier = require('../../helpers/parse.sequelize');
+const { logger } = require('../middlewares/logger');
+const { TalkSends, Groups } = require('../db/models');
+const parseSequelizePrettier = require('../helpers/parse.sequelize');
 const { Op } = require('sequelize');
 
 module.exports = class TalkSendRepository {

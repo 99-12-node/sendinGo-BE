@@ -1,13 +1,13 @@
 const UserService = require('../services/user.service');
 const _ = require('lodash');
-const { logger } = require('../../middlewares/logger');
+const { logger } = require('../middlewares/logger');
 const {
   BadRequestError,
   UnauthorizedError,
   ForbiddenError,
   NotFoundError,
   Conflict,
-} = require('../../exceptions/errors');
+} = require('../exceptions/errors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY, EXPIRE_IN } = process.env;

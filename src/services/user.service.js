@@ -1,12 +1,12 @@
 const UserRepository = require('../repositories/user.repository');
 const CompanyRepository = require('../repositories/company.repository');
-const { logger } = require('../../middlewares/logger');
+const { logger } = require('../middlewares/logger');
 const bcrypt = require('bcrypt');
 const {
   BadRequestError,
   Conflict,
   NotFoundError,
-} = require('../../exceptions/errors');
+} = require('../exceptions/errors');
 require('dotenv').config();
 const SALT = parseInt(process.env.SALT);
 
