@@ -5,13 +5,10 @@ module.exports = class GroupRepository {
   constructor() {}
 
   //빈 Group 생성
-  createGroup = async ({
-    //userId,
-    groupName,
-    groupDescription,
-  }) => {
+  createGroup = async ({ userId, companyId, groupName, groupDescription }) => {
     const createGroup = await Groups.create({
-      // userId,
+      userId,
+      companyId,
       groupName,
       groupDescription,
     });
@@ -41,15 +38,21 @@ module.exports = class GroupRepository {
   };
 
   //그룹 삭제
-  deleteGroup = async ({ groupId }) => {
+  deleteGroup = async ({ userId, companyId, groupId }) => {
     logger.info(`GroupRepository.deleteGroup Request`);
-    const deleteGroupData = await Groups.destroy({ where: { groupId } });
+    const deleteGroupData = await Groups.destroy(
+      { groupId },
+      { where: { userId, companyId } }
+    );
     return deleteGroupData;
   };
 
   //그룹 삭제시, 삭제할 groupId 있는지 찾아보기
-  findGroupId = async ({ groupId }) => {
-    const findGroupData = await Groups.findOne({ where: { groupId } });
+  findGroupId = async ({ userId, companyId, groupId }) => {
+    const findGroupData = await Groups.findOne(
+      { groupId },
+      { where: { userId, companyId } }
+    );
     return findGroupData;
   };
 };
