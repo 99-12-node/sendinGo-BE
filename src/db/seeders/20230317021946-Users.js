@@ -20,7 +20,7 @@ module.exports = {
         companyId: 2,
         email: 'user2@company2.com',
         password:
-          '$2a$10$ZbuxxFUgouMF25ZFFLR4GeJVLemStnvlHCSaxzOTINXbZRm4jyA8i',
+          '$2a$10$JrYbpE0t7ZQQE9iT3c/nHO6uSJmVRFSydyke5O1iVVEZYKISrVOqm',
         name: '이두',
         phoneNumber: '01010101010',
         provider: 0,
