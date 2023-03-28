@@ -1,5 +1,5 @@
-const { Users, Companies, sequelize } = require('../../db/models');
-const { logger } = require('../../middlewares/logger');
+const { Users, Companies, sequelize } = require('../db/models');
+const { logger } = require('../middlewares/logger');
 
 class UserRepository {
   findUserByUserId = async ({ userId }) => {

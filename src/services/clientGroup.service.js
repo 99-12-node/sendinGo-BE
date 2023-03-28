@@ -1,5 +1,5 @@
-const { logger } = require('../../middlewares/logger');
-const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
+const { logger } = require('../middlewares/logger');
+const { BadRequestError, NotFoundError } = require('../exceptions/errors');
 const ClientGroupRepository = require('../repositories/clientGroup.repository');
 const GroupRepository = require('../repositories/group.repository');
 const ClientRepository = require('../repositories/client.repository');

@@ -1,7 +1,7 @@
-const { logger } = require('../../middlewares/logger');
+const { logger } = require('../middlewares/logger');
 const TalkContentRepository = require('../repositories/talkcontent.repository');
 const TalkTemplateRepository = require('../repositories/talktemplate.repository');
-const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
+const { BadRequestError, NotFoundError } = require('../exceptions/errors');
 
 module.exports = class TalkTemplateService {
   constructor() {
