@@ -1,11 +1,5 @@
 const Joi = require('joi');
-const {
-  BadRequestError,
-  UnauthorizedError,
-  ForbiddenError,
-  NotFoundError,
-  Conflict,
-} = require('../exceptions//errors');
+const { BadRequestError } = require('../exceptions/errors');
 
 const JoiHelper = {
   //Users
