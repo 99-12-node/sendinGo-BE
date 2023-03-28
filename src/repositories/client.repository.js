@@ -1,6 +1,6 @@
-const { logger } = require('../../middlewares/logger');
-const { Groups, Clients, ClientGroups, sequelize } = require('../../db/models');
-const parseSequelizePrettier = require('../../helpers/parse.sequelize');
+const { logger } = require('../middlewares/logger');
+const { Groups, Clients, ClientGroups, sequelize } = require('../db/models');
+const parseSequelizePrettier = require('../helpers/parse.sequelize');
 
 module.exports = class ClientRepository {
   constructor() {}

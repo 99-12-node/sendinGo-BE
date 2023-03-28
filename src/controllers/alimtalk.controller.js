@@ -1,9 +1,9 @@
-const { logger } = require('../../middlewares/logger');
+const { logger } = require('../middlewares/logger');
 const AlimtalkSendService = require('../services/alimtalkSend.service');
 const AlimtalkResultService = require('../services/alimitalkResult.service');
 const AligoService = require('../services/aligo.service');
 const axios = require('axios');
-const { BadRequestError } = require('../../exceptions/errors');
+const { BadRequestError } = require('../exceptions/errors');
 require('dotenv').config();
 const { PORT } = process.env;
 

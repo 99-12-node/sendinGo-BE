@@ -10,14 +10,14 @@ module.exports = async (req, res, next) => {
   const { authorization } = req.headers;
   const [tokenType, token] = (authorization ?? '').split(' ');
 
-  if (tokenType !== 'Bearer' || !token) {
-    throw new UnauthorizedError(
-      '토큰 타입이 일치하지 않거나, 토큰이 존재하지 않습니다.'
-    );
-  }
-  logger.info(`auth.middleware.userdecoded`);
-
   try {
+    if (tokenType !== 'Bearer' || !token) {
+      throw new UnauthorizedError(
+        '토큰 타입이 일치하지 않거나, 토큰이 존재하지 않습니다.'
+      );
+    }
+    logger.info(`auth.middleware.userdecoded`);
+
     const decodedToken = jwt.verify(token, KEY);
     const userId = decodedToken.userId;
     const companyId = decodedToken.companyId;

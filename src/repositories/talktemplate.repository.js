@@ -1,10 +1,10 @@
-const { logger } = require('../../middlewares/logger');
+const { logger } = require('../middlewares/logger');
 const {
   TalkTemplates,
   TalkVariables,
   TalkTemplatesVariables,
-} = require('../../db/models');
-const { NotFoundError } = require('../../exceptions/errors');
+} = require('../db/models');
+const { NotFoundError } = require('../exceptions/errors');
 
 module.exports = class TalkTemplateRepository {
   constructor() {}
