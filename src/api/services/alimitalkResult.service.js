@@ -84,14 +84,15 @@ module.exports = class AlimtalkResultService {
     return response;
   };
 
-  // groupId로 전송 데이터 조회
-  getTalkSendByGroupId = async ({ groupId }) => {
-    logger.info(`AlimtalkResultService.getTalkSendByGroupId`);
+  // talkSendId로 전송 데이터 조회
+  getTalkSendBySendId = async ({ talkSendId }) => {
+    logger.info(`AlimtalkResultService.getTalkSendBySendId`);
 
     // talkTemplateId, ClientId, talkSendId 찾기
-    const talkSend = await this.talkSendRepository.getTalkSendByGroupId({
-      groupId,
+    const talkSend = await this.talkSendRepository.getTalkSendBySendId({
+      talkSendId,
     });
+
     if (!talkSend) {
       throw new NotFoundError('해당하는 전송 데이터를 찾을 수 없습니다.');
     }

@@ -22,7 +22,7 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 전체 조회
-  getAllClients = async () => {
+  getAllClients = async ({ offset }) => {
     logger.info(`ClientRepository.getAllClients Request`);
     const allData = await Clients.findAll({
       attributes: {
@@ -41,13 +41,15 @@ module.exports = class ClientRepository {
         },
       ],
       order: [['clientName', 'ASC']],
+      offset: offset * 14,
+      limit: 14,
       raw: true,
     }).then((model) => model.map(parseSequelizePrettier));
     return allData;
   };
 
   //클라이언트 그룹별 조회
-  getClientsByGroup = async ({ groupId }) => {
+  getClientsByGroup = async ({ groupId, offset }) => {
     logger.info(`ClientRepository.getClientsByGroup Request`);
     const allData = await Clients.findAll({
       attributes: {
@@ -67,6 +69,8 @@ module.exports = class ClientRepository {
         },
       ],
       order: [['clientName', 'ASC']],
+      offset: offset * 14,
+      limit: 14,
       raw: true,
     }).then((model) => model.map(parseSequelizePrettier));
     return allData;

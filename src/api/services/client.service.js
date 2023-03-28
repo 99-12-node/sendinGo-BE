@@ -35,11 +35,15 @@ module.exports = class ClientService {
   };
 
   //클라이언트 조회 (쿼리로 조건 조회)
-  getClients = async ({ groupId }) => {
+  getClients = async ({ groupId, index }) => {
     logger.info(`ClientService.getClients Request`);
+    if (index == 0) {
+      throw new BadRequestError('올바르지 않은 요청입니다.');
+    }
+    const offset = index ? parseInt(index - 1) : 0;
 
     if (!groupId) {
-      const allData = await this.clientRepository.getAllClients();
+      const allData = await this.clientRepository.getAllClients({ offset });
       const clientCount = await this.clientRepository.getAllClientsCount();
       return { clients: allData, clientCount };
     }
@@ -47,7 +51,10 @@ module.exports = class ClientService {
     if (!existGroup) {
       throw new NotFoundError('그룹 조회에 실패하였습니다.');
     }
-    const allData = await this.clientRepository.getClientsByGroup({ groupId });
+    const allData = await this.clientRepository.getClientsByGroup({
+      groupId,
+      offset,
+    });
     return allData;
   };
 
@@ -61,7 +68,7 @@ module.exports = class ClientService {
       clientEmail,
     });
     if (!editClientData) {
-      throw new BadRequestError('클라이언트 수정을 실패하였습니다.');
+      throw new BadRequestError('수정을 실패하였습니다.');
     }
 
     return editClientData;
@@ -75,7 +82,7 @@ module.exports = class ClientService {
     logger.info(`ClientService.deleteClient Request`);
     const deleteData = await this.clientRepository.deleteClient({ clientId });
     if (!deleteData) {
-      throw new BadRequestError('클라이언트 삭제에 실패하였습니다.');
+      throw new BadRequestError('삭제에 실패하였습니다.');
     }
     // if (deleteData.userId !== userId) {
     //   throw new Error('권한이 없습니다.');

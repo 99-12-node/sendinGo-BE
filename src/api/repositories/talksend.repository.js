@@ -81,11 +81,11 @@ module.exports = class TalkSendRepository {
     return talkSend;
   };
 
-  // 상세조회용 - groupId로 전송 데이터 컬럼 조회
-  getTalkSendByGroupId = async ({ groupId }) => {
-    logger.info(`TalkSendRepository.getTalkSendByGroupId Request`);
+  // 상세조회용 - talkSendId로 전송 데이터 컬럼 조회
+  getTalkSendBySendId = async ({ talkSendId }) => {
+    logger.info(`TalkSendRepository.getTalkSendBySendId Request`);
     const talkSend = await TalkSends.findOne({
-      where: { groupId },
+      where: { talkSendId },
       attributes: [
         // 필요 컬럼: talkSendId, mid, groupId, talkContentId, clientId, talkTemplateId
         'talkSendId',
