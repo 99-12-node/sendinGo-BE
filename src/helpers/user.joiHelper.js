@@ -91,6 +91,21 @@ const JoiHelper = {
     }
     next();
   },
+
+  existEmailCheck: async (req, res, next) => {
+    const check = Joi.object().keys({
+      email: Joi.string()
+        .email()
+        .required()
+        .error(new BadRequestError('email 형식에 맞춰서 입력 바랍니다.')),
+    });
+    try {
+      await check.validateAsync(req.body);
+    } catch (e) {
+      next(e);
+    }
+    next();
+  },
 };
 
 module.exports = JoiHelper;
