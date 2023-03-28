@@ -85,8 +85,16 @@ class UserController {
           '핸드폰 번호는 - 를 제외한 10~11 자리 입니다.'
         );
       }
-      await this.userService.createUser(user);
-      res.status(201).json({ message: '회원가입이 완료 되었습니다.' });
+
+      const existUser = await this.userService.checkUserEmail({
+        email: user.email,
+      });
+      if (!existUser) {
+        const result = await this.userService.createUser(user);
+        return res.status(201).json({ message: '회원가입이 완료 되었습니다.' });
+      } else {
+        return res.status(400).json({ message: '회원가입에 실패했습니다.' });
+      }
     } catch (e) {
       next(e);
     }
@@ -100,8 +108,7 @@ class UserController {
         throw new BadRequestError('이메일 형식에 맞춰 입력 바랍니다.');
       }
       await this.userService.checkUserEmail({ email });
-
-      res.status(200).json({ message: '사용가능 한 이메일 입니다.' });
+      return res.status(200).json({ message: '사용가능 한 이메일 입니다.' });
     } catch (e) {
       next(e);
     }
