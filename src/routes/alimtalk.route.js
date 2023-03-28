@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { logger } = require('../../middlewares/logger');
+const { logger } = require('../middlewares/logger');
 const AlimtalkController = require('../controllers/alimtalk.controller');
 const alimtalkController = new AlimtalkController();
 

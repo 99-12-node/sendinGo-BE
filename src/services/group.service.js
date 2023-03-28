@@ -1,5 +1,5 @@
-const { logger } = require('../../middlewares/logger');
-const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
+const { logger } = require('../middlewares/logger');
+const { BadRequestError, NotFoundError } = require('../exceptions/errors');
 const GroupRepository = require('../repositories/group.repository');
 
 module.exports = class GroupService {

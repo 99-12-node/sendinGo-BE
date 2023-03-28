@@ -1,11 +1,11 @@
-const { logger } = require('../../middlewares/logger');
+const { logger } = require('../middlewares/logger');
 const ClientRepository = require('../repositories/client.repository');
 const TalkContentRepository = require('../repositories/talkcontent.repository');
 const TalkTemplateRepository = require('../repositories/talktemplate.repository');
 const TalkSendRepository = require('../repositories/talksend.repository');
 const GroupRepository = require('../repositories/group.repository');
 const AligoService = require('./aligo.service');
-const { BadRequestError, NotFoundError } = require('../../exceptions/errors');
+const { BadRequestError, NotFoundError } = require('../exceptions/errors');
 const aligoService = new AligoService();
 
 module.exports = class AlimtalkSendService {

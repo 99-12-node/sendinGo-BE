@@ -1,5 +1,5 @@
-const { Companies } = require('../../db/models');
-const { logger } = require('../../middlewares/logger');
+const { Companies } = require('../db/models');
+const { logger } = require('../middlewares/logger');
 
 class CompanyRepository {
   findCompanyByCompanyId = async ({ companyId }) => {

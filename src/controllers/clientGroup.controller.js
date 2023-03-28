@@ -1,6 +1,6 @@
-const { logger } = require('../../middlewares/logger');
+const { logger } = require('../middlewares/logger');
 const ClientGroupService = require('../services/clientGroup.service');
-const { BadRequestError } = require('../../exceptions/errors');
+const { BadRequestError } = require('../exceptions/errors');
 
 module.exports = class ClientGroupController {
   constructor() {

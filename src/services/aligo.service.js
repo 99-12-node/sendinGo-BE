@@ -1,7 +1,7 @@
-const { logger } = require('../../middlewares/logger');
+const { logger } = require('../middlewares/logger');
 const axios = require('axios');
 const url = require('url');
-const { BadRequestError } = require('../../exceptions/errors');
+const { BadRequestError } = require('../exceptions/errors');
 require('dotenv').config();
 
 const instance = axios.create({

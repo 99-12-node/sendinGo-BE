@@ -1,5 +1,5 @@
-const { logger } = require('../../middlewares/logger');
-const { NotFoundError } = require('../../exceptions/errors');
+const { logger } = require('../middlewares/logger');
+const { NotFoundError } = require('../exceptions/errors');
 const TalkResultRepository = require('../repositories/talkresult.repository');
 const TalkSendRepository = require('../repositories/talksend.repository');
 

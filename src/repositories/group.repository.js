@@ -1,5 +1,5 @@
-const { logger } = require('../../middlewares/logger');
-const { Groups, ClientGroups, sequelize } = require('../../db/models');
+const { logger } = require('../middlewares/logger');
+const { Groups, ClientGroups, sequelize } = require('../db/models');
 
 module.exports = class GroupRepository {
   constructor() {}
