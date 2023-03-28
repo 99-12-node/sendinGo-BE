@@ -48,33 +48,8 @@ module.exports = class ClientRepository {
     return allData;
   };
 
-  // getClientPage = async ({ index, limit }) => {
-  //   logger.info(`ClientRepository.getClientPage Request`);
-  //   const page = await Clients.findAllCount({
-  //     attributes: {
-  //       exclude: ['updatedAt'],
-  //     },
-  //     include: [
-  //       {
-  //         model: ClientGroups,
-  //         attributes: ['groupId'],
-  //         include: [
-  //           {
-  //             model: Groups,
-  //             attributes: ['groupName'],
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //     order: [['clientName', 'ASC']],
-  //     index,
-  //     limit,
-  //     raw: true,
-  //   });
-  // };
-
   //클라이언트 그룹별 조회
-  getClientsByGroup = async ({ groupId }) => {
+  getClientsByGroup = async ({ groupId, offset }) => {
     logger.info(`ClientRepository.getClientsByGroup Request`);
     const allData = await Clients.findAll({
       attributes: {
@@ -94,6 +69,8 @@ module.exports = class ClientRepository {
         },
       ],
       order: [['clientName', 'ASC']],
+      offset: offset * 14,
+      limit: 14,
       raw: true,
     }).then((model) => model.map(parseSequelizePrettier));
     return allData;
