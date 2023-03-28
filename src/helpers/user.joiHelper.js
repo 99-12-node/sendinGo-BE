@@ -12,9 +12,9 @@ const JoiHelper = {
   signUpCheck: async (req, res, next) => {
     const check = Joi.object().keys({
       email: Joi.string()
-        .email('email 형식에 맞춰서 입력 바랍니다.')
-        .required('필수 정보를 모두 입력해주세요.')
-        .error(new BadRequestError()),
+        .email()
+        .required()
+        .error(new BadRequestError('email 형식에 맞춰서 입력 바랍니다.')),
 
       name: Joi.string()
         .required('필수 정보를 모두 입력해주세요.')
@@ -47,6 +47,7 @@ const JoiHelper = {
     try {
       await check.validateAsync(req.body);
     } catch (e) {
+      console.log(e);
       next(e);
     }
     next();
