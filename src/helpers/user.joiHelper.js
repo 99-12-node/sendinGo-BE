@@ -122,13 +122,6 @@ const JoiHelper = {
           )
         ),
 
-      confirmPassword: Joi.string()
-        .required()
-        .valid(Joi.ref('password'))
-        .error(
-          new BadRequestError('비밀번호와 비밀번호 확인이 일치하지 않습니다.')
-        ),
-
       phoneNumber: Joi.string()
         .required()
         .regex(/^[0-9]{10,11}$/)
