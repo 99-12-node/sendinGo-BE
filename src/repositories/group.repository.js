@@ -40,19 +40,18 @@ module.exports = class GroupRepository {
   //그룹 삭제
   deleteGroup = async ({ userId, companyId, groupId }) => {
     logger.info(`GroupRepository.deleteGroup Request`);
-    const deleteGroupData = await Groups.destroy(
-      { groupId },
-      { where: { userId, companyId } }
-    );
+    const deleteGroupData = await Groups.destroy({
+      where: { userId, companyId, groupId },
+    });
     return deleteGroupData;
   };
 
   //그룹 삭제시, 삭제할 groupId 있는지 찾아보기
-  findGroupId = async ({ userId, companyId, groupId }) => {
-    const findGroupData = await Groups.findOne(
-      { groupId },
-      { where: { userId, companyId } }
-    );
+  findGroupId = async ({ groupId }) => {
+    const findGroupData = await Groups.findOne({
+      where: { groupId },
+      attributes: ['userId', 'companyId'],
+    });
     return findGroupData;
   };
 };

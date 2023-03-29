@@ -23,9 +23,7 @@ module.exports = class GroupService {
     if (!groupData) {
       throw new BadRequestError('그룹 생성에 실패하였습니다.');
     }
-    if (groupData.userId !== userId) {
-      throw new ForbiddenError('접근 권한이 없습니다.');
-    }
+
     return groupData;
   };
 
@@ -42,22 +40,20 @@ module.exports = class GroupService {
   //그룹 삭제
   deleteGroup = async ({ userId, companyId, groupId }) => {
     logger.info(`GroupService.deleteGroup Request`);
-    const findGroupData = await this.groupRepository.findGroupId({
-      userId,
-      companyId,
+    const data = await this.groupRepository.findGroupId({
       groupId,
     });
-    if (!findGroupData) {
-      throw new NotFoundError('그룹 삭제에 실패하였습니다.');
-    }
-    if (findGroupData.userId !== userId) {
-      throw new ForbiddenError('접근 권한이 없습니다.');
+    if (data.userId !== userId || data.companyId !== companyId) {
+      throw new ForbiddenError('삭제 권한이 없습니다.');
     }
     const deleteGroupData = await this.groupRepository.deleteGroup({
       userId,
       companyId,
       groupId,
     });
+    if (!deleteGroupData) {
+      throw new BadRequestError('그룹 삭제에 실패하였습니다.');
+    }
 
     return deleteGroupData;
   };
