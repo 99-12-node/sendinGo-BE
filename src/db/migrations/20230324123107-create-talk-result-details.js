@@ -18,22 +18,22 @@ module.exports = {
         },
         onDelete: 'CASCADE',
       },
-      // userId: {
-      //   type: Sequelize.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: 'Users',
-      //     key: 'userId',
-      //   },
-      // },
-      // companyId: {
-      //   type: Sequelize.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: 'Companies',
-      //     key: 'companyId',
-      //   },
-      // },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'userId',
+        },
+      },
+      companyId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Companies',
+          key: 'companyId',
+        },
+      },
       clientId: {
         type: Sequelize.INTEGER,
         allowNull: false,

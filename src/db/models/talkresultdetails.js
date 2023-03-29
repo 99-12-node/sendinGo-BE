@@ -21,15 +21,16 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'groupId',
         foreignKey: 'groupId',
       });
+
+      this.belongsTo(models.Users, {
+        targetKey: 'userId',
+        foreignKey: 'userId',
+      });
+      this.belongsTo(models.Users, {
+        targetKey: 'companyId',
+        foreignKey: 'companyId',
+      });
     }
-    // this.belongsTo(models.Users, {
-    //   targetKey: 'userId',
-    //   foreignKey: 'userId',
-    // });
-    // this.belongsTo(models.Users, {
-    //   targetKey: 'companyId',
-    //   foreignKey: 'companyId',
-    // });
   }
   TalkResultDetails.init(
     {
@@ -48,22 +49,22 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: 'CASCADE',
       },
-      // userId: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: 'Users',
-      //     key: 'userId',
-      //   },
-      // },
-      // companyId: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: 'Companies',
-      //     key: 'companyId',
-      //   },
-      // },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'userId',
+        },
+      },
+      companyId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Companies',
+          key: 'companyId',
+        },
+      },
       clientId: {
         type: DataTypes.INTEGER,
         allowNull: false,

@@ -6,14 +6,16 @@ module.exports = class ClientRepository {
   constructor() {}
   // 클라이언트 생성
   createClient = async ({
-    //userId,
+    userId,
+    companyId,
     clientName,
     contact,
     clientEmail,
   }) => {
     logger.info(`ClientRepository.createClient Request`);
     const createData = await Clients.create({
-      // userId,
+      userId,
+      companyId,
       clientName,
       contact,
       clientEmail,
@@ -77,11 +79,18 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 수정
-  editClientInfo = async ({ clientId, clientName, contact, clientEmail }) => {
+  editClientInfo = async ({
+    userId,
+    companyId,
+    clientId,
+    clientName,
+    contact,
+    clientEmail,
+  }) => {
     logger.info(`ClientRepository.editClientInfo Request`);
     const editClientData = await Clients.update(
       { clientName, contact, clientEmail },
-      { where: { clientId } }
+      { where: { userId, companyId, clientId } }
     );
 
     return editClientData;
@@ -92,6 +101,7 @@ module.exports = class ClientRepository {
     logger.info(`ClientRepository.deleteClient Request`);
     const deleteData = await Clients.destroy({
       where: { clientId },
+      attributes: ['userId', 'companyId'],
     });
     return deleteData;
   };
@@ -102,6 +112,15 @@ module.exports = class ClientRepository {
     const client = await Clients.findOne({
       where: { clientId },
       attributes: ['clientId', 'clientName', 'contact'],
+    });
+    return client;
+  };
+
+  comfirmUser = async ({ clientId }) => {
+    logger.info(`ClientRepository.comfirmUser Request`);
+    const client = await Clients.findOne({
+      where: { clientId },
+      attributes: ['userId', 'companyId'],
     });
     return client;
   };
