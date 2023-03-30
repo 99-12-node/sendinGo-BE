@@ -13,6 +13,11 @@ router.use('/users', [userRouter]);
 router.use('/groups', [groupRouter]);
 router.use('/batch', [clientGroupRouter]);
 
+/**
+ * GET /
+ * @summary This is the summary of the endpoint
+ * @return {string} 200 - success response
+ */
 router.get('/', (_req, res) => {
   res.send('정상적으로 요청되었습니다.');
 });

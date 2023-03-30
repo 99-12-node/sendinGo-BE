@@ -33,6 +33,7 @@
     "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
+    "express-jsdoc-swagger": "^1.8.0",
     "sequelize-cli": "^6.6.0"
   }
 }
