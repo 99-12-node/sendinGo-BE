@@ -1,15 +1,16 @@
 const { logger } = require('../middlewares/logger');
 const { ClientGroups } = require('../db/models');
 const { Op } = require('sequelize');
-const { NotFoundError } = require('../exceptions/errors');
 
 module.exports = class ClientGroupRepository {
   constructor() {}
 
   // ClientGroup 생성
-  createClientGroup = async ({ groupId, clientId }) => {
+  createClientGroup = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGroupRepository.createClientGroup Request`);
     const clientGroupData = await ClientGroups.create({
+      userId,
+      companyId,
       groupId,
       clientId,
     });

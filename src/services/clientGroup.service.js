@@ -1,5 +1,9 @@
 const { logger } = require('../middlewares/logger');
-const { BadRequestError, NotFoundError } = require('../exceptions/errors');
+const {
+  BadRequestError,
+  NotFoundError,
+  ForbiddenError,
+} = require('../exceptions/errors');
 const ClientGroupRepository = require('../repositories/clientGroup.repository');
 const GroupRepository = require('../repositories/group.repository');
 const ClientRepository = require('../repositories/client.repository');
@@ -11,19 +15,26 @@ module.exports = class ClientGroupService {
     this.clientRepository = new ClientRepository();
   }
   // ClientGroup 등록
-  createClientGroup = async ({ groupId, clientId }) => {
+  createClientGroup = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGrouopService.createClientGroup Request`);
 
-    // 존재하는 groupId 인지 확인
-    const existGroup = await this.groupRepository.findGroupId({ groupId });
-    if (!existGroup) {
-      throw new NotFoundError('그룹 조회에 실패했습니다.');
+    //유저 확인
+    const comfirmClientId = await this.clientRepository.comfirmUser({
+      userId,
+      companyId,
+      clientId,
+    });
+    if (!comfirmClientId) {
+      throw new ForbiddenError('등록 권한이 없습니다.');
     }
-
-    // 존재하는 clientId 인지 확인
-    const existClient = await this.clientRepository.getClientById({ clientId });
-    if (!existClient) {
-      throw new NotFoundError('클라이언트 조회에 실패했습니다.');
+    //유저 확인
+    const comfirmGroupId = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+    if (!comfirmGroupId) {
+      throw new ForbiddenError('그룹 조회에 실패하였습니다.');
     }
 
     // 기존 등록 여부 확인
@@ -44,6 +55,8 @@ module.exports = class ClientGroupService {
       // 등록되지 않은 경우, 추가
       const clientGroupData =
         await this.clientGroupRepository.createClientGroup({
+          userId,
+          companyId,
           groupId,
           clientId,
         });
