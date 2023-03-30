@@ -10,10 +10,14 @@ module.exports = class ClientGroupController {
   // ClientGroup 등록
   createClientGroup = async (req, res, next) => {
     logger.info(`ClientGroupController.createClientGroup Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { groupId, clientId } = req.params;
 
     try {
       const result = await this.clientGroupService.createClientGroup({
+        userId,
+        companyId,
         groupId,
         clientId,
       });
