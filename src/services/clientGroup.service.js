@@ -27,7 +27,7 @@ module.exports = class ClientGroupService {
     if (!comfirmClientId) {
       throw new ForbiddenError('등록 권한이 없습니다.');
     }
-    //유저 확인
+    // //유저 확인
     const comfirmGroupId = await this.groupRepository.findGroupId({
       userId,
       companyId,
