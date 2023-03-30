@@ -29,7 +29,7 @@ module.exports = {
       },
       // userId: {
       //   allowNull: false,
-      //   type: DataTypes.INTEGER,
+      //   type: Sequelize.INTEGER,
       //   references: {
       //     model: 'Users',
       //     key: 'userId',
@@ -38,7 +38,7 @@ module.exports = {
       // },
       // companyId: {
       //   allowNull: false,
-      //   type: DataTypes.INTEGER,
+      //   type: Sequelize.INTEGER,
       //   references: {
       //     model: 'Companies',
       //     key: 'companyId',

@@ -7,15 +7,17 @@ module.exports = class GroupController {
     this.groupService = new GroupService();
   }
 
-  //빈 Group 생성 //groupId 반환
+  //빈 Group 생성
   createGroup = async (req, res, next) => {
     logger.info(`GroupController.createGroup Request`);
-    // const { userId } = res.locals.users;
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { groupName, groupDescription } = req.body;
 
     try {
       const groupData = await this.groupService.createGroup({
-        // userId,
+        userId,
+        companyId,
         groupName,
         groupDescription,
       });
@@ -43,10 +45,12 @@ module.exports = class GroupController {
   //그룹 삭제
   deleteGroup = async (req, res, next) => {
     logger.info(`GroupController.deleteGroup Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { groupId } = req.params;
 
     try {
-      await this.groupService.deleteGroup({ groupId });
+      await this.groupService.deleteGroup({ userId, companyId, groupId });
       res.status(200).json({ message: '그룹 삭제가 완료되었습니다.' });
     } catch (error) {
       next(error);

@@ -9,14 +9,16 @@ module.exports = class ClientRepository {
   constructor() {}
   // 클라이언트 생성
   createClient = async ({
-    //userId,
+    userId,
+    companyId,
     clientName,
     contact,
     clientEmail,
   }) => {
     logger.info(`ClientRepository.createClient Request`);
     const createData = await Clients.create({
-      // userId,
+      userId,
+      companyId,
       clientName,
       contact,
       clientEmail,
@@ -72,21 +74,28 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 수정
-  editClientInfo = async ({ clientId, clientName, contact, clientEmail }) => {
+  editClientInfo = async ({
+    userId,
+    companyId,
+    clientId,
+    clientName,
+    contact,
+    clientEmail,
+  }) => {
     logger.info(`ClientRepository.editClientInfo Request`);
     const editClientData = await Clients.update(
       { clientName, contact, clientEmail },
-      { where: { clientId } }
+      { where: { userId, companyId, clientId } }
     );
 
     return editClientData;
   };
 
   //클라이언트 삭제
-  deleteClient = async ({ clientId }) => {
+  deleteClient = async ({ clientId, userId, companyId }) => {
     logger.info(`ClientRepository.deleteClient Request`);
     const deleteData = await Clients.destroy({
-      where: { clientId },
+      where: { clientId, userId, companyId },
     });
     return deleteData;
   };
@@ -97,6 +106,22 @@ module.exports = class ClientRepository {
     const client = await Clients.findOne({
       where: { clientId },
       attributes: ['clientId', 'clientName', 'contact'],
+    });
+    return client;
+  };
+
+  comfirmUser = async ({ clientId, userId, companyId }) => {
+    logger.info(`ClientRepository.comfirmUser Request`);
+    const client = await Clients.findOne({
+      where: { clientId, userId, companyId },
+    });
+    return client;
+  };
+
+  comfirmUserId = async ({ userId, companyId }) => {
+    logger.info(`ClientRepository. comfirmUserId Request`);
+    const client = await Clients.findOne({
+      where: { userId, companyId },
     });
     return client;
   };
