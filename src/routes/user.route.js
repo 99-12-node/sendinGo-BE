@@ -12,13 +12,23 @@ router.post(
   userController.checkUserEmail
 );
 router.post('/login', JoiHelper.loginCheck, userController.loginUser);
-router.get('/:userId', authMiddleWare, userController.getUser);
+router.get(
+  '/:userId',
+  authMiddleWare,
+  JoiHelper.userIdAndRequestIdCheck,
+  userController.getUser
+);
 router.patch(
   '/:userId',
   authMiddleWare,
   JoiHelper.editUserCheck,
   userController.editUser
 );
-router.delete('/:userId', authMiddleWare, userController.deleteUser);
+router.delete(
+  '/:userId',
+  authMiddleWare,
+  JoiHelper.userIdAndRequestIdCheck,
+  userController.deleteUser
+);
 
 module.exports = router;
