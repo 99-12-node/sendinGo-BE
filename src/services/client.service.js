@@ -47,14 +47,18 @@ module.exports = class ClientService {
       userId,
       companyId,
     });
-    if (!data) {
-      throw new ForbiddenError('조회 권한이 없습니다.');
-    }
     const offset = index ? parseInt(index - 1) : 0;
 
     if (!groupId) {
-      const allData = await this.clientRepository.getAllClients({ offset });
-      const clientCount = await this.clientRepository.getAllClientsCount();
+      const allData = await this.clientRepository.getAllClients({
+        userId,
+        companyId,
+        offset,
+      });
+      const clientCount = await this.clientRepository.getAllClientsCount({
+        userId,
+        companyId,
+      });
       return { clients: allData, clientCount };
     }
     const existGroup = await this.groupRepository.findGroupId({ groupId });

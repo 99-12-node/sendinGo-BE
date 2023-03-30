@@ -1,6 +1,7 @@
 const { logger } = require('../middlewares/logger');
 const { Groups, Clients, ClientGroups, sequelize } = require('../db/models');
 const parseSequelizePrettier = require('../helpers/parse.sequelize');
+const { Op } = require('sequelize');
 
 // offset 기준 상수
 const OFFSET_CONSTANT = 14;
@@ -27,7 +28,7 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 전체 조회
-  getAllClients = async ({ offset }) => {
+  getAllClients = async ({ userId, companyId, offset }) => {
     logger.info(`ClientRepository.getAllClients Request`);
 
     const TOTAL_OFFSET = offset * OFFSET_CONSTANT;
@@ -37,6 +38,7 @@ module.exports = class ClientRepository {
       FROM Clients AS c\
       LEFT OUTER JOIN ClientGroups cg ON c.clientId = cg.clientId\
       LEFT OUTER JOIN \`Groups\` g ON g.groupId = cg.groupId\
+      WHERE c.userId = ${userId} AND c.companyId = ${companyId}\
       GROUP BY c.clientId\
       ORDER BY c.createdAt DESC\
       LIMIT ${OFFSET_CONSTANT} OFFSET ${TOTAL_OFFSET}\
@@ -113,7 +115,7 @@ module.exports = class ClientRepository {
   comfirmUser = async ({ clientId, userId, companyId }) => {
     logger.info(`ClientRepository.comfirmUser Request`);
     const client = await Clients.findOne({
-      where: { clientId, userId, companyId },
+      where: { [Op.and]: [{ userId }, { companyId }, { clientId }] },
     });
     return client;
   };
@@ -121,15 +123,19 @@ module.exports = class ClientRepository {
   comfirmUserId = async ({ userId, companyId }) => {
     logger.info(`ClientRepository. comfirmUserId Request`);
     const client = await Clients.findOne({
-      where: { userId, companyId },
+      where: { [Op.and]: [{ userId }, { companyId }] },
     });
     return client;
   };
 
   //클라이언트 전체 인원 조회
-  getAllClientsCount = async () => {
+  getAllClientsCount = async ({ userId, companyId }) => {
     logger.info(`ClientRepository.getAllClientsCount Request`);
-    const count = await Clients.count({});
+    const count = await Clients.count({
+      where: {
+        [Op.and]: [{ userId }, { companyId }],
+      },
+    });
     return count;
   };
 };
