@@ -8,16 +8,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // this.belongsTo(models.Users, {
-      //   targetKey: 'userId',
-      //   foreignKey: 'userId',
-      //   onDelete: 'CASCADE',
-      // });
-      // this.belongsTo(models.Users, {
-      //   targetKey: 'companyId',
-      //   foreignKey: 'companyId',
-      //   onDelete: 'CASCADE',
-      // });
+      this.belongsTo(models.Users, {
+        targetKey: 'userId',
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+      });
+      this.belongsTo(models.Users, {
+        targetKey: 'companyId',
+        foreignKey: 'companyId',
+        onDelete: 'CASCADE',
+      });
       this.belongsTo(models.Groups, {
         targetKey: 'groupId',
         foreignKey: 'groupId',
@@ -89,24 +89,24 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      // userId: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: 'Users',
-      //     key: 'userId',
-      //   },
-      //   onDelete: 'CASCADE',
-      // },
-      // companyId: {
-      //   type: DataTypes.INTEGER,
-      //   allowNull: false,
-      //   references: {
-      //     model: 'Users',
-      //     key: 'companyId',
-      //   },
-      //   onDelete: 'CASCADE',
-      // },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'userId',
+        },
+        onDelete: 'CASCADE',
+      },
+      companyId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'companyId',
+        },
+        onDelete: 'CASCADE',
+      },
       groupId: {
         type: DataTypes.INTEGER,
         allowNull: false,
