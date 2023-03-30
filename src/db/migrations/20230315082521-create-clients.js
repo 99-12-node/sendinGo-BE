@@ -15,12 +15,10 @@ module.exports = {
       },
       contact: {
         type: Sequelize.STRING,
-        unique: true,
         allowNull: false,
       },
       clientEmail: {
         type: Sequelize.STRING,
-        unique: true,
         allowNull: false,
       },
       userId: {
