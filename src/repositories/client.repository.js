@@ -38,7 +38,7 @@ module.exports = class ClientRepository {
       LEFT OUTER JOIN ClientGroups cg ON c.clientId = cg.clientId\
       LEFT OUTER JOIN \`Groups\` g ON g.groupId = cg.groupId\
       GROUP BY c.clientId\
-      ORDER BY c.clientName ASC\
+      ORDER BY c.createdAt DESC\
       LIMIT ${OFFSET_CONSTANT} OFFSET ${TOTAL_OFFSET}\
       `
     );
@@ -60,12 +60,12 @@ module.exports = class ClientRepository {
           include: [
             {
               model: Groups,
-              attributes: ['groupName'],
+              attributes: ['groupName', 'groupDescription'],
             },
           ],
         },
       ],
-      order: [['clientName', 'ASC']],
+      order: [['createdAt', 'DESC']],
       offset: offset * OFFSET_CONSTANT,
       limit: OFFSET_CONSTANT,
       raw: true,
