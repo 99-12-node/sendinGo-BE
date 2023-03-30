@@ -29,15 +29,23 @@ module.exports = {
           },
           onDelete: 'CASCADE',
         },
-        createdAt: {
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        userId: {
+          type: Sequelize.INTEGER,
           allowNull: false,
+          references: {
+            model: 'Users',
+            key: 'userId',
+          },
+          onDelete: 'CASCADE',
         },
-        updatedAt: {
-          type: Sequelize.DATE,
-          defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        companyId: {
+          type: Sequelize.INTEGER,
           allowNull: false,
+          references: {
+            model: 'Users',
+            key: 'companyId',
+          },
+          onDelete: 'CASCADE',
         },
       },
       {

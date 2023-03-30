@@ -7,9 +7,11 @@ module.exports = class ClientGroupRepository {
   constructor() {}
 
   // ClientGroup 생성
-  createClientGroup = async ({ groupId, clientId }) => {
+  createClientGroup = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGroupRepository.createClientGroup Request`);
     const clientGroupData = await ClientGroups.create({
+      userId,
+      companyId,
       groupId,
       clientId,
     });
@@ -17,22 +19,22 @@ module.exports = class ClientGroupRepository {
   };
 
   //ClientGroup 삭제
-  deleteClientGroup = async ({ groupId, clientId }) => {
+  deleteClientGroup = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGroupRepository.deleteClientGroup Request`);
     const deletedClientGroup = await ClientGroups.destroy({
       where: {
-        [Op.and]: [{ groupId }, { clientId }],
+        [Op.and]: [{ userId }, { companyId }, { groupId }, { clientId }],
       },
     });
     return deletedClientGroup;
   };
 
   //ClientGroup Id로 조회
-  getClientGroupById = async ({ groupId, clientId }) => {
+  getClientGroupById = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGroupRepository.getClientGroupById Request`);
     const clientGroup = await ClientGroups.findOne({
       where: {
-        [Op.and]: [{ groupId }, { clientId }],
+        [Op.and]: [{ userId }, { companyId }, { groupId }, { clientId }],
       },
     });
 

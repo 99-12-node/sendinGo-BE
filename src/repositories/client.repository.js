@@ -48,9 +48,10 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 그룹별 조회
-  getClientsByGroup = async ({ groupId, offset }) => {
+  getClientsByGroup = async ({ userId, companyId, groupId, offset }) => {
     logger.info(`ClientRepository.getClientsByGroup Request`);
     const allData = await Clients.findAll({
+      where: { [Op.and]: [{ userId }, { companyId }] },
       attributes: {
         exclude: ['updatedAt'],
       },
@@ -87,7 +88,7 @@ module.exports = class ClientRepository {
     logger.info(`ClientRepository.editClientInfo Request`);
     const editClientData = await Clients.update(
       { clientName, contact, clientEmail },
-      { where: { userId, companyId, clientId } }
+      { where: { [Op.and]: [{ userId }, { companyId }, { clientId }] } }
     );
 
     return editClientData;
@@ -97,16 +98,16 @@ module.exports = class ClientRepository {
   deleteClient = async ({ clientId, userId, companyId }) => {
     logger.info(`ClientRepository.deleteClient Request`);
     const deleteData = await Clients.destroy({
-      where: { clientId, userId, companyId },
+      where: { [Op.and]: [{ userId }, { companyId }, { clientId }] },
     });
     return deleteData;
   };
 
   //클라이언트 Id로 조회
-  getClientById = async ({ clientId }) => {
-    logger.info(`ClientRepository.getClientById Request`);
+  getClientByClientId = async ({ userId, companyId, clientId }) => {
+    logger.info(`ClientRepository.getClientByClientId Request`);
     const client = await Clients.findOne({
-      where: { clientId },
+      where: { [Op.and]: [{ userId }, { companyId }, { clientId }] },
       attributes: ['clientId', 'clientName', 'contact'],
     });
     return client;
