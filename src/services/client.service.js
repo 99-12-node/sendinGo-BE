@@ -61,7 +61,11 @@ module.exports = class ClientService {
       });
       return { clients: allData, clientCount };
     }
-    const existGroup = await this.groupRepository.findGroupId({ groupId });
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
     if (!existGroup) {
       throw new NotFoundError('그룹 조회에 실패하였습니다.');
     }
