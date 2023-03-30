@@ -43,12 +43,9 @@ module.exports = class ClientService {
     if (index == 0) {
       throw new BadRequestError('올바르지 않은 요청입니다.');
     }
-    const data = await this.clientRepository.comfirmUserId({
-      userId,
-      companyId,
-    });
     const offset = index ? parseInt(index - 1) : 0;
 
+    // 전체 조회
     if (!groupId) {
       const allData = await this.clientRepository.getAllClients({
         userId,
@@ -61,15 +58,16 @@ module.exports = class ClientService {
       });
       return { clients: allData, clientCount };
     }
+
+    // 그룹별 조회
     const existGroup = await this.groupRepository.findGroupId({
       userId,
       companyId,
       groupId,
     });
-    if (!existGroup) {
-      throw new NotFoundError('그룹 조회에 실패하였습니다.');
-    }
     const allData = await this.clientRepository.getClientsByGroup({
+      userId,
+      companyId,
       groupId,
       offset,
     });
@@ -149,7 +147,7 @@ module.exports = class ClientService {
   createClientBulk = async ({ userId, companyId, clientArray }) => {
     logger.info(`ClientService.createClientBulk Request`);
     try {
-      let createClients = [];
+      const createClients = [];
 
       if (!clientArray) {
         throw new BadRequestError('입력값을 확인해주세요');

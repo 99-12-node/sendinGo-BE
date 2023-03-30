@@ -27,19 +27,21 @@ module.exports = class ClientGroupService {
     if (!comfirmClientId) {
       throw new ForbiddenError('등록 권한이 없습니다.');
     }
-    // //유저 확인
-    const comfirmGroupId = await this.groupRepository.findGroupId({
+    // 존재하는 groupId 인지 확인
+    const existGroup = await this.groupRepository.findGroupId({
       userId,
       companyId,
       groupId,
     });
-    if (!comfirmGroupId) {
-      throw new ForbiddenError('그룹 조회에 실패하였습니다.');
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패했습니다.');
     }
 
     // 기존 등록 여부 확인
     const existClientGroup =
       await this.clientGroupRepository.getClientGroupById({
+        userId,
+        companyId,
         groupId,
         clientId,
       });
@@ -47,6 +49,8 @@ module.exports = class ClientGroupService {
     // 등록된 경우, 해제
     if (existClientGroup) {
       const destoryResult = await this.clientGroupRepository.deleteClientGroup({
+        userId,
+        companyId,
         groupId,
         clientId,
       });
@@ -65,19 +69,25 @@ module.exports = class ClientGroupService {
   };
 
   // ClientGroup 대량등록
-  createClientGroupBulk = async ({ groupId, clientIds }) => {
+  createClientGroupBulk = async ({ userId, companyId, groupId, clientIds }) => {
     logger.info(`ClientGrouopService.createClientGroupBulk Request`);
 
     // 존재하는 groupId 인지 확인
-    const existGroup = await this.groupRepository.findGroupId({ groupId });
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
     if (!existGroup) {
       throw new NotFoundError('그룹 조회에 실패했습니다.');
     }
 
-    let result;
+    const result = {};
     for (const clientId of clientIds) {
       // clientId 존재여부 확인
-      const existClient = await this.clientRepository.getClientById({
+      const existClient = await this.clientRepository.getClientByClientId({
+        userId,
+        companyId,
         clientId,
       });
       if (!existClient) {
@@ -87,6 +97,8 @@ module.exports = class ClientGroupService {
       // 기존 등록 여부 확인
       const existClientGroup =
         await this.clientGroupRepository.getClientGroupById({
+          userId,
+          companyId,
           groupId,
           clientId,
         });
@@ -95,20 +107,24 @@ module.exports = class ClientGroupService {
       if (existClientGroup) {
         const destoryResult =
           await this.clientGroupRepository.deleteClientGroup({
+            userId,
+            companyId,
             groupId,
             clientId,
           });
 
-        result = { destoryResult };
+        result.destoryResult = destoryResult;
       } else {
         // 등록되지 않은 경우, 추가
         const clientGroupData =
           await this.clientGroupRepository.createClientGroup({
+            userId,
+            companyId,
             groupId,
             clientId,
           });
 
-        result = { groupId };
+        result.groupId = groupId;
       }
     }
 
@@ -179,7 +195,8 @@ module.exports = class ClientGroupService {
 
   // 신규 그룹에 ClientGroup 대량등록
   createNewClientGroupBulk = async ({
-    // userId,
+    userId,
+    companyId,
     clientIds,
     groupName,
     groupDescription,
@@ -188,16 +205,19 @@ module.exports = class ClientGroupService {
 
     // 신규 그룹 생성
     const newGroup = await this.groupRepository.createGroup({
-      //userId,
+      userId,
+      companyId,
       groupName,
       groupDescription,
     });
     const groupId = newGroup.groupId;
 
-    let result;
+    const result = [];
     for (const clientId of clientIds) {
       // clientId 존재여부 확인
-      const existClient = await this.clientRepository.getClientById({
+      const existClient = await this.clientRepository.getClientByClientId({
+        userId,
+        companyId,
         clientId,
       });
       if (!existClient) {
@@ -207,11 +227,13 @@ module.exports = class ClientGroupService {
       // 새로운 그룹에 클라이언트 추가
       const clientGroupData =
         await this.clientGroupRepository.createClientGroup({
+          userId,
+          companyId,
           groupId,
           clientId,
         });
 
-      result = { groupId };
+      result.groupId = groupId;
     }
 
     return result;
