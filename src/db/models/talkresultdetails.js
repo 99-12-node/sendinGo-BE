@@ -17,10 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'clientId',
         foreignKey: 'clientId',
       });
-      // this.belongsTo(models.Groups, {
-      //   targetKey: 'groupId',
-      //   foreignKey: 'groupId',
-      // });
+      this.belongsTo(models.Groups, {
+        targetKey: 'groupId',
+        foreignKey: 'groupId',
+      });
 
       // this.belongsTo(models.Users, {
       //   targetKey: 'userId',
