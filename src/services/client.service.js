@@ -47,17 +47,25 @@ module.exports = class ClientService {
       userId,
       companyId,
     });
-    if (!data) {
-      throw new ForbiddenError('조회 권한이 없습니다.');
-    }
     const offset = index ? parseInt(index - 1) : 0;
 
     if (!groupId) {
-      const allData = await this.clientRepository.getAllClients({ offset });
-      const clientCount = await this.clientRepository.getAllClientsCount();
+      const allData = await this.clientRepository.getAllClients({
+        userId,
+        companyId,
+        offset,
+      });
+      const clientCount = await this.clientRepository.getAllClientsCount({
+        userId,
+        companyId,
+      });
       return { clients: allData, clientCount };
     }
-    const existGroup = await this.groupRepository.findGroupId({ groupId });
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
     if (!existGroup) {
       throw new NotFoundError('그룹 조회에 실패하였습니다.');
     }
@@ -83,9 +91,15 @@ module.exports = class ClientService {
       companyId,
       clientId,
     });
+
     if (!data) {
+      throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+    }
+
+    if (userId !== data.userId) {
       throw new ForbiddenError('수정 권한이 없습니다.');
     }
+
     const editedClient = await this.clientRepository.editClientInfo({
       clientId,
       userId,
@@ -112,8 +126,13 @@ module.exports = class ClientService {
     });
 
     if (!deleteData) {
+      throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+    }
+
+    if (userId !== deleteData.userId) {
       throw new ForbiddenError('삭제 권한이 없습니다.');
     }
+
     const deleteId = await this.clientRepository.deleteClient({
       clientId,
       userId,
@@ -127,10 +146,7 @@ module.exports = class ClientService {
   };
 
   // 클라이언트 대량등록
-  createClientBulk = async ({
-    //userId,
-    clientArray,
-  }) => {
+  createClientBulk = async ({ userId, companyId, clientArray }) => {
     logger.info(`ClientService.createClientBulk Request`);
     try {
       let createClients = [];
@@ -141,6 +157,8 @@ module.exports = class ClientService {
       for (const client of clientArray) {
         const { clientName, contact, clientEmail } = client;
         const newClient = await this.clientRepository.createClient({
+          userId,
+          companyId,
           clientName,
           contact,
           clientEmail,
@@ -148,9 +166,10 @@ module.exports = class ClientService {
         if (!newClient) {
           throw new BadRequestError('클라이언트 대량 등록에 실패하였습니다.');
         }
+        console.log('newClient: ', newClient);
         createClients.push(newClient.clientId);
       }
-      if (!createClients) {
+      if (!createClients.length || createClients) {
         throw new BadRequestError('클라이언트 대량 등록에 실패하였습니다.');
       }
       return createClients;

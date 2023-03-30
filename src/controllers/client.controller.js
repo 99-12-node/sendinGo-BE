@@ -98,14 +98,16 @@ module.exports = class ClientController {
   createClientBulk = async (req, res, next) => {
     logger.info(`ClientController.createClientBulk Request`);
     try {
-      // const { userId } = res.locals.users;
+      const { userId } = res.locals.user;
+      const { companyId } = res.locals.company;
       const { data } = req.body;
       if (!data || Object.keys(data).length === 0) {
         throw new BadRequestError('입력 값을 확인해주세요.');
       }
 
       const newClients = await this.clientService.createClientBulk({
-        //userId,
+        userId,
+        companyId,
         clientArray: data,
       });
 

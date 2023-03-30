@@ -27,13 +27,13 @@ module.exports = class GroupService {
   };
 
   //그룹 전체 조회
-  getAllGroup = async () => {
+  getAllGroup = async ({ userId, companyId }) => {
     logger.info(`GroupService.getAllGroup Request`);
 
-    const allGroupData = await this.groupRepository.getAllGroup();
-    if (!allGroupData) {
-      throw new BadRequestError('그룹 조회에 실패하였습니다.');
-    }
+    const allGroupData = await this.groupRepository.getAllGroup({
+      userId,
+      companyId,
+    });
     return allGroupData;
   };
 
