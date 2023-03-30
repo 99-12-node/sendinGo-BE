@@ -10,10 +10,14 @@ module.exports = class ClientGroupController {
   // ClientGroup 등록
   createClientGroup = async (req, res, next) => {
     logger.info(`ClientGroupController.createClientGroup Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { groupId, clientId } = req.params;
 
     try {
       const result = await this.clientGroupService.createClientGroup({
+        userId,
+        companyId,
         groupId,
         clientId,
       });
@@ -35,15 +39,22 @@ module.exports = class ClientGroupController {
   // ClientGroup 대량등록 / 해제
   createClientGroupBulk = async (req, res, next) => {
     logger.info(`ClientGroupController.createClientGroupBulk Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { groupId } = req.params;
     const { clientIds } = req.body;
 
     try {
-      if (!(groupId && clientIds) || clientIds.length < 1) {
+      if (
+        !(groupId && clientIds && userId && companyId) ||
+        clientIds.length < 1
+      ) {
         throw new BadRequestError('입력 값을 확인해주세요.');
       }
 
       const result = await this.clientGroupService.createClientGroupBulk({
+        userId,
+        companyId,
         groupId,
         clientIds,
       });
@@ -105,16 +116,21 @@ module.exports = class ClientGroupController {
   // 신규 그룹에 ClientGroup 대량 등록
   createNewClientGroupBulk = async (req, res, next) => {
     logger.info(`ClientGroupController.createNewClientGroupBulk Request`);
-    // const { userId } = res.locals.user;
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { clientIds, groupName, groupDescription } = req.body;
 
     try {
-      if (!(clientIds && groupName) || clientIds.length < 1) {
+      if (
+        !(clientIds && groupName && userId && companyId) ||
+        clientIds.length < 1
+      ) {
         throw new BadRequestError('입력 값을 확인해주세요.');
       }
 
       const result = await this.clientGroupService.createNewClientGroupBulk({
-        // userId,
+        userId,
+        companyId,
         clientIds,
         groupName,
         groupDescription,
