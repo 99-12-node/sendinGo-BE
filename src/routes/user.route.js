@@ -5,20 +5,30 @@ const UserController = require('../controllers/user.controller');
 const authMiddleWare = require('../middlewares/auth.middleware');
 const userController = new UserController();
 
-router.post('/signup', JoiHelper.signupCheck, userController.createUser);
+router.post('/signup', JoiHelper.signUpCheck, userController.createUser);
 router.post(
   '/signup/existemail',
   JoiHelper.existEmailCheck,
   userController.checkUserEmail
 );
 router.post('/login', JoiHelper.loginCheck, userController.loginUser);
-router.get('/:userId', authMiddleWare, userController.getUser);
+router.get(
+  '/:userId',
+  authMiddleWare,
+  JoiHelper.userIdAndRequestIdCheck,
+  userController.getUser
+);
 router.patch(
   '/:userId',
   authMiddleWare,
-  JoiHelper.editUserCheck,
+  JoiHelper.editInfoCheck,
   userController.editUser
 );
-router.delete('/:userId', authMiddleWare, userController.deleteUser);
+router.delete(
+  '/:userId',
+  authMiddleWare,
+  JoiHelper.userIdAndRequestIdCheck,
+  userController.deleteUser
+);
 
 module.exports = router;

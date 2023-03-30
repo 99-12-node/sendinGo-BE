@@ -1,7 +1,5 @@
 const UserService = require('../services/user.service');
-const _ = require('lodash');
 const { logger } = require('../middlewares/logger');
-const { ForbiddenError } = require('../exceptions/errors');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { KEY } = process.env;
@@ -16,14 +14,7 @@ class UserController {
 
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
-    const requestUserId = parseInt(req.params.userId);
     try {
-      if (userId !== requestUserId) {
-        throw new ForbiddenError(
-          '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
-        );
-      }
-
       const data = await this.userService.getUser({
         userId,
         companyId,
@@ -86,14 +77,7 @@ class UserController {
     logger.info(`UserController.editUser Request`);
     const user = res.locals.user;
     const updateInfo = req.body;
-    const requestUserId = parseInt(req.params.userId);
     try {
-      if (user.userId !== requestUserId) {
-        throw new ForbiddenError(
-          '요청하신 회원의 정보와 토큰의 정보가 일치 하지않아 수정이 불가합니다.'
-        );
-      }
-
       const requestData = { user, updateInfo };
 
       await this.userService.editUser(requestData);
@@ -107,15 +91,7 @@ class UserController {
   deleteUser = async (req, res, next) => {
     logger.info(`UserController.deleteUser Request`);
     const user = res.locals.user;
-    const requestUserId = parseInt(req.params.userId);
-
     try {
-      if (user.userId !== requestUserId) {
-        throw new ForbiddenError(
-          '요청하신 회원의 정보와 토큰의 정보가 일치 하지않아 탈퇴가 불가합니다.'
-        );
-      }
-
       await this.userService.deleteUser(user);
 
       res.status(200).json({ message: '회원 탈퇴가 완료 되었습니다.' });
