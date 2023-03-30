@@ -51,12 +51,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       contact: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
       },
       clientEmail: {
         type: DataTypes.STRING,
-        unique: true,
         allowNull: false,
       },
       userId: {

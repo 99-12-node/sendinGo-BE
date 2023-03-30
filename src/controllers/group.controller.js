@@ -33,9 +33,14 @@ module.exports = class GroupController {
   //그룹 전체 조회
   getAllGroup = async (req, res, next) => {
     logger.info(`GroupController.getAllGroup Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
 
     try {
-      const allGroupData = await this.groupService.getAllGroup();
+      const allGroupData = await this.groupService.getAllGroup({
+        userId,
+        companyId,
+      });
       res.status(200).json({ data: allGroupData });
     } catch (error) {
       next(error);
