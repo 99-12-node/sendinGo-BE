@@ -13,7 +13,7 @@ const JoiHelper = {
 
       name: Joi.string()
         .required()
-        .regex(/^([ㄱ-ㅎ|ㅏ-ㅣ|가-힣]){2,15}$/)
+        .regex(/^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]){2,15}$/)
         .error(new BadRequestError('이름 입력란을 다시 확인해주세요.')),
 
       password: Joi.string()
