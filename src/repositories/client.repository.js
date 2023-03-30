@@ -2,6 +2,9 @@ const { logger } = require('../middlewares/logger');
 const { Groups, Clients, ClientGroups, sequelize } = require('../db/models');
 const parseSequelizePrettier = require('../helpers/parse.sequelize');
 
+// offset 기준 상수
+const OFFSET_CONSTANT = 14;
+
 module.exports = class ClientRepository {
   constructor() {}
   // 클라이언트 생성
@@ -24,27 +27,19 @@ module.exports = class ClientRepository {
   //클라이언트 전체 조회
   getAllClients = async ({ offset }) => {
     logger.info(`ClientRepository.getAllClients Request`);
-    const allData = await Clients.findAll({
-      attributes: {
-        exclude: ['updatedAt'],
-      },
-      include: [
-        {
-          model: ClientGroups,
-          attributes: ['groupId'],
-          include: [
-            {
-              model: Groups,
-              attributes: ['groupName'],
-            },
-          ],
-        },
-      ],
-      order: [['clientName', 'ASC']],
-      offset: offset * 14,
-      limit: 14,
-      raw: true,
-    }).then((model) => model.map(parseSequelizePrettier));
+
+    const TOTAL_OFFSET = offset * OFFSET_CONSTANT;
+
+    const [allData] = await sequelize.query(
+      `SELECT c.clientId, c.clientName, c.contact, c.clientEmail, c.createdAt, cg.groupId, g.groupName\
+      FROM Clients AS c\
+      LEFT OUTER JOIN ClientGroups cg ON c.clientId = cg.clientId\
+      LEFT OUTER JOIN \`Groups\` g ON g.groupId = cg.groupId\
+      GROUP BY c.clientId\
+      ORDER BY c.clientName ASC\
+      LIMIT ${OFFSET_CONSTANT} OFFSET ${TOTAL_OFFSET}\
+      `
+    );
     return allData;
   };
 
@@ -69,8 +64,8 @@ module.exports = class ClientRepository {
         },
       ],
       order: [['clientName', 'ASC']],
-      offset: offset * 14,
-      limit: 14,
+      offset: offset * OFFSET_CONSTANT,
+      limit: OFFSET_CONSTANT,
       raw: true,
     }).then((model) => model.map(parseSequelizePrettier));
     return allData;

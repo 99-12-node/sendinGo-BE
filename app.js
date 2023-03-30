@@ -5,10 +5,14 @@ const errorMiddleware = require('./src/middlewares/error.middleware');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const router = require('./src/routes');
+const expressJSDocSwagger = require('express-jsdoc-swagger');
+const options = require('./src/api/swagger.option');
 
 const app = express();
 dotenv.config();
 const port = process.env.PORT;
+
+expressJSDocSwagger(app)(options);
 
 app.use(express.json());
 app.use(cookieparser());
