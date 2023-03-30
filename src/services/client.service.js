@@ -147,7 +147,7 @@ module.exports = class ClientService {
   createClientBulk = async ({ userId, companyId, clientArray }) => {
     logger.info(`ClientService.createClientBulk Request`);
     try {
-      let createClients = [];
+      const createClients = [];
 
       if (!clientArray) {
         throw new BadRequestError('입력값을 확인해주세요');
