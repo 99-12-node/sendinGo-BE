@@ -91,9 +91,15 @@ module.exports = class ClientService {
       companyId,
       clientId,
     });
+
     if (!data) {
+      throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+    }
+
+    if (userId !== data.userId) {
       throw new ForbiddenError('수정 권한이 없습니다.');
     }
+
     const editedClient = await this.clientRepository.editClientInfo({
       clientId,
       userId,
@@ -120,8 +126,13 @@ module.exports = class ClientService {
     });
 
     if (!deleteData) {
+      throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+    }
+
+    if (userId !== deleteData.userId) {
       throw new ForbiddenError('삭제 권한이 없습니다.');
     }
+
     const deleteId = await this.clientRepository.deleteClient({
       clientId,
       userId,
