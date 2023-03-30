@@ -166,10 +166,9 @@ module.exports = class ClientService {
         if (!newClient) {
           throw new BadRequestError('클라이언트 대량 등록에 실패하였습니다.');
         }
-        console.log('newClient: ', newClient);
         createClients.push(newClient.clientId);
       }
-      if (!createClients.length || createClients) {
+      if (!createClients.length) {
         throw new BadRequestError('클라이언트 대량 등록에 실패하였습니다.');
       }
       return createClients;
