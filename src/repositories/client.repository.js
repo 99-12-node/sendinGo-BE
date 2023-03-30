@@ -97,11 +97,10 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 삭제
-  deleteClient = async ({ clientId }) => {
+  deleteClient = async ({ clientId, userId, companyId }) => {
     logger.info(`ClientRepository.deleteClient Request`);
     const deleteData = await Clients.destroy({
-      where: { clientId },
-      attributes: ['userId', 'companyId'],
+      where: { clientId, userId, companyId },
     });
     return deleteData;
   };
@@ -116,11 +115,18 @@ module.exports = class ClientRepository {
     return client;
   };
 
-  comfirmUser = async ({ clientId }) => {
+  comfirmUser = async ({ clientId, userId, companyId }) => {
     logger.info(`ClientRepository.comfirmUser Request`);
     const client = await Clients.findOne({
-      where: { clientId },
-      attributes: ['userId', 'companyId'],
+      where: { clientId, userId, companyId },
+    });
+    return client;
+  };
+
+  comfirmUserId = async ({ userId, companyId }) => {
+    logger.info(`ClientRepository. comfirmUserId Request`);
+    const client = await Clients.findOne({
+      where: { userId, companyId },
     });
     return client;
   };

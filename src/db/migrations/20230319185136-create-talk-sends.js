@@ -45,24 +45,24 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Users',
-          key: 'userId',
-        },
-        onDelete: 'CASCADE',
-      },
-      companyId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Companies',
-          key: 'companyId',
-        },
-        onDelete: 'CASCADE',
-      },
+      // userId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Users',
+      //     key: 'userId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
+      // companyId: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      //   references: {
+      //     model: 'Companies',
+      //     key: 'companyId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
       groupId: {
         type: Sequelize.INTEGER,
         allowNull: false,

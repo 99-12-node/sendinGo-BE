@@ -27,24 +27,24 @@ module.exports = {
         },
         onDelete: 'RESTRICT',
       },
-      userId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'userId',
-        },
-        onDelete: 'CASCADE',
-      },
-      companyId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Companies',
-          key: 'companyId',
-        },
-        onDelete: 'CASCADE',
-      },
+      // userId: {
+      //   allowNull: false,
+      //   type: Sequelize.INTEGER,
+      //   references: {
+      //     model: 'Users',
+      //     key: 'userId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
+      // companyId: {
+      //   allowNull: false,
+      //   type: Sequelize.INTEGER,
+      //   references: {
+      //     model: 'Companies',
+      //     key: 'companyId',
+      //   },
+      //   onDelete: 'CASCADE',
+      // },
       organizationName: {
         type: Sequelize.STRING,
         allowNull: true,

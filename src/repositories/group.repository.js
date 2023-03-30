@@ -6,6 +6,7 @@ module.exports = class GroupRepository {
 
   //빈 Group 생성
   createGroup = async ({ userId, companyId, groupName, groupDescription }) => {
+    logger.info(`GroupRepository.createGroup Request`);
     const createGroup = await Groups.create({
       userId,
       companyId,
@@ -49,6 +50,7 @@ module.exports = class GroupRepository {
 
   //그룹 삭제시, 삭제할 groupId 있는지 찾아보기
   findGroupId = async ({ userId, companyId, groupId }) => {
+    logger.info(`GroupRepository.findGroupId Request`);
     const findGroupData = await Groups.findOne(
       { groupId },
       { where: { userId, companyId } }

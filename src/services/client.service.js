@@ -39,8 +39,16 @@ module.exports = class ClientService {
   //클라이언트 조회 (쿼리로 조건 조회)
   getClients = async ({ userId, companyId, groupId, index }) => {
     logger.info(`ClientService.getClients Request`);
+
     if (index == 0) {
       throw new BadRequestError('올바르지 않은 요청입니다.');
+    }
+    const data = await this.clientRepository.comfirmUserId({
+      userId,
+      companyId,
+    });
+    if (!data) {
+      throw new ForbiddenError('조회 권한이 없습니다.');
     }
     const offset = index ? parseInt(index - 1) : 0;
 
@@ -71,9 +79,11 @@ module.exports = class ClientService {
   }) => {
     logger.info(`ClientService.editClientInfo Request`);
     const data = await this.clientRepository.comfirmUser({
+      userId,
+      companyId,
       clientId,
     });
-    if (data.userId !== userId || data.companyId !== companyId) {
+    if (!data) {
       throw new ForbiddenError('수정 권한이 없습니다.');
     }
     const editedClient = await this.clientRepository.editClientInfo({
@@ -95,16 +105,21 @@ module.exports = class ClientService {
   //클라이언트 삭제
   deleteClient = async ({ userId, companyId, clientId }) => {
     logger.info(`ClientService.deleteClient Request`);
-    const data = await this.clientRepository.comfirmUser({
+    const deleteData = await this.clientRepository.comfirmUser({
       clientId,
+      userId,
+      companyId,
     });
-    if (data.userId !== userId || data.companyId !== companyId) {
-      throw new ForbiddenError('수정 권한이 없습니다.');
-    }
-    const deleteData = await this.clientRepository.deleteClient({
-      clientId,
-    });
+
     if (!deleteData) {
+      throw new ForbiddenError('삭제 권한이 없습니다.');
+    }
+    const deleteId = await this.clientRepository.deleteClient({
+      clientId,
+      userId,
+      companyId,
+    });
+    if (!deleteId) {
       throw new BadRequestError('삭제에 실패하였습니다.');
     }
 

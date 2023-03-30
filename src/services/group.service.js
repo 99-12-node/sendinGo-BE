@@ -23,15 +23,13 @@ module.exports = class GroupService {
     if (!groupData) {
       throw new BadRequestError('그룹 생성에 실패하였습니다.');
     }
-    if (groupData.userId !== userId) {
-      throw new ForbiddenError('접근 권한이 없습니다.');
-    }
     return groupData;
   };
 
   //그룹 전체 조회
   getAllGroup = async () => {
     logger.info(`GroupService.getAllGroup Request`);
+
     const allGroupData = await this.groupRepository.getAllGroup();
     if (!allGroupData) {
       throw new BadRequestError('그룹 조회에 실패하였습니다.');
