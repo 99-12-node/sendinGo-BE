@@ -24,6 +24,7 @@ module.exports = class GroupRepository {
       attributes: [
         'groupId',
         'groupName',
+        'groupDescription',
         'createdAt',
         [sequelize.fn('COUNT', sequelize.col('clientId')), 'clientCount'],
       ],
@@ -34,6 +35,7 @@ module.exports = class GroupRepository {
         },
       ],
       group: ['Groups.groupId'],
+      order: [['createdAt', 'DESC']],
     });
     return allGroupData;
   };
