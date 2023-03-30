@@ -42,6 +42,7 @@ module.exports = {
       role: {
         type: Sequelize.TINYINT,
         allowNull: false,
+        defaultValue: 0,
       },
       status: {
         type: Sequelize.TINYINT,

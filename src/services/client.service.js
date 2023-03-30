@@ -1,11 +1,12 @@
 const { logger } = require('../middlewares/logger');
 const {
   BadRequestError,
-  Conflict,
   NotFoundError,
+  ForbiddenError,
 } = require('../exceptions/errors');
 const ClientRepository = require('../repositories/client.repository');
 const GroupRepository = require('../repositories/group.repository');
+const { forbidden } = require('joi');
 
 module.exports = class ClientService {
   constructor() {
@@ -13,9 +14,9 @@ module.exports = class ClientService {
     this.groupRepository = new GroupRepository();
   }
   // 클라이언트 등록
-  //유저 검증, 권한
   createClient = async ({
-    //userId,
+    userId,
+    companyId,
     clientName,
     contact,
     clientEmail,
@@ -23,7 +24,8 @@ module.exports = class ClientService {
     logger.info(`ClientService.createClient Request`);
 
     const createClient = await this.clientRepository.createClient({
-      // userId,
+      userId,
+      companyId,
       clientName,
       contact,
       clientEmail,
@@ -35,10 +37,18 @@ module.exports = class ClientService {
   };
 
   //클라이언트 조회 (쿼리로 조건 조회)
-  getClients = async ({ groupId, index }) => {
+  getClients = async ({ userId, companyId, groupId, index }) => {
     logger.info(`ClientService.getClients Request`);
+
     if (index == 0) {
       throw new BadRequestError('올바르지 않은 요청입니다.');
+    }
+    const data = await this.clientRepository.comfirmUserId({
+      userId,
+      companyId,
+    });
+    if (!data) {
+      throw new ForbiddenError('조회 권한이 없습니다.');
     }
     const offset = index ? parseInt(index - 1) : 0;
 
@@ -59,34 +69,59 @@ module.exports = class ClientService {
   };
 
   //클라이언트 수정
-  editClientInfo = async ({ clientId, clientName, contact, clientEmail }) => {
+  editClientInfo = async ({
+    userId,
+    companyId,
+    clientId,
+    clientName,
+    contact,
+    clientEmail,
+  }) => {
     logger.info(`ClientService.editClientInfo Request`);
-    const editClientData = await this.clientRepository.editClientInfo({
+    const data = await this.clientRepository.comfirmUser({
+      userId,
+      companyId,
       clientId,
+    });
+    if (!data) {
+      throw new ForbiddenError('수정 권한이 없습니다.');
+    }
+    const editedClient = await this.clientRepository.editClientInfo({
+      clientId,
+      userId,
+      companyId,
       clientName,
       contact,
       clientEmail,
     });
-    if (!editClientData) {
-      throw new BadRequestError('수정을 실패하였습니다.');
+
+    if (!editedClient) {
+      throw new NotFoundError('수정에 실패하였습니다');
     }
 
-    return editClientData;
+    return editedClient;
   };
 
   //클라이언트 삭제
-  deleteClient = async ({
-    //userId,
-    clientId,
-  }) => {
+  deleteClient = async ({ userId, companyId, clientId }) => {
     logger.info(`ClientService.deleteClient Request`);
-    const deleteData = await this.clientRepository.deleteClient({ clientId });
+    const deleteData = await this.clientRepository.comfirmUser({
+      clientId,
+      userId,
+      companyId,
+    });
+
     if (!deleteData) {
+      throw new ForbiddenError('삭제 권한이 없습니다.');
+    }
+    const deleteId = await this.clientRepository.deleteClient({
+      clientId,
+      userId,
+      companyId,
+    });
+    if (!deleteId) {
       throw new BadRequestError('삭제에 실패하였습니다.');
     }
-    // if (deleteData.userId !== userId) {
-    //   throw new Error('권한이 없습니다.');
-    // }
 
     return deleteData;
   };

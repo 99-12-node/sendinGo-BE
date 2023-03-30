@@ -10,12 +10,14 @@ module.exports = class ClientController {
   // 클라이언트 등록
   createClient = async (req, res, next) => {
     logger.info(`ClientController.createClient Request`);
-    // const { userId } = res.locals.users;
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { clientName, contact, clientEmail } = req.body;
 
     try {
       const newClient = await this.clientService.createClient({
-        // userId,
+        userId,
+        companyId,
         clientName,
         contact,
         clientEmail,
@@ -33,11 +35,16 @@ module.exports = class ClientController {
   //클라이언트 조회 (쿼리로 조건 조회)
   getClients = async (req, res, next) => {
     logger.info(`ClientController.getClients Request`);
-    // const { userId } = res.locals.user;
-    // const { companyId } = res.locals.company;
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { groupId, index } = req.query;
     try {
-      const allData = await this.clientService.getClients({ groupId, index });
+      const allData = await this.clientService.getClients({
+        userId,
+        companyId,
+        groupId,
+        index,
+      });
 
       return res.status(200).json({ data: allData });
     } catch (error) {
@@ -47,12 +54,16 @@ module.exports = class ClientController {
   //클라이언트 수정
   editClientInfo = async (req, res, next) => {
     logger.info(`ClientController.editClientInfo Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { clientId } = req.params;
     const { clientName, contact, clientEmail } = req.body;
 
     try {
-      await this.clientService.editClientInfo({
+      const editClientData = await this.clientService.editClientInfo({
         clientId,
+        userId,
+        companyId,
         clientName,
         contact,
         clientEmail,
@@ -67,12 +78,13 @@ module.exports = class ClientController {
   //클라이언트 삭제
   deleteClient = async (req, res, next) => {
     logger.info(`ClientController.deleteClient Request`);
-
-    // const { userId } = res.locals.user;
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { clientId } = req.params;
     try {
       await this.clientService.deleteClient({
-        //userId,
+        userId,
+        companyId,
         clientId,
       });
 

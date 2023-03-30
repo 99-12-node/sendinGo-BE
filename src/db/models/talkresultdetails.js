@@ -21,15 +21,16 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'groupId',
         foreignKey: 'groupId',
       });
+
+      // this.belongsTo(models.Users, {
+      //   targetKey: 'userId',
+      //   foreignKey: 'userId',
+      // });
+      // this.belongsTo(models.Users, {
+      //   targetKey: 'companyId',
+      //   foreignKey: 'companyId',
+      // });
     }
-    // this.belongsTo(models.Users, {
-    //   targetKey: 'userId',
-    //   foreignKey: 'userId',
-    // });
-    // this.belongsTo(models.Users, {
-    //   targetKey: 'companyId',
-    //   foreignKey: 'companyId',
-    // });
   }
   TalkResultDetails.init(
     {

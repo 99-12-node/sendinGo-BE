@@ -67,6 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       role: {
         type: DataTypes.TINYINT,
         allowNull: false,
+        defaultValue: 0,
       },
       status: {
         type: DataTypes.TINYINT,
