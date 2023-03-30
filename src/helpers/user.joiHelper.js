@@ -1,5 +1,6 @@
 const Joi = require('joi');
-const { BadRequestError } = require('../exceptions/errors');
+const { logger } = require('../middlewares/logger');
+const { BadRequestError, ForbiddenError } = require('../exceptions/errors');
 
 const JoiHelper = {
   //Users
@@ -55,6 +56,7 @@ const JoiHelper = {
         ),
     });
     try {
+      logger.info(`JoiHelper.signUpCheck Request`);
       await check.validateAsync(req.body);
     } catch (e) {
       next(e);
@@ -79,6 +81,7 @@ const JoiHelper = {
         ),
     });
     try {
+      logger.info(`JoiHelper.loginCheck Request`);
       await check.validateAsync(req.body);
     } catch (e) {
       next(e);
@@ -94,6 +97,8 @@ const JoiHelper = {
         .error(new BadRequestError('email 형식에 맞춰서 입력 바랍니다.')),
     });
     try {
+      logger.info(`JoiHelper.existEmailCheck Request`);
+
       await check.validateAsync(req.body);
     } catch (e) {
       next(e);
@@ -102,7 +107,10 @@ const JoiHelper = {
   },
 
   editInfoCheck: async (req, res, next) => {
+    const requestUserId = req.params.userId;
+    const { userId } = res.locals.user;
     const check = Joi.object().keys({
+      requestUserId: Joi.string().required,
       email: Joi.string()
         .email()
         .required()
@@ -145,8 +153,53 @@ const JoiHelper = {
           new BadRequestError('회사 이메일을 이메일 형식에 맞게 기재 바랍니다.')
         ),
     });
+
+    const requestUserIdSchema = Joi.number()
+      .min(1)
+      .required()
+      .error(new BadRequestError('요청하신 회원 정보가 유효하지 않습니다.'));
+
+    const userIdSchema = Joi.number()
+      .valid(userId)
+      .required()
+      .error(
+        new ForbiddenError(
+          '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
+        )
+      );
+
     try {
+      logger.info(`JoiHelper.editInfoCheck Request`);
+      await requestUserIdSchema.validateAsync(requestUserId);
+      await userIdSchema.validateAsync(requestUserId);
       await check.validateAsync(req.body);
+    } catch (e) {
+      next(e);
+    }
+    next();
+  },
+
+  userIdAndRequestIdCheck: async (req, res, next) => {
+    const requestUserId = req.params.userId;
+    const { userId } = res.locals.user;
+
+    const requestUserIdSchema = Joi.number()
+      .min(1)
+      .required()
+      .error(new BadRequestError('요청하신 회원 정보가 유효하지 않습니다.'));
+
+    const userIdSchema = Joi.number()
+      .valid(userId)
+      .required()
+      .error(
+        new ForbiddenError(
+          '요청하신 회원의 정보와 토큰의 정보가 일치하지 않습니다.'
+        )
+      );
+    try {
+      logger.info(`JoiHelper.userIdAndRequestIdCheck Request`);
+      await requestUserIdSchema.validateAsync(requestUserId);
+      await userIdSchema.validateAsync(requestUserId);
     } catch (e) {
       next(e);
     }
