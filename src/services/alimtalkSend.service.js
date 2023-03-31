@@ -19,17 +19,32 @@ module.exports = class AlimtalkSendService {
 
   // 알림톡 전송 내용 저장
   saveTalkContents = async ({
+    userId,
+    companyId,
+    groupId,
     clientId,
     talkTemplateCode,
     ...talkContentData
   }) => {
     logger.info(`AlimtalkSendService.saveTalkContents`);
     // 클라이언트 존재 확인
-    const existClient = await this.clientRepository.getClientById({
+    const existClient = await this.clientRepository.getClientByClientId({
+      userId,
+      companyId,
       clientId,
     });
     if (!existClient) {
       throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+    }
+
+    // 그룹 존재 확인
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패하였습니다.');
     }
 
     // 템플릿 데이터 맞는지 확인하고 템플릿 Id 반환
@@ -60,6 +75,9 @@ module.exports = class AlimtalkSendService {
     // 템필릿 전송 내용 저장
     if (talkTemplateId) {
       const result = await this.talkContentRepository.createTalkContent({
+        userId,
+        companyId,
+        groupId,
         clientId,
         talkTemplateId,
         ...talkContentData,
@@ -67,9 +85,62 @@ module.exports = class AlimtalkSendService {
       return {
         talkContentId: result.talkContentId,
         clientId: result.clientId,
+        groupId: result.groupId,
         talkTemplateId: result.talkTemplateId,
       };
     }
+  };
+
+  //등록된 클라이언트 알림톡 전송 내용 조회
+  getTalkContentsByClientId = async ({
+    userId,
+    companyId,
+    groupId,
+    clientIds,
+  }) => {
+    logger.info(`ClientService.getTalkContentsByClientId Request`);
+
+    // 존재하는 그룹인지 확인
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패하였습니다.');
+    }
+
+    const results = [];
+    for (const clientId of clientIds) {
+      // 존재하는 클라이언트인지 확인
+      const existClient = await this.clientRepository.getClientByClientId({
+        userId,
+        companyId,
+        clientId,
+      });
+
+      if (!existClient) {
+        throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+      }
+      const client = await this.clientRepository.getClientByClientIdAndGroupId({
+        userId,
+        companyId,
+        groupId,
+        clientId,
+      });
+
+      const talkContent =
+        await this.talkContentRepository.getContentByClientIdAndGroupId({
+          userId,
+          companyId,
+          groupId,
+          clientId,
+        });
+      const result = { client, talkContent };
+      results.push(result);
+    }
+    return results;
   };
 
   // 알림톡 발송
@@ -83,7 +154,7 @@ module.exports = class AlimtalkSendService {
 
       // clientId, talkContentId, talkTemplateId, groupId로 데이터 조회
       const talkSendPromises = [
-        await this.clientRepository.getClientById({ clientId }),
+        await this.clientRepository.getClientByClientId({ clientId }),
         await this.talkContentRepository.getTalkContentById({ talkContentId }),
         await this.talkTemplateRepository.getTemplateById({ talkTemplateId }),
         await this.groupRepository.findGroupId({ groupId }),

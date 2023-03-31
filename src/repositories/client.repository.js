@@ -139,4 +139,33 @@ module.exports = class ClientRepository {
     });
     return count;
   };
+
+  // clientId, groupId로 등록된 클라이언트 조회
+  getClientByClientIdAndGroupId = async ({
+    userId,
+    companyId,
+    groupId,
+    clientId,
+  }) => {
+    logger.info(`ClientRepository.getClientByClientIdAndGroupId Request`);
+    const client = await Clients.findOne({
+      attributes: {
+        exclude: ['userId', 'companyId', 'createdAt', 'updatedAt'],
+      },
+      where: {
+        [Op.and]: [{ userId }, { companyId }, { clientId }],
+      },
+      include: {
+        model: ClientGroups,
+        attributes: [],
+        where: { groupId },
+        include: {
+          model: Groups,
+          attributes: ['groupName'],
+        },
+      },
+      raw: true,
+    }).then((model) => parseSequelizePrettier(model));
+    return client;
+  };
 };
