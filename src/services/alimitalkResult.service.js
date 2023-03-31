@@ -10,18 +10,21 @@ module.exports = class AlimtalkResultService {
   }
 
   // 알림톡 전송 결과 저장
-  saveAlimTalkResult = async (results, groupId) => {
+  saveAlimTalkResult = async (results, groupId, userId, companyId) => {
     logger.info(`AlimtalkResultService.saveAlimTalkResult`);
 
+    const response = [];
     try {
-      let response = [];
       for (const result of results) {
         const { mid, msgCount, msgContent, sendState, sendDate } = result;
         // 존재하는 전송 결과인지 확인
         const existTalkSend = await this.talkSendRepository.getTalkSendByMid({
           mid,
           groupId,
+          userId,
+          companyId,
         });
+
         // 존재하는 경우에만 해당 전송 결과 데이터 업데이트
         if (existTalkSend) {
           const updatedDataCount =
@@ -32,7 +35,15 @@ module.exports = class AlimtalkResultService {
               sendState,
               sendDate,
             });
-          const { mid, ...talkSendData } = existTalkSend;
+          // 업데이트된 TalkSend 반환
+          const updatedTalkSend =
+            await this.talkSendRepository.getTalkSendByMid({
+              mid: existTalkSend.mid,
+              groupId,
+              userId,
+              companyId,
+            });
+          const { mid, ...talkSendData } = updatedTalkSend;
           response.push(talkSendData);
         }
       }
