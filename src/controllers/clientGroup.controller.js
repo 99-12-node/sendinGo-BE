@@ -76,10 +76,14 @@ module.exports = class ClientGroupController {
   // ClientGroup 클라이언트 이동
   moveClientGroup = async (req, res, next) => {
     logger.info(`ClientGroupController.moveClientGroup Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { clientId, existGroupId, newGroupId } = req.params;
 
     try {
       await this.clientGroupService.moveClientGroup({
+        userId,
+        companyId,
         clientId,
         existGroupId,
         newGroupId,
@@ -96,10 +100,14 @@ module.exports = class ClientGroupController {
   // ClientGroup 복사
   copyClientGroup = async (req, res, next) => {
     logger.info(`ClientGroupController.copyClientGroup Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { clientId, existGroupId, newGroupId } = req.params;
 
     try {
       await this.clientGroupService.copyClientGroup({
+        userId,
+        companyId,
         clientId,
         existGroupId,
         newGroupId,

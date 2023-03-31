@@ -84,7 +84,7 @@ module.exports = class ClientService {
     clientEmail,
   }) => {
     logger.info(`ClientService.editClientInfo Request`);
-    const data = await this.clientRepository.comfirmUser({
+    const data = await this.clientRepository.confirmUser({
       userId,
       companyId,
       clientId,
@@ -117,7 +117,7 @@ module.exports = class ClientService {
   //클라이언트 삭제
   deleteClient = async ({ userId, companyId, clientId }) => {
     logger.info(`ClientService.deleteClient Request`);
-    const deleteData = await this.clientRepository.comfirmUser({
+    const deleteData = await this.clientRepository.confirmUser({
       clientId,
       userId,
       companyId,
