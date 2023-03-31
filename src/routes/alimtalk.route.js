@@ -32,11 +32,7 @@ router.get(
 );
 
 // 알림톡 전송 결과 데이터 저장
-router.post(
-  '/results/list/save',
-  authMiddleware,
-  alimtalkController.saveSendAlimTalkResult
-);
+router.post('/results/list/save', alimtalkController.saveSendAlimTalkResult);
 
 // 알림톡 전송 결과 상세 조회
 router.get(
