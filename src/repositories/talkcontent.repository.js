@@ -1,5 +1,7 @@
 const { logger } = require('../middlewares/logger');
-const { Clients, TalkContents } = require('../db/models');
+const { Clients, TalkContents, sequelize, Groups } = require('../db/models');
+const { Op } = require('sequelize');
+const parseSequelizePrettier = require('../helpers/parse.sequelize');
 
 module.exports = class TalkContentRepository {
   constructor() {}
@@ -37,5 +39,24 @@ module.exports = class TalkContentRepository {
       console.error(e);
       throw new Error('Id로 조회에 실패하였습니다.');
     }
+  };
+
+  // clientId, groupId로 등록된 클라이언트 조회
+  getContentByClientIdAndGroupId = async ({
+    userId,
+    companyId,
+    groupId,
+    clientId,
+  }) => {
+    logger.info(`TalkContentRepository.getContentByClientIdAndGroupId Request`);
+    const client = await TalkContents.findOne({
+      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      where: {
+        [Op.and]: [{ userId }, { companyId }, { groupId }, { clientId }],
+      },
+      raw: true,
+    });
+    // .then((model) => parseSequelizePrettier(model));
+    return client;
   };
 };
