@@ -29,16 +29,21 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'clientId',
         onDelete: 'CASCADE',
       });
-      // this.belongsTo(models.Users, {
-      //   targetKey: 'userId',
-      //   foreignKey: 'userId',
-      //   onDelete: 'CASCADE',
-      // });
-      // this.belongsTo(models.Companies, {
-      //   targetKey: 'companyId',
-      //   foreignKey: 'companyId',
-      //   onDelete: 'CASCADE',
-      // });
+      this.belongsTo(models.Users, {
+        targetKey: 'userId',
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+      });
+      this.belongsTo(models.Users, {
+        targetKey: 'companyId',
+        foreignKey: 'companyId',
+        onDelete: 'CASCADE',
+      });
+      this.belongsTo(models.Groups, {
+        targetKey: 'groupId',
+        foreignKey: 'groupId',
+        onDelete: 'CASCADE',
+      });
     }
   }
   TalkContents.init(
@@ -67,24 +72,33 @@ module.exports = (sequelize, DataTypes) => {
         },
         onDelete: 'RESTRICT',
       },
-      // userId: {
-      //   allowNull: false,
-      //   type: DataTypes.INTEGER,
-      //   references: {
-      //     model: 'Users',
-      //     key: 'userId',
-      //   },
-      //   onDelete: 'CASCADE',
-      // },
-      // companyId: {
-      //   allowNull: false,
-      //   type: DataTypes.INTEGER,
-      //   references: {
-      //     model: 'Companies',
-      //     key: 'companyId',
-      //   },
-      //   onDelete: 'CASCADE',
-      // },
+      userId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'userId',
+        },
+        onDelete: 'CASCADE',
+      },
+      companyId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'companyId',
+        },
+        onDelete: 'CASCADE',
+      },
+      groupId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Groups',
+          key: 'groupId',
+        },
+        onDelete: 'CASCADE',
+      },
       organizationName: {
         type: DataTypes.STRING,
         allowNull: true,
