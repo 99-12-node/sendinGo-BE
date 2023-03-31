@@ -25,7 +25,7 @@ module.exports = class ClientGroupService {
       clientId,
     });
     if (!confirmClientId) {
-      throw new ForbiddenError('등록 권한이 없습니다.');
+      throw new NotFoundError('존재하지 않는 고객입니다.');
     }
     // 존재하는 groupId 인지 확인
     const existGroup = await this.groupRepository.findGroupId({
@@ -148,7 +148,7 @@ module.exports = class ClientGroupService {
         groupId: existGroupId,
       });
     if (!existClientGroup) {
-      throw new NotFoundError('잘못된 요청입니다.');
+      throw new NotFoundError('존재하지 않는 그룹입니다.');
     }
 
     const movedClientGroup =
@@ -194,7 +194,7 @@ module.exports = class ClientGroupService {
         groupId: existGroupId,
       });
     if (!existClientGroup) {
-      throw new NotFoundError('잘못된 요청입니다.');
+      throw new NotFoundError('존재하지 않는 그룹입니다.');
     }
     const movedClientGroup =
       await this.clientGroupRepository.getClientGroupById({
