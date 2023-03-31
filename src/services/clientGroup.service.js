@@ -1,5 +1,9 @@
 const { logger } = require('../middlewares/logger');
-const { BadRequestError, NotFoundError } = require('../exceptions/errors');
+const {
+  BadRequestError,
+  NotFoundError,
+  ForbiddenError,
+} = require('../exceptions/errors');
 const ClientGroupRepository = require('../repositories/clientGroup.repository');
 const GroupRepository = require('../repositories/group.repository');
 const ClientRepository = require('../repositories/client.repository');
@@ -14,6 +18,15 @@ module.exports = class ClientGroupService {
   createClientGroup = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGrouopService.createClientGroup Request`);
 
+    //유저 확인
+    const confirmClientId = await this.clientRepository.confirmUser({
+      userId,
+      companyId,
+      clientId,
+    });
+    if (!confirmClientId) {
+      throw new NotFoundError('존재하지 않는 고객입니다.');
+    }
     // 존재하는 groupId 인지 확인
     const existGroup = await this.groupRepository.findGroupId({
       userId,
@@ -22,12 +35,6 @@ module.exports = class ClientGroupService {
     });
     if (!existGroup) {
       throw new NotFoundError('그룹 조회에 실패했습니다.');
-    }
-
-    // 존재하는 clientId 인지 확인
-    const existClient = await this.clientRepository.getClientById({ clientId });
-    if (!existClient) {
-      throw new NotFoundError('클라이언트 조회에 실패했습니다.');
     }
 
     // 기존 등록 여부 확인
@@ -125,11 +132,18 @@ module.exports = class ClientGroupService {
   };
 
   // ClientGroup 클라이언트 이동
-  //이동하려는 곳에 이미 존재하면 에러
-  moveClientGroup = async ({ clientId, existGroupId, newGroupId }) => {
+  moveClientGroup = async ({
+    userId,
+    companyId,
+    clientId,
+    existGroupId,
+    newGroupId,
+  }) => {
     logger.info(`ClientGrouopService.moveClientGroup Request`);
     const existClientGroup =
       await this.clientGroupRepository.getClientGroupById({
+        userId,
+        companyId,
         clientId,
         groupId: existGroupId,
       });
@@ -139,45 +153,74 @@ module.exports = class ClientGroupService {
 
     const movedClientGroup =
       await this.clientGroupRepository.getClientGroupById({
+        userId,
+        companyId,
         clientId,
         groupId: newGroupId,
       });
     if (movedClientGroup) {
       throw new BadRequestError('이미 존재하는 그룹입니다.');
     } else {
-      await this.deleteClientGroup({ clientId, groupId: existGroupId });
-      await this.createClientGroup({ clientId, groupId: newGroupId });
+      await this.deleteClientGroup({
+        userId,
+        companyId,
+        clientId,
+        groupId: existGroupId,
+      });
+      await this.createClientGroup({
+        userId,
+        companyId,
+        clientId,
+        groupId: newGroupId,
+      });
     }
   };
 
   //ClientGroup 복사
-  copyClientGroup = async ({ clientId, existGroupId, newGroupId }) => {
+  copyClientGroup = async ({
+    userId,
+    companyId,
+    clientId,
+    existGroupId,
+    newGroupId,
+  }) => {
     logger.info(`ClientGroupService.copyClientGroup Request`);
 
     const existClientGroup =
       await this.clientGroupRepository.getClientGroupById({
+        userId,
+        companyId,
         clientId,
         groupId: existGroupId,
       });
     if (!existClientGroup) {
-      throw new NotFoundError('그룹이 존재하지 않습니다.');
+      throw new NotFoundError('존재하지 않는 그룹입니다.');
     }
     const movedClientGroup =
       await this.clientGroupRepository.getClientGroupById({
+        userId,
+        companyId,
         clientId,
         groupId: newGroupId,
       });
     if (movedClientGroup) {
       throw new BadRequestError('이미 존재하는 그룹입니다.');
     } else {
-      await this.createClientGroup({ clientId, groupId: newGroupId });
+      await this.createClientGroup({
+        userId,
+        companyId,
+        clientId,
+        groupId: newGroupId,
+      });
     }
   };
 
   // ClientGroup 삭제
-  deleteClientGroup = async ({ groupId, clientId }) => {
+  deleteClientGroup = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGroupService.deleteClientGroup Request`);
     const clientGroupData = await this.clientGroupRepository.deleteClientGroup({
+      userId,
+      companyId,
       groupId,
       clientId,
     });
