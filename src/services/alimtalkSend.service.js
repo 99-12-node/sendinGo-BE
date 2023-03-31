@@ -19,6 +19,9 @@ module.exports = class AlimtalkSendService {
 
   // 알림톡 전송 내용 저장
   saveTalkContents = async ({
+    userId,
+    companyId,
+    groupId,
     clientId,
     talkTemplateCode,
     ...talkContentData
@@ -26,10 +29,22 @@ module.exports = class AlimtalkSendService {
     logger.info(`AlimtalkSendService.saveTalkContents`);
     // 클라이언트 존재 확인
     const existClient = await this.clientRepository.getClientByClientId({
+      userId,
+      companyId,
       clientId,
     });
     if (!existClient) {
       throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+    }
+
+    // 그룹 존재 확인
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패하였습니다.');
     }
 
     // 템플릿 데이터 맞는지 확인하고 템플릿 Id 반환
@@ -60,6 +75,9 @@ module.exports = class AlimtalkSendService {
     // 템필릿 전송 내용 저장
     if (talkTemplateId) {
       const result = await this.talkContentRepository.createTalkContent({
+        userId,
+        companyId,
+        groupId,
         clientId,
         talkTemplateId,
         ...talkContentData,
@@ -67,6 +85,7 @@ module.exports = class AlimtalkSendService {
       return {
         talkContentId: result.talkContentId,
         clientId: result.clientId,
+        groupId: result.groupId,
         talkTemplateId: result.talkTemplateId,
       };
     }

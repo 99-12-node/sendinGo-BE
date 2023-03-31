@@ -149,7 +149,9 @@ module.exports = class ClientRepository {
   }) => {
     logger.info(`ClientRepository.getClientByClientIdAndGroupId Request`);
     const client = await Clients.findOne({
-      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      attributes: {
+        exclude: ['userId', 'companyId', 'createdAt', 'updatedAt'],
+      },
       where: {
         [Op.and]: [{ userId }, { companyId }, { clientId }],
       },
