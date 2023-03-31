@@ -119,29 +119,4 @@ module.exports = class ClientController {
       next(error);
     }
   };
-
-  //clientId로 등록된 클라이언트 조회
-  getCreatedClientsById = async (req, res, next) => {
-    logger.info(`ClientController.getCreatedClientsById Request`);
-    const { userId } = res.locals.user;
-    const { companyId } = res.locals.company;
-    const { groupId, clientIds } = req.body;
-
-    try {
-      if (!groupId || clientIds.length < 1) {
-        throw new BadRequestError('올바르지 않은 요청입니다.');
-      }
-
-      const allClients = await this.clientService.getCreatedClientsById({
-        userId,
-        companyId,
-        groupId,
-        clientIds,
-      });
-
-      return res.status(200).json({ data: allClients });
-    } catch (error) {
-      next(error);
-    }
-  };
 };
