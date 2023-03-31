@@ -174,4 +174,42 @@ module.exports = class ClientService {
       console.error(e);
     }
   };
+
+  //clientId로 등록된 클라이언트 조회
+  getCreatedClientsById = async ({ userId, companyId, groupId, clientIds }) => {
+    logger.info(`ClientService.getCreatedClientsById Request`);
+
+    // 존재하는 그룹인지 확인
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패하였습니다.');
+    }
+
+    const result = [];
+    for (const clientId of clientIds) {
+      // 존재하는 클라이언트인지 확인
+      const existClient = await this.clientRepository.getClientByClientId({
+        userId,
+        companyId,
+        clientId,
+      });
+
+      if (!existClient) {
+        throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+      }
+      const client = await this.clientRepository.getClientByClientIdAndGroupId({
+        userId,
+        companyId,
+        groupId,
+        clientId,
+      });
+      result.push(client);
+    }
+    return result;
+  };
 };
