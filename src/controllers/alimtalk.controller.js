@@ -186,6 +186,8 @@ module.exports = class AlimtalkController {
   // 알림톡 전송 결과 상세
   getAlimTalkResultDetail = async (req, res, next) => {
     logger.info(`AlimtalkController.getAlimTalkResultDetail`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const { talkSendId } = req.params;
     try {
       if (!talkSendId) {
@@ -195,6 +197,8 @@ module.exports = class AlimtalkController {
       const talkSendData = await this.alimtalkResultService.getTalkSendBySendId(
         {
           talkSendId,
+          userId,
+          companyId,
         }
       );
 
@@ -205,7 +209,7 @@ module.exports = class AlimtalkController {
 
       const saveResultDetails = await axios
         .post(`http://localhost:${PORT}/api/talk/results/detail/save`, {
-          data: { results, talkSendData },
+          data: { results, talkSendData, userId, companyId },
         })
         .catch((err) => {
           console.error(err.response.data);
@@ -222,7 +226,7 @@ module.exports = class AlimtalkController {
   // 알림톡 전송 결과 상세 DB 저장
   saveTalkResultDetail = async (req, res, next) => {
     logger.info(`AlimtalkController.saveTalkResultDetail`);
-    const { results, talkSendData } = req.body.data;
+    const { results, talkSendData, userId, companyId } = req.body.data;
     try {
       if (!results.length) {
         throw new BadRequestError('상세결과 조회에 실패하였습니다.');
@@ -231,6 +235,8 @@ module.exports = class AlimtalkController {
       const response = await this.alimtalkResultService.saveTalkResultDetail({
         results,
         talkSendData,
+        userId,
+        companyId,
       });
 
       return res

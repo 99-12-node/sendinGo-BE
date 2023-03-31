@@ -54,7 +54,12 @@ module.exports = class AlimtalkResultService {
   };
 
   // 알림톡 전송 상세 결과 저장
-  saveTalkResultDetail = async ({ results, talkSendData }) => {
+  saveTalkResultDetail = async ({
+    results,
+    talkSendData,
+    userId,
+    companyId,
+  }) => {
     logger.info(`AlimtalkResultService.saveTalkResultDetail`);
 
     const { talkSendId, clientId, groupId } = talkSendData;
@@ -66,11 +71,13 @@ module.exports = class AlimtalkResultService {
       const existTalkResult =
         await this.talkResultRepository.getExistTalkResult({
           msgid,
+          userId,
+          companyId,
         });
       // 이미 상세 결과가 DB에 있는 경우, 원하는 컬럼만 조회
       if (existTalkResult) {
         const talkResult = await this.talkResultRepository.getTalkResultByMsgId(
-          { msgid }
+          { msgid, userId, companyId }
         );
         response.push(talkResult);
       } else {
@@ -81,12 +88,16 @@ module.exports = class AlimtalkResultService {
             talkSendId,
             clientId,
             groupId,
+            userId,
+            companyId,
           }
         );
-
+        // 원하는 결과 상세 데이터 컬럼 반환
         const talkResult = await this.talkResultRepository.getTalkResultByMsgId(
           {
             msgid: talkResultData.msgid,
+            userId,
+            companyId,
           }
         );
         response.push(talkResult);
@@ -96,12 +107,14 @@ module.exports = class AlimtalkResultService {
   };
 
   // talkSendId로 전송 데이터 조회
-  getTalkSendBySendId = async ({ talkSendId }) => {
+  getTalkSendBySendId = async ({ talkSendId, userId, companyId }) => {
     logger.info(`AlimtalkResultService.getTalkSendBySendId`);
 
     // talkTemplateId, ClientId, talkSendId 찾기
     const talkSend = await this.talkSendRepository.getTalkSendBySendId({
       talkSendId,
+      userId,
+      companyId,
     });
 
     if (!talkSend) {
