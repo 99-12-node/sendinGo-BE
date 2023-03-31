@@ -91,10 +91,10 @@ module.exports = class TalkSendRepository {
   };
 
   // 상세조회용 - talkSendId로 전송 데이터 컬럼 조회
-  getTalkSendBySendId = async ({ talkSendId }) => {
+  getTalkSendBySendId = async ({ talkSendId, userId, companyId }) => {
     logger.info(`TalkSendRepository.getTalkSendBySendId Request`);
     const talkSend = await TalkSends.findOne({
-      where: { talkSendId },
+      where: { [Op.and]: [{ talkSendId }, { userId }, { companyId }] },
       attributes: [
         // 필요 컬럼: talkSendId, mid, groupId, talkContentId, clientId, talkTemplateId
         'talkSendId',
