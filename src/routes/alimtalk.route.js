@@ -42,11 +42,7 @@ router.get(
 );
 
 // 알림톡 전송 결과 상세 데이터 저장
-router.post(
-  '/results/detail/save',
-  authMiddleware,
-  alimtalkController.saveTalkResultDetail
-);
+router.post('/results/detail/save', alimtalkController.saveTalkResultDetail);
 
 // [임시] 알림톡 전송 내용 저장 및 알림톡 발송
 router.post(
