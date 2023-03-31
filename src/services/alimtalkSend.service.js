@@ -144,20 +144,29 @@ module.exports = class AlimtalkSendService {
   };
 
   // 알림톡 발송
-  sendAlimTalk = async (datas) => {
+  sendAlimTalk = async (userId, companyId, datas) => {
     logger.info(`AlimtalkSendService.sendAlimTalk`);
 
-    let talkSendDatas = [];
-    let talkSendParams = [];
+    const talkSendDatas = [];
+    const talkSendParams = [];
+
     for (const data of datas) {
       const { talkContentId, clientId, talkTemplateId, groupId } = data;
 
       // clientId, talkContentId, talkTemplateId, groupId로 데이터 조회
       const talkSendPromises = [
-        await this.clientRepository.getClientByClientId({ clientId }),
-        await this.talkContentRepository.getTalkContentById({ talkContentId }),
+        await this.clientRepository.getClientByClientId({
+          userId,
+          companyId,
+          clientId,
+        }),
+        await this.talkContentRepository.getTalkContentById({
+          userId,
+          companyId,
+          talkContentId,
+        }),
         await this.talkTemplateRepository.getTemplateById({ talkTemplateId }),
-        await this.groupRepository.findGroupId({ groupId }),
+        await this.groupRepository.findGroupId({ userId, companyId, groupId }),
       ];
 
       // 관련 Promise 에러 핸들링
@@ -183,29 +192,24 @@ module.exports = class AlimtalkSendService {
         talkSendData: talkcontent,
       };
       talkSendDatas.push(talksendAligoParams);
+      talkSendParams.push(data);
     }
 
     // 파라미터로 알리고에 알림톡 전송 요청
     const aligoResult = await aligoService.sendAlimTalk(talkSendDatas);
 
-    // 요청 받은 응답 데이터와 알림톡 전송 파라미터 반환
-    for (const data of datas) {
-      const { talkContentId, clientId, talkTemplateId, groupId } = data;
-      const talkSend = { talkContentId, clientId, talkTemplateId, groupId };
-      talkSendParams.push(talkSend);
-    }
     return {
       message: '성공적으로 전송요청 하였습니다.',
       aligoResult,
-      talkSend: [...talkSendParams],
+      talkSend: talkSendParams,
     };
   };
 
   // 알림톡 발송 요청 응답 데이터 저장
-  saveSendAlimTalkResponse = async ({ data }) => {
+  saveSendAlimTalkResponse = async ({ userId, companyId, data }) => {
     logger.info(`AlimtalkSendService.saveSendAlimTalkResponse`);
     const { aligoResult, talkSend } = data;
-    let result = [];
+    const result = [];
     for (const send of talkSend) {
       const { code, message } = aligoResult;
       const { talkContentId, clientId, talkTemplateId, groupId } = send;
@@ -213,6 +217,8 @@ module.exports = class AlimtalkSendService {
         talkContentId,
         clientId,
         talkTemplateId,
+        userId,
+        companyId,
         groupId,
         code,
         message,

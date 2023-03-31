@@ -22,11 +22,7 @@ router.post(
 router.post('/sends', authMiddleware, alimtalkController.sendAlimTalk);
 
 // 알림톡 발송 요청 응답 데이터 저장
-router.post(
-  '/sends/response',
-  authMiddleware,
-  alimtalkController.saveSendAlimTalkResponse
-);
+router.post('/sends/response', alimtalkController.saveSendAlimTalkResponse);
 
 // 알림톡 전송 결과 목록(리스트) 조회
 router.get(
@@ -55,5 +51,15 @@ router.post(
   authMiddleware,
   alimtalkController.saveTalkResultDetail
 );
+
+// [임시] 알림톡 전송 내용 저장 및 알림톡 발송
+router.post(
+  '/both/contents/send',
+  authMiddleware,
+  alimtalkController.saveTalkContentsAndSend
+);
+
+// [임시] 전송 내용 저장 및 알림톡 발송 리다이렉트 URL
+router.post('/both/sends', alimtalkController.saveContentsAndSendAlimTalk);
 
 module.exports = router;

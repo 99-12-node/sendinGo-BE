@@ -10,6 +10,8 @@ module.exports = class TalkSendRepository {
     clientId,
     talkContentId,
     talkTemplateId,
+    userId,
+    companyId,
     groupId,
     ...aligoData
   }) => {
@@ -19,6 +21,8 @@ module.exports = class TalkSendRepository {
         clientId,
         talkContentId,
         talkTemplateId,
+        userId,
+        companyId,
         groupId,
         ...aligoData,
       });
