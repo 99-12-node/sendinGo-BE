@@ -12,7 +12,7 @@ router.get('/auth', alimtalkController.generateSendToken);
 router.post('/contents', authMiddleware, alimtalkController.saveTalkContents);
 
 // 클라이언트 전송 내용 조회
-router.get(
+router.post(
   '/clients/lists',
   authMiddleware,
   alimtalkController.getTalkContentsByClientId
