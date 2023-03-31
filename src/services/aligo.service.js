@@ -85,15 +85,19 @@ module.exports = class AligoService {
   getAlimTalkResult = async ({ page, limit, startdate, enddate }) => {
     logger.info(`AligoService.getAlimTalkResult`);
 
-    const today = new Date();
-    const formatToday = today.toISOString().slice(0, 10).replace(/-/g, ''); // yyyymmdd
+    const TIME_ZONE = 9 * 60 * 60 * 1000; // 9시간
+    const today = Date.now() + TIME_ZONE; // 한국 현지 시각
+    const formatToday = new Date(today)
+      .toISOString()
+      .slice(0, 10)
+      .replace(/-/g, ''); // yyyymmdd
 
     const params = new url.URLSearchParams({
       ...authParams,
       page: page ?? 1,
       limit: limit ?? 50,
       startdate: startdate ?? formatToday - 7,
-      enddate: enddate ?? formatToday, // 이전일을 기본값,
+      enddate: enddate ?? formatToday, // 현재시각을 기본값,
     });
 
     const aligoRes = await instance.post(
