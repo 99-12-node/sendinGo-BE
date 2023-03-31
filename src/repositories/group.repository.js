@@ -54,11 +54,6 @@ module.exports = class GroupRepository {
   //그룹 삭제시, 삭제할 groupId 있는지 찾아보기
   findGroupId = async ({ userId, companyId, groupId }) => {
     logger.info(`GroupRepository.findGroupId Request`);
-    console.log('{ userId, companyId, groupId }: ', {
-      userId,
-      companyId,
-      groupId,
-    });
     const findGroupData = await Groups.findOne({
       where: { [Op.and]: [{ userId }, { companyId }, { groupId }] },
     });
