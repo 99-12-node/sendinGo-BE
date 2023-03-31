@@ -92,7 +92,6 @@ module.exports = class AligoService {
       .slice(0, 10)
       .replace(/-/g, ''); // yyyymmdd
 
-    console.log('formatToday :', formatToday);
     const params = new url.URLSearchParams({
       ...authParams,
       page: page ?? 1,
