@@ -48,6 +48,32 @@ module.exports = class AlimtalkController {
     }
   };
 
+  // 클라이언트 알림톡 전송 내용 조회
+  getTalkContentsByClientId = async (req, res, next) => {
+    logger.info(`AlimtalkController.getTalkContentsByClientId Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+    const { groupId, clientIds } = req.body;
+
+    try {
+      if (!groupId || clientIds.length < 1) {
+        throw new BadRequestError('올바르지 않은 요청입니다.');
+      }
+
+      const allClients =
+        await this.alimtalkSendService.getTalkContentsByClientId({
+          userId,
+          companyId,
+          groupId,
+          clientIds,
+        });
+
+      return res.status(200).json({ data: allClients });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   // 알림톡 발송
   sendAlimTalk = async (req, res, next) => {
     logger.info(`AlimtalkController.sendAlimTalk`);

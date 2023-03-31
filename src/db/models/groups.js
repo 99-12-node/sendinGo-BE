@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'groupId',
         foreignKey: 'groupId',
       });
+      this.hasMany(models.TalkContents, {
+        sourceKey: 'groupId',
+        foreignKey: 'groupId',
+      });
     }
   }
   Groups.init(
