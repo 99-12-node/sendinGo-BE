@@ -19,12 +19,12 @@ module.exports = class ClientGroupService {
     logger.info(`ClientGrouopService.createClientGroup Request`);
 
     //유저 확인
-    const comfirmClientId = await this.clientRepository.comfirmUser({
+    const confirmClientId = await this.clientRepository.confirmUser({
       userId,
       companyId,
       clientId,
     });
-    if (!comfirmClientId) {
+    if (!confirmClientId) {
       throw new ForbiddenError('등록 권한이 없습니다.');
     }
     // 존재하는 groupId 인지 확인
@@ -132,59 +132,95 @@ module.exports = class ClientGroupService {
   };
 
   // ClientGroup 클라이언트 이동
-  //이동하려는 곳에 이미 존재하면 에러
-  moveClientGroup = async ({ clientId, existGroupId, newGroupId }) => {
+  moveClientGroup = async ({
+    userId,
+    companyId,
+    clientId,
+    existGroupId,
+    newGroupId,
+  }) => {
     logger.info(`ClientGrouopService.moveClientGroup Request`);
     const existClientGroup =
       await this.clientGroupRepository.getClientGroupById({
+        userId,
+        companyId,
         clientId,
         groupId: existGroupId,
       });
     if (!existClientGroup) {
-      throw new NotFoundError('존재하지 않는 그룹입니다.');
+      throw new NotFoundError('잘못된 요청입니다.');
     }
 
     const movedClientGroup =
       await this.clientGroupRepository.getClientGroupById({
+        userId,
+        companyId,
         clientId,
         groupId: newGroupId,
       });
     if (movedClientGroup) {
       throw new BadRequestError('이미 존재하는 그룹입니다.');
     } else {
-      await this.deleteClientGroup({ clientId, groupId: existGroupId });
-      await this.createClientGroup({ clientId, groupId: newGroupId });
+      await this.deleteClientGroup({
+        userId,
+        companyId,
+        clientId,
+        groupId: existGroupId,
+      });
+      await this.createClientGroup({
+        userId,
+        companyId,
+        clientId,
+        groupId: newGroupId,
+      });
     }
   };
 
   //ClientGroup 복사
-  copyClientGroup = async ({ clientId, existGroupId, newGroupId }) => {
+  copyClientGroup = async ({
+    userId,
+    companyId,
+    clientId,
+    existGroupId,
+    newGroupId,
+  }) => {
     logger.info(`ClientGroupService.copyClientGroup Request`);
 
     const existClientGroup =
       await this.clientGroupRepository.getClientGroupById({
+        userId,
+        companyId,
         clientId,
         groupId: existGroupId,
       });
     if (!existClientGroup) {
-      throw new NotFoundError('그룹이 존재하지 않습니다.');
+      throw new NotFoundError('잘못된 요청입니다.');
     }
     const movedClientGroup =
       await this.clientGroupRepository.getClientGroupById({
+        userId,
+        companyId,
         clientId,
         groupId: newGroupId,
       });
     if (movedClientGroup) {
       throw new BadRequestError('이미 존재하는 그룹입니다.');
     } else {
-      await this.createClientGroup({ clientId, groupId: newGroupId });
+      await this.createClientGroup({
+        userId,
+        companyId,
+        clientId,
+        groupId: newGroupId,
+      });
     }
   };
 
   // ClientGroup 삭제
-  deleteClientGroup = async ({ groupId, clientId }) => {
+  deleteClientGroup = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGroupService.deleteClientGroup Request`);
     const clientGroupData = await this.clientGroupRepository.deleteClientGroup({
+      userId,
+      companyId,
       groupId,
       clientId,
     });

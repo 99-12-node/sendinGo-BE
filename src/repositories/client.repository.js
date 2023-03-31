@@ -113,16 +113,16 @@ module.exports = class ClientRepository {
     return client;
   };
 
-  comfirmUser = async ({ clientId, userId, companyId }) => {
-    logger.info(`ClientRepository.comfirmUser Request`);
+  confirmUser = async ({ clientId, userId, companyId }) => {
+    logger.info(`ClientRepository.confirmUser Request`);
     const client = await Clients.findOne({
       where: { [Op.and]: [{ userId }, { companyId }, { clientId }] },
     });
     return client;
   };
 
-  comfirmUserId = async ({ userId, companyId }) => {
-    logger.info(`ClientRepository. comfirmUserId Request`);
+  confirmUserId = async ({ userId, companyId }) => {
+    logger.info(`ClientRepository. confirmUserId Request`);
     const client = await Clients.findOne({
       where: { [Op.and]: [{ userId }, { companyId }] },
     });
