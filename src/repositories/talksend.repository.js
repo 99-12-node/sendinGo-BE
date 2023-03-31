@@ -49,16 +49,21 @@ module.exports = class TalkSendRepository {
         sendState,
         sendDate,
       },
-      { where: { mid } }
+      { where: { mid } },
+      { plain: true }
     );
     return updatedTalkSends;
   };
 
   // 리스트 조회용 - mid로 전송 데이터 컬럼 조회
-  getTalkSendByMid = async ({ mid, groupId }) => {
+  getTalkSendByMid = async ({ mid, groupId, userId, companyId }) => {
     logger.info(`TalkSendRepository.getTalkSendByMid Request`);
     const talkSend = await TalkSends.findOne({
-      where: { [Op.and]: groupId ? [{ mid }, { groupId }] : [{ mid }] },
+      where: {
+        [Op.and]: groupId
+          ? [{ mid }, { groupId }, { userId }, { companyId }]
+          : [{ mid }],
+      },
       attributes: {
         // 필요 컬럼: talkSendId, mid, scnt, fcnt, msgCount, sendState, sendDate, groupId, groupName,
         exclude: [
