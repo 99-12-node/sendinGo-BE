@@ -13,6 +13,4 @@ router.get('/', authMiddleware, clientController.getClients);
 router.patch('/:clientId', authMiddleware, clientController.editClientInfo);
 router.delete('/:clientId', authMiddleware, clientController.deleteClient);
 
-router.get('/lists', authMiddleware, clientController.getCreatedClientsById);
-
 module.exports = router;
