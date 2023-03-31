@@ -27,13 +27,18 @@ module.exports = class AlimtalkController {
   // 알림톡 전송 내용 저장
   saveTalkContents = async (req, res, next) => {
     logger.info(`AlimtalkController.saveTalkContents`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const datas = req.body.data;
     try {
       let result = [];
       for (const data of datas) {
-        const { clientId, templateCode, ...talkContentData } = data;
+        const { groupId, clientId, templateCode, ...talkContentData } = data;
         // 알림톡 전송 내용 저장
         const createdData = await this.alimtalkSendService.saveTalkContents({
+          userId,
+          companyId,
+          groupId,
           clientId,
           talkTemplateCode: templateCode,
           ...talkContentData,
@@ -60,15 +65,14 @@ module.exports = class AlimtalkController {
         throw new BadRequestError('올바르지 않은 요청입니다.');
       }
 
-      const allClients =
-        await this.alimtalkSendService.getTalkContentsByClientId({
-          userId,
-          companyId,
-          groupId,
-          clientIds,
-        });
+      const allData = await this.alimtalkSendService.getTalkContentsByClientId({
+        userId,
+        companyId,
+        groupId,
+        clientIds,
+      });
 
-      return res.status(200).json({ data: allClients });
+      return res.status(200).json({ data: allData });
     } catch (error) {
       next(error);
     }
