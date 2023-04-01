@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.TalkTemplates, {
         targetKey: 'talkTemplateId',
         foreignKey: 'talkTemplateId',
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       });
       this.hasMany(models.TalkSends, {
         sourceKey: 'talkTemplateId',
@@ -70,7 +70,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'TalkTemplates',
           key: 'talkTemplateId',
         },
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       },
       userId: {
         allowNull: false,

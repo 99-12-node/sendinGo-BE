@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Users, {
         targetKey: 'userId',
         foreignKey: 'userId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.Users, {
         targetKey: 'companyId',
         foreignKey: 'companyId',
+        onDelete: 'CASCADE',
       });
       this.hasMany(models.TalkContents, {
         sourceKey: 'clientId',
@@ -34,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.TalkResultDetails, {
         sourceKey: 'clientId',
         foreignKey: 'clientId',
+        onDelete: 'CASCADE',
       });
     }
   }

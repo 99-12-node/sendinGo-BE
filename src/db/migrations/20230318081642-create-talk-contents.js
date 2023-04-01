@@ -25,7 +25,7 @@ module.exports = {
           model: 'TalkTemplates',
           key: 'talkTemplateId',
         },
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       },
       userId: {
         allowNull: false,
