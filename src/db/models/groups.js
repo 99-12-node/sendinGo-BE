@@ -19,12 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.TalkSends, {
         sourceKey: 'groupId',
         foreignKey: 'groupId',
-        onDelete: 'NO ACTION',
       });
       this.hasMany(models.ClientGroups, {
         sourceKey: 'groupId',
         foreignKey: 'groupId',
-        onDelete: 'CASCADE',
       });
       this.hasMany(models.TalkResultDetails, {
         sourceKey: 'groupId',
