@@ -11,15 +11,17 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Users, {
         targetKey: 'userId',
         foreignKey: 'userId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.Companies, {
         targetKey: 'companyId',
         foreignKey: 'companyId',
+        onDelete: 'CASCADE',
       });
       this.hasMany(models.TalkSends, {
         sourceKey: 'groupId',
         foreignKey: 'groupId',
-        onDelete: 'NO ACTION',
+        onDelete: 'CASCADE',
       });
       this.hasMany(models.ClientGroups, {
         sourceKey: 'groupId',
@@ -29,10 +31,12 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.TalkResultDetails, {
         sourceKey: 'groupId',
         foreignKey: 'groupId',
+        onDelete: 'CASCADE',
       });
       this.hasMany(models.TalkContents, {
         sourceKey: 'groupId',
         foreignKey: 'groupId',
+        onDelete: 'CASCADE',
       });
     }
   }
