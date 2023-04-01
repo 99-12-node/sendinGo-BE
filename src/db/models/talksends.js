@@ -26,17 +26,17 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.TalkContents, {
         targetKey: 'talkContentId',
         foreignKey: 'talkContentId',
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       });
-      this.belongsTo(models.TalkContents, {
+      this.belongsTo(models.Clients, {
         targetKey: 'clientId',
         foreignKey: 'clientId',
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.TalkContents, {
         targetKey: 'talkTemplateId',
         foreignKey: 'talkTemplateId',
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       });
       this.hasMany(models.TalkResultDetails, {
         sourceKey: 'talkSendId',
@@ -114,7 +114,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Groups',
           key: 'groupId',
         },
-        onDelete: 'NO ACTION',
+        onDelete: 'CASCADE',
       },
       talkContentId: {
         type: DataTypes.INTEGER,
@@ -123,7 +123,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'TalkContents',
           key: 'talkContentId',
         },
-        onDelete: 'NO ACTION',
+        onDelete: 'CASCADE',
       },
       clientId: {
         type: DataTypes.INTEGER,
@@ -132,7 +132,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Clients',
           key: 'clientId',
         },
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       },
       talkTemplateId: {
         type: DataTypes.INTEGER,
@@ -141,7 +141,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'TalkTemplates',
           key: 'talkTemplateId',
         },
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,
