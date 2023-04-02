@@ -30,20 +30,34 @@ module.exports = class ClientRepository {
   //클라이언트 전체 조회
   getAllClients = async ({ userId, companyId, offset }) => {
     logger.info(`ClientRepository.getAllClients Request`);
+    const allData = await Clients.findAll({
+      where: { [Op.and]: [{ userId }, { companyId }] },
+      attributes: [
+        'clientId',
+        'clientName',
+        'contact',
+        'clientEmail',
+        'createdAt',
+      ],
+      include: [
+        {
+          model: ClientGroups,
+          attributes: ['groupId'],
+          include: [
+            {
+              model: Groups,
+              attributes: ['groupName'],
+            },
+          ],
+        },
+      ],
+      group: 'clientId',
+      order: [['createdAt', 'DESC']],
+      offset: offset * OFFSET_CONSTANT,
+      limit: OFFSET_CONSTANT,
+      raw: true,
+    }).then((model) => model.map(parseSequelizePrettier));
 
-    const TOTAL_OFFSET = offset * OFFSET_CONSTANT;
-
-    const [allData] = await sequelize.query(
-      `SELECT c.clientId, c.clientName, c.contact, c.clientEmail, c.createdAt, cg.groupId, g.groupName\
-      FROM Clients AS c\
-      LEFT OUTER JOIN ClientGroups cg ON c.clientId = cg.clientId\
-      LEFT OUTER JOIN \`Groups\` g ON g.groupId = cg.groupId\
-      WHERE c.userId = ${userId} AND c.companyId = ${companyId}\
-      GROUP BY c.clientId\
-      ORDER BY c.createdAt DESC\
-      LIMIT ${OFFSET_CONSTANT} OFFSET ${TOTAL_OFFSET}\
-      `
-    );
     return allData;
   };
 
