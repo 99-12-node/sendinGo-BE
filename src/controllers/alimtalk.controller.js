@@ -33,7 +33,7 @@ module.exports = class AlimtalkController {
     const { companyId } = res.locals.company;
     const datas = req.body.data;
     try {
-      let result = [];
+      const result = [];
       for (const data of datas) {
         const { groupId, clientId, talkTemplateId, ...talkContentData } = data;
         // 알림톡 전송 내용 저장
