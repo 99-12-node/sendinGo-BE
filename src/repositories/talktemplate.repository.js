@@ -5,6 +5,7 @@ const {
   TalkTemplatesVariables,
 } = require('../db/models');
 const { NotFoundError } = require('../exceptions/errors');
+const parseSequelizePrettier = require('../helpers/parse.sequelize');
 
 module.exports = class TalkTemplateRepository {
   constructor() {}
@@ -86,7 +87,8 @@ module.exports = class TalkTemplateRepository {
           ],
         },
       ],
-    });
+      raw: true,
+    }).then((model) => model.map(parseSequelizePrettier));
     return templateVariables;
   };
 };
