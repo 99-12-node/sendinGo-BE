@@ -40,8 +40,25 @@ const JoiHelper = {
     try {
       logger.info(`JoiHelper.clientId Request`);
       await check.validateAsync(req.params);
-    } catch (error) {
-      next(error);
+    } catch (e) {
+      next(e);
+    }
+    next();
+  },
+
+  //index
+  checkIndex: async (req, res, next) => {
+    const check = Joi.object().keys({
+      index: Joi.number()
+        .required()
+        .error(new BadRequestError('index는 숫자입니다.')),
+    });
+
+    try {
+      logger.info(`JoiHelper.checkIndex Request`);
+      await check.validateAsync(req.query);
+    } catch (e) {
+      next(e);
     }
     next();
   },
@@ -50,7 +67,6 @@ const JoiHelper = {
   groupCheck: async (req, res, next) => {
     const check = Joi.object().keys({
       groupName: Joi.string()
-        //.min(2)
         .required()
         .regex(/^([a-zA-Z0-9ㄱ-ㅎ가-힣])*$/)
         .error(new BadRequestError('그룹명을 입력해주세요.')),
@@ -76,8 +92,49 @@ const JoiHelper = {
     try {
       logger.info(`JoiHelper.groupId Request`);
       await check.validateAsync(req.params);
-    } catch (error) {
-      next(error);
+    } catch (e) {
+      next(e);
+    }
+    next();
+  },
+  clientGroupCheck: async (req, res, next) => {
+    const check = Joi.object().keys({
+      clientId: Joi.number()
+        .required()
+        .error(new BadRequestError('올바른 clientId를 입력해주세요.')),
+
+      groupId: Joi.number()
+        .required()
+        .error(new BadRequestError('올바른 groupId를 입력해주세요.')),
+    });
+    try {
+      logger.info(`JoiHelper.clientGroupCheck Request`);
+      await check.validateAsync(req.params);
+    } catch (e) {
+      next(e);
+    }
+    next();
+  },
+
+  groupIdCheck: async (req, res, next) => {
+    const check = Joi.object().keys({
+      clientId: Joi.number()
+        .required()
+        .error(new BadRequestError('올바른 clientId를 입력해주세요.')),
+
+      existGroupId: Joi.number()
+        .required()
+        .error(new BadRequestError('올바른 existGroupId를 입력해주세요.')),
+
+      newGroupId: Joi.number()
+        .required()
+        .error(new BadRequestError('올바른 newGroupId를 입력해주세요.')),
+    });
+    try {
+      logger.info(`JoiHelper.groupIdCheck Request`);
+      await check.validateAsync(req.params);
+    } catch (e) {
+      next(e);
     }
     next();
   },
