@@ -35,14 +35,14 @@ module.exports = class AlimtalkController {
     try {
       let result = [];
       for (const data of datas) {
-        const { groupId, clientId, templateCode, ...talkContentData } = data;
+        const { groupId, clientId, talkTemplateId, ...talkContentData } = data;
         // 알림톡 전송 내용 저장
         const createdData = await this.alimtalkSendService.saveTalkContents({
           userId,
           companyId,
           groupId,
           clientId,
-          talkTemplateCode: templateCode,
+          talkTemplateId,
           ...talkContentData,
         });
         result.push(createdData);
