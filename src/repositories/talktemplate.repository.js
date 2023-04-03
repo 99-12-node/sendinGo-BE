@@ -51,4 +51,30 @@ module.exports = class TalkTemplateRepository {
     });
     return template;
   };
+
+  // 템플릿 목록 전체 조회
+  getTemplatesList = async () => {
+    logger.info(`TalkTemplateRepository.getTemplatesList Request`);
+    const templates = await TalkTemplates.findAll({
+      attributes: ['talkTemplateId', 'talkTemplateCode', 'talkTemplateName'],
+    });
+    return templates;
+  };
+
+  // 템플릿 Id로 변수들 상세 조회
+  getTemplateVariablesById = async ({ talkTemplateId }) => {
+    logger.info(`TalkTemplateRepository.getTemplateVariablesById Request`);
+
+    const templateVariables = await TalkVariables.findAll({
+      attributes: ['talkVariableId', 'talkVariableEng', 'talkVariableKor'],
+      include: [
+        {
+          model: TalkTemplatesVariables,
+          attributes: [],
+          where: { talkTemplateId },
+        },
+      ],
+    });
+    return templateVariables;
+  };
 };

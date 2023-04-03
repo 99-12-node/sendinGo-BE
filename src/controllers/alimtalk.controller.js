@@ -1,9 +1,10 @@
 const { logger } = require('../middlewares/logger');
 const AlimtalkSendService = require('../services/alimtalkSend.service');
 const AlimtalkResultService = require('../services/alimitalkResult.service');
+const TalkTemplateService = require('../services/talktemplate.service');
 const AligoService = require('../services/aligo.service');
 const axios = require('axios');
-const { BadRequestError } = require('../exceptions/errors');
+const { BadRequestError, ForbiddenError } = require('../exceptions/errors');
 require('dotenv').config();
 const { PORT } = process.env;
 
@@ -11,6 +12,7 @@ module.exports = class AlimtalkController {
   constructor() {
     this.alimtalkSendService = new AlimtalkSendService();
     this.alimtalkResultService = new AlimtalkResultService();
+    this.talkTemplateService = new TalkTemplateService();
     this.aligoService = new AligoService();
   }
   // 토큰 생성
@@ -78,6 +80,47 @@ module.exports = class AlimtalkController {
     }
   };
 
+  // 알림톡 템플릿 목록 조회
+  getTemplatesList = async (req, res, next) => {
+    logger.info(`AlimtalkController.getTemplatesList Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+
+    try {
+      if (!(userId && companyId)) {
+        throw new ForbiddenError('접근 권한이 없습니다.');
+      }
+
+      const allData = await this.talkTemplateService.getTemplatesList();
+
+      return res.status(200).json({ data: allData });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // 알림톡 템플릿 Id로 변수들 상세 조회
+  getTemplateVariablesById = async (req, res, next) => {
+    logger.info(`AlimtalkController.getTemplateVariablesById Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+    const { talkTemplateId } = req.params;
+    console.log('talkTemplateId :', talkTemplateId, req.body, req.params);
+
+    try {
+      if (!(userId && companyId)) {
+        throw new ForbiddenError('접근 권한이 없습니다.');
+      }
+
+      const data = await this.talkTemplateService.getTemplateVariablesById({
+        talkTemplateId,
+      });
+
+      return res.status(200).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  };
   // 알림톡 발송
   sendAlimTalk = async (req, res, next) => {
     logger.info(`AlimtalkController.sendAlimTalk`);
