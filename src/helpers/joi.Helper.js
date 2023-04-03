@@ -46,6 +46,23 @@ const JoiHelper = {
     next();
   },
 
+  //index
+  checkIndex: async (req, res, next) => {
+    const check = Joi.object().keys({
+      index: Joi.number()
+        .required()
+        .error(new BadRequestError('index는 숫자입니다.')),
+    });
+
+    try {
+      logger.info(`JoiHelper.checkIndex Request`);
+      await check.validateAsync(req.query);
+    } catch (e) {
+      next(e);
+    }
+    next();
+  },
+
   //Group
   groupCheck: async (req, res, next) => {
     const check = Joi.object().keys({

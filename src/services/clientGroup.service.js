@@ -18,7 +18,7 @@ module.exports = class ClientGroupService {
   createClientGroup = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGrouopService.createClientGroup Request`);
 
-    //유저 확인
+    // 유저 확인
     const confirmClientId = await this.clientRepository.confirmUser({
       userId,
       companyId,
