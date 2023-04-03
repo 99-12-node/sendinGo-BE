@@ -22,11 +22,11 @@ router.post(
 router.get('/templates', authMiddleware, alimtalkController.getTemplatesList);
 
 // 알림톡 템플릿 상세 조회
-// router.get(
-//   '/templates/:talkTemplateId',
-//   authMiddleware,
-//   alimtalkController.getTemplateVariablesById
-// );
+router.get(
+  '/templates/:talkTemplateId',
+  authMiddleware,
+  alimtalkController.getTemplateVariablesById
+);
 
 // 알림톡 보내기
 router.post('/sends', authMiddleware, alimtalkController.sendAlimTalk);
