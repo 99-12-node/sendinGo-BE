@@ -18,6 +18,25 @@ module.exports = class ClientGroupService {
   createClientGroup = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGrouopService.createClientGroup Request`);
 
+    //유저 확인
+    const confirmClientId = await this.clientRepository.confirmUser({
+      userId,
+      companyId,
+      clientId,
+    });
+    if (!confirmClientId) {
+      throw new NotFoundError('존재하지 않는 고객입니다.');
+    }
+    // 존재하는 groupId 인지 확인
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패했습니다.');
+    }
+
     // 기존 등록 여부 확인
     const existClientGroup =
       await this.clientGroupRepository.getClientGroupById({
