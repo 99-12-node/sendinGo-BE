@@ -51,4 +51,13 @@ module.exports = class TalkTemplateRepository {
     });
     return template;
   };
+
+  // 템플릿 목록 전체 조회
+  getTemplatesList = async () => {
+    logger.info(`TalkTemplateRepository.getTemplatesList Request`);
+    const templates = await TalkTemplates.findAll({
+      attributes: ['talkTemplateId', 'talkTemplateCode', 'talkTemplateName'],
+    });
+    return templates;
+  };
 };
