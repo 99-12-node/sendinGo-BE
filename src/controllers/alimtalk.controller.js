@@ -91,7 +91,7 @@ module.exports = class AlimtalkController {
         throw new ForbiddenError('접근 권한이 없습니다.');
       }
 
-      const allData = await this.talkTemplateService.getTemplatesList({});
+      const allData = await this.talkTemplateService.getTemplatesList();
 
       return res.status(200).json({ data: allData });
     } catch (error) {
@@ -99,6 +99,28 @@ module.exports = class AlimtalkController {
     }
   };
 
+  // 알림톡 템플릿 Id로 변수들 상세 조회
+  getTemplateVariablesById = async (req, res, next) => {
+    logger.info(`AlimtalkController.getTemplateVariablesById Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+    const { talkTemplateId } = req.params;
+    console.log('talkTemplateId :', talkTemplateId, req.body, req.params);
+
+    try {
+      if (!(userId && companyId)) {
+        throw new ForbiddenError('접근 권한이 없습니다.');
+      }
+
+      const data = await this.talkTemplateService.getTemplateVariablesById({
+        talkTemplateId,
+      });
+
+      return res.status(200).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  };
   // 알림톡 발송
   sendAlimTalk = async (req, res, next) => {
     logger.info(`AlimtalkController.sendAlimTalk`);
