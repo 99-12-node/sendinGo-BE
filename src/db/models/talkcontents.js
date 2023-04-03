@@ -39,11 +39,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'companyId',
         onDelete: 'CASCADE',
       });
-      this.belongsTo(models.Groups, {
-        targetKey: 'groupId',
-        foreignKey: 'groupId',
-        onDelete: 'CASCADE',
-      });
     }
   }
   TalkContents.init(
@@ -87,15 +82,6 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: 'Users',
           key: 'companyId',
-        },
-        onDelete: 'CASCADE',
-      },
-      groupId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'Groups',
-          key: 'groupId',
         },
         onDelete: 'CASCADE',
       },

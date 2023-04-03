@@ -12,7 +12,11 @@ router.post(
   JoiHelper.clientCheck,
   clientController.createClient
 );
-router.post('/bulk', authMiddleware, clientController.createClientBulk);
+router.post(
+  '/contents/bulk',
+  authMiddleware,
+  clientController.createClientBulk
+);
 
 router.get(
   '/',
