@@ -23,7 +23,7 @@ module.exports = class AlimtalkSendService {
     companyId,
     groupId,
     clientId,
-    talkTemplateCode,
+    talkTemplateId,
     ...talkContentData
   }) => {
     logger.info(`AlimtalkSendService.saveTalkContents`);
@@ -47,48 +47,43 @@ module.exports = class AlimtalkSendService {
       throw new NotFoundError('그룹 조회에 실패하였습니다.');
     }
 
-    // 템플릿 데이터 맞는지 확인하고 템플릿 Id 반환
-    const talkTemplateId = await this.talkTemplateRepository
-      .getTemplateByCode({
-        talkTemplateCode,
-      })
-      .then(async (template) => {
-        // 해당 템플릿 변수들 불러오기
-        const variables =
-          await this.talkTemplateRepository.getVariablesByTemplateId({
-            talkTemplateId: template.talkTemplateId,
-          });
-        // 입력 데이터와 템플릿 변수 일치여부 확인
-        const result = variables.every(async (value) => {
-          const currentVariable = value['talkVariableEng'];
-          const inputDataArray = Object.keys(talkContentData);
-          return inputDataArray.includes(currentVariable);
-        });
-        if (!result) {
-          throw new BadRequestError(
-            '입력 데이터가 템플릿과 일치하지 않습니다.'
-          );
-        }
-        return template.talkTemplateId;
-      });
-
-    // 템필릿 전송 내용 저장
-    if (talkTemplateId) {
-      const result = await this.talkContentRepository.createTalkContent({
-        userId,
-        companyId,
-        groupId,
-        clientId,
-        talkTemplateId,
-        ...talkContentData,
-      });
-      return {
-        talkContentId: result.talkContentId,
-        clientId: result.clientId,
-        groupId: result.groupId,
-        talkTemplateId: result.talkTemplateId,
-      };
+    // 템플릿 존재 확인
+    const existTalkTemplate = await this.talkTemplateRepository.getTemplateById(
+      { talkTemplateId }
+    );
+    if (!existTalkTemplate) {
+      throw new NotFoundError('템플릿 조회에 실패하였습니다.');
     }
+
+    // 해당 템플릿 변수들 불러오기
+    const variables =
+      await this.talkTemplateRepository.getVariablesByTemplateId({
+        talkTemplateId: existTalkTemplate.talkTemplateId,
+      });
+    // 입력 데이터와 템플릿 변수 일치여부 확인
+    const result = variables.every((value) => {
+      const currentVariable = value['talkVariableEng'];
+      const inputDataArray = Object.keys(talkContentData);
+      return inputDataArray.includes(currentVariable);
+    });
+    if (!result) {
+      throw new BadRequestError('입력 데이터가 템플릿과 일치하지 않습니다.');
+    }
+
+    // 템플릿 전송 내용 저장
+    const newTalkContent = await this.talkContentRepository.createTalkContent({
+      userId,
+      companyId,
+      clientId: existClient.clientId,
+      talkTemplateId: existTalkTemplate.talkTemplateId,
+      ...talkContentData,
+    });
+    return {
+      talkContentId: newTalkContent.talkContentId,
+      clientId: newTalkContent.clientId,
+      groupId: existGroup.groupId,
+      talkTemplateId: newTalkContent.talkTemplateId,
+    };
   };
 
   //등록된 클라이언트 알림톡 전송 내용 조회

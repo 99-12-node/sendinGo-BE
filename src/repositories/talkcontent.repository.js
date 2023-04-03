@@ -9,26 +9,19 @@ module.exports = class TalkContentRepository {
   createTalkContent = async ({
     userId,
     companyId,
-    groupId,
     clientId,
     talkTemplateId,
     ...talkContentData
   }) => {
     logger.info(`TalkContentRepository.createTalkContent Request`);
-    try {
-      const newTalkContent = await TalkContents.create({
-        userId,
-        companyId,
-        groupId,
-        clientId,
-        talkTemplateId,
-        ...talkContentData,
-      });
-      return newTalkContent;
-    } catch (e) {
-      console.error(e);
-      throw new Error('전송 내용 저장에 실패하였습니다.');
-    }
+    const newTalkContent = await TalkContents.create({
+      userId,
+      companyId,
+      clientId,
+      talkTemplateId,
+      ...talkContentData,
+    });
+    return newTalkContent;
   };
 
   // 톡 전송 내용 Id로 조회
