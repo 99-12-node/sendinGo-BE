@@ -81,9 +81,13 @@ module.exports = class AlimtalkController {
   // 알림톡 발송
   sendAlimTalk = async (req, res, next) => {
     logger.info(`AlimtalkController.sendAlimTalk`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
     const datas = req.body.data;
     try {
       const { message, ...data } = await this.alimtalkSendService.sendAlimTalk(
+        userId,
+        companyId,
         datas
       );
       const redirectSaveResponse = await axios.post(
@@ -91,6 +95,8 @@ module.exports = class AlimtalkController {
         {
           message,
           data,
+          userId,
+          companyId,
         }
       );
       return res

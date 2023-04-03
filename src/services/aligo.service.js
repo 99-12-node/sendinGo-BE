@@ -29,7 +29,7 @@ module.exports = class AligoService {
     logger.info(`AligoService.generateSendToken`);
     const params = new URLSearchParams(noAuthParams);
     const aligoRes = await instance.post(
-      '/akv10/token/create/10/d',
+      '/akv10/token/create/1/y',
       params.toString()
     );
     return aligoRes.data;
