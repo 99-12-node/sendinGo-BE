@@ -56,7 +56,9 @@ module.exports = class TalkTemplateRepository {
   getTemplatesList = async () => {
     logger.info(`TalkTemplateRepository.getTemplatesList Request`);
     const templates = await TalkTemplates.findAll({
-      attributes: ['talkTemplateId', 'talkTemplateCode', 'talkTemplateName'],
+      attributes: {
+        exclude: ['createdAt', 'updatedAt'],
+      },
     });
     return templates;
   };
@@ -72,6 +74,16 @@ module.exports = class TalkTemplateRepository {
           model: TalkTemplatesVariables,
           attributes: [],
           where: { talkTemplateId },
+          include: [
+            {
+              model: TalkTemplates,
+              attributes: [
+                'talkTemplateId',
+                'talkTemplateCode',
+                'talkTemplateName',
+              ],
+            },
+          ],
         },
       ],
     });
