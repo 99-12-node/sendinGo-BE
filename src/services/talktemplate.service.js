@@ -15,7 +15,7 @@ module.exports = class TalkTemplateService {
     // 템플릿 코드로 템플릿 존재여부 확인
     const existedTemplate = await this.talkTemplateRepository.getTemplateByCode(
       {
-        talkTemplateCode,
+        talkTemplateId,
       }
     );
     if (!existedTemplate) {
