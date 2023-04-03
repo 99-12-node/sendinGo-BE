@@ -60,4 +60,21 @@ module.exports = class TalkTemplateRepository {
     });
     return templates;
   };
+
+  // 템플릿 Id로 변수들 상세 조회
+  getTemplateVariablesById = async ({ talkTemplateId }) => {
+    logger.info(`TalkTemplateRepository.getTemplateVariablesById Request`);
+
+    const templateVariables = await TalkVariables.findAll({
+      attributes: ['talkVariableId', 'talkVariableEng', 'talkVariableKor'],
+      include: [
+        {
+          model: TalkTemplatesVariables,
+          attributes: [],
+          where: { talkTemplateId },
+        },
+      ],
+    });
+    return templateVariables;
+  };
 };
