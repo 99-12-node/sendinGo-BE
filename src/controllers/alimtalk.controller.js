@@ -93,7 +93,9 @@ module.exports = class AlimtalkController {
 
       const allData = await this.talkTemplateService.getTemplatesList();
 
-      return res.status(200).json({ data: allData });
+      return res
+        .status(200)
+        .json({ message: '성공적으로 조회하였습니다.', data: allData });
     } catch (error) {
       next(error);
     }
@@ -105,7 +107,6 @@ module.exports = class AlimtalkController {
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
     const { talkTemplateId } = req.params;
-    console.log('talkTemplateId :', talkTemplateId, req.body, req.params);
 
     try {
       if (!(userId && companyId)) {
@@ -116,7 +117,9 @@ module.exports = class AlimtalkController {
         talkTemplateId,
       });
 
-      return res.status(200).json({ data });
+      return res
+        .status(200)
+        .json({ message: '성공적으로 조회하였습니다.', data });
     } catch (error) {
       next(error);
     }
