@@ -27,6 +27,7 @@ module.exports = class ClientGroupService {
     if (!confirmClientId) {
       throw new NotFoundError('존재하지 않는 고객입니다.');
     }
+
     // 존재하는 groupId 인지 확인
     const existGroup = await this.groupRepository.findGroupId({
       userId,
