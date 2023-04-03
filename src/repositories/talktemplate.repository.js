@@ -47,7 +47,7 @@ module.exports = class TalkTemplateRepository {
     const template = await TalkTemplates.findOne({
       where: { talkTemplateId },
       attributes: {
-        exclude: ['createdAt', 'updatedAt'],
+        exclude: ['talktemplateCode', 'createdAt', 'updatedAt'],
       },
     });
     return template;
