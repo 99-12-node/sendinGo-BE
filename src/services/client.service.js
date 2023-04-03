@@ -6,12 +6,16 @@ const {
 } = require('../exceptions/errors');
 const ClientRepository = require('../repositories/client.repository');
 const GroupRepository = require('../repositories/group.repository');
+const TalkContentRepository = require('../repositories/talkcontent.repository');
+const TalkTemplateRepository = require('../repositories/talktemplate.repository');
 const { forbidden } = require('joi');
 
 module.exports = class ClientService {
   constructor() {
     this.clientRepository = new ClientRepository();
     this.groupRepository = new GroupRepository();
+    this.talkContentRepository = new TalkContentRepository();
+    this.talkTemplateRepository = new TalkTemplateRepository();
   }
   // 클라이언트 등록
   createClient = async ({
@@ -144,34 +148,49 @@ module.exports = class ClientService {
   };
 
   // 클라이언트 대량등록
-  createClientBulk = async ({ userId, companyId, clientArray }) => {
+  createClientBulk = async ({
+    userId,
+    companyId,
+    clientName,
+    contact,
+    clientEmail,
+    talkTemplateId,
+    ...talkContentData
+  }) => {
     logger.info(`ClientService.createClientBulk Request`);
-    try {
-      const createClients = [];
 
-      if (!clientArray) {
-        throw new BadRequestError('입력값을 확인해주세요');
-      }
-      for (const client of clientArray) {
-        const { clientName, contact, clientEmail } = client;
-        const newClient = await this.clientRepository.createClient({
+    // 템플릿 존재 확인
+    const existedTemplate = await this.talkTemplateRepository.getTemplateById({
+      talkTemplateId,
+    });
+    if (!existedTemplate) {
+      throw new BadRequestError('템플릿 조회에 실패하였습니다.');
+    }
+    // 클라이언트 생성
+    const newClient = await this.clientRepository.createClient({
+      userId,
+      companyId,
+      clientName,
+      contact,
+      clientEmail,
+    });
+    if (!newClient) {
+      throw new BadRequestError('클라이언트 대량 등록에 실패하였습니다.');
+    }
+    if (talkContentData) {
+      const newTalkContent = await this.talkContentRepository.createTalkContent(
+        {
           userId,
           companyId,
-          clientName,
-          contact,
-          clientEmail,
-        });
-        if (!newClient) {
-          throw new BadRequestError('클라이언트 대량 등록에 실패하였습니다.');
+          clientId: newClient.clientId,
+          talkTemplateId: existedTemplate.talkTemplateId,
+          ...talkContentData,
         }
-        createClients.push(newClient.clientId);
+      );
+      if (!newTalkContent) {
+        throw new BadRequestError('전송 데이터 등록에 실패하였습니다.');
       }
-      if (!createClients.length) {
-        throw new BadRequestError('클라이언트 대량 등록에 실패하였습니다.');
-      }
-      return createClients;
-    } catch (e) {
-      console.error(e);
     }
+    return newClient;
   };
 };
