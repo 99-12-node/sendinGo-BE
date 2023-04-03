@@ -1,10 +1,12 @@
 const { logger } = require('../middlewares/logger');
 const ClientService = require('../services/client.service');
+const AlimtalkSendService = require('../services/alimtalkSend.service');
 const { BadRequestError } = require('../exceptions/errors');
 
 module.exports = class ClientController {
   constructor() {
     this.clientService = new ClientService();
+    this.alimtalkSendService = new AlimtalkSendService();
   }
 
   // 클라이언트 등록
@@ -97,22 +99,44 @@ module.exports = class ClientController {
   // 클라이언트 대량등록
   createClientBulk = async (req, res, next) => {
     logger.info(`ClientController.createClientBulk Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+    const datas = req.body.data;
+
+    const result = [];
     try {
-      const { userId } = res.locals.user;
-      const { companyId } = res.locals.company;
-      const { data } = req.body;
-      if (!data || Object.keys(data).length === 0) {
-        throw new BadRequestError('입력 값을 확인해주세요.');
+      for (const data of datas) {
+        const {
+          clientName,
+          contact,
+          clientEmail,
+          talkTemplateId,
+          ...talkContentData
+        } = data;
+        if (
+          !(clientName && contact && clientEmail && talkTemplateId) ||
+          Object.values(data).length === 0
+        ) {
+          throw new BadRequestError('입력 값을 확인해주세요.');
+        }
+
+        const newClients = await this.clientService.createClientBulk({
+          userId,
+          companyId,
+          clientName,
+          contact,
+          clientEmail,
+          talkTemplateId,
+          ...talkContentData,
+        });
+        if (!newClients) {
+          throw new BadRequestError('클라이언트 대량 등록에 실패하였습니다.');
+        }
+        result.push(newClients.clientId);
       }
 
-      const newClients = await this.clientService.createClientBulk({
-        userId,
-        companyId,
-        clientArray: data,
-      });
-
       return res.status(201).json({
-        newClients,
+        clientIds: result,
         message: '대량 등록이 완료되었습니다.',
       });
     } catch (error) {
