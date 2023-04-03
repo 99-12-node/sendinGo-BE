@@ -18,7 +18,12 @@ router.post(
   clientController.createClientBulk
 );
 
-router.get('/', authMiddleware, clientController.getClients);
+router.get(
+  '/',
+  authMiddleware,
+  JoiHelper.checkIndex,
+  clientController.getClients
+);
 
 router.patch(
   '/:clientId',

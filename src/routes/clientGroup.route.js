@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/auth.middleware');
+const JoiHelper = require('../helpers/joi.Helper');
 
 const ClientGroupController = require('../controllers/clientGroup.controller');
 const clientGroupController = new ClientGroupController();
@@ -9,6 +10,7 @@ const clientGroupController = new ClientGroupController();
 router.post(
   '/clients/:clientId/groups/:groupId',
   authMiddleware,
+  JoiHelper.clientGroupCheck,
   clientGroupController.createClientGroup
 );
 
@@ -16,6 +18,7 @@ router.post(
 router.post(
   '/clients/:clientId/groups/:existGroupId/move/:newGroupId',
   authMiddleware,
+  JoiHelper.groupIdCheck,
   clientGroupController.moveClientGroup
 );
 
@@ -23,6 +26,7 @@ router.post(
 router.post(
   '/clients/:clientId/groups/:existGroupId/copy/:newGroupId',
   authMiddleware,
+  JoiHelper.groupIdCheck,
   clientGroupController.copyClientGroup
 );
 
