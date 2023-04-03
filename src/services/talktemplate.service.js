@@ -49,4 +49,23 @@ module.exports = class TalkTemplateService {
       (data) => data.talkTemplateId !== 1 && data.talkTemplateId !== 4
     );
   };
+
+  // 템플릿 ID로 변수들 상세 조회
+  getTemplateVariablesById = async ({ talkTemplateId }) => {
+    logger.info(`TalkTemplateService.getTemplateVariablesById`);
+
+    const existedTemplate = await this.talkTemplateRepository.getTemplateById({
+      talkTemplateId,
+    });
+    if (!existedTemplate) {
+      throw new NotFoundError('템플릿 조회에 실패하였습니다.');
+    }
+
+    // 템플릿 전체 불러오기
+    const data = await this.talkTemplateRepository.getTemplateVariablesById({
+      talkTemplateId,
+    });
+
+    return data;
+  };
 };
