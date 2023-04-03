@@ -36,4 +36,17 @@ module.exports = class TalkTemplateService {
       throw new BadRequestError('입력 데이터가 템플릿과 일치하지 않습니다.');
     return result;
   };
+
+  // 템플릿 목록 전체 조회
+  getTemplatesList = async () => {
+    logger.info(`TalkTemplateService.getTemplatesList`);
+
+    // 템플릿 전체 불러오기
+    const allData = await this.talkTemplateRepository.getTemplatesList();
+
+    // 필요한 템플릿만 조회 (1,4번 제외)
+    return allData.filter(
+      (data) => data.talkTemplateId !== 1 && data.talkTemplateId !== 4
+    );
+  };
 };
