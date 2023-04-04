@@ -13,9 +13,9 @@ router.post('/contents', authMiddleware, alimtalkController.saveTalkContents);
 
 // 클라이언트 전송 내용 조회
 router.post(
-  '/clients/lists',
+  '/clients/contents',
   authMiddleware,
-  alimtalkController.getTalkContentsByClientId
+  alimtalkController.getContentByClientIds
 );
 
 // 알림톡 템플릿 목록 조회
