@@ -1,7 +1,6 @@
 const { logger } = require('../middlewares/logger');
-const { Clients, TalkContents, sequelize, Groups } = require('../db/models');
+const { TalkContents } = require('../db/models');
 const { Op } = require('sequelize');
-const parseSequelizePrettier = require('../helpers/parse.sequelize');
 
 module.exports = class TalkContentRepository {
   constructor() {}
@@ -46,14 +45,14 @@ module.exports = class TalkContentRepository {
     logger.info(`TalkContentRepository.getContentByClientId Request`);
     const client = await TalkContents.findOne({
       attributes: {
-        exclude: ['clientId', 'userId', 'companyId', 'createdAt', 'updatedAt'],
+        exclude: ['clientId', 'userId', 'companyId', 'updatedAt'],
       },
       where: {
         [Op.and]: [{ userId }, { companyId }, { clientId }],
       },
+      order: [['createdAt', 'DESC']],
       raw: true,
     });
-    // .then((model) => parseSequelizePrettier(model));
     return client;
   };
 };
