@@ -56,8 +56,8 @@ module.exports = class AlimtalkController {
   };
 
   // 클라이언트 알림톡 전송 내용 조회
-  getTalkContentsByClientId = async (req, res, next) => {
-    logger.info(`AlimtalkController.getTalkContentsByClientId Request`);
+  getContentByClientIds = async (req, res, next) => {
+    logger.info(`AlimtalkController.getContentByClientId Request`);
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
     const { groupId, clientIds } = req.body;
@@ -67,7 +67,7 @@ module.exports = class AlimtalkController {
         throw new BadRequestError('올바르지 않은 요청입니다.');
       }
 
-      const allData = await this.alimtalkSendService.getTalkContentsByClientId({
+      const allData = await this.alimtalkSendService.getContentByClientIds({
         userId,
         companyId,
         groupId,
