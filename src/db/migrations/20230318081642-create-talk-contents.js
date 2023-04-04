@@ -85,6 +85,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      useLink: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
