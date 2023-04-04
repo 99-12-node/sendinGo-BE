@@ -50,15 +50,36 @@ const JoiHelper = {
   checkIndex: async (req, res, next) => {
     const check = Joi.object().keys({
       index: Joi.number()
+        .integer()
         .required()
         .error(new BadRequestError('index는 숫자입니다.')),
+
+      groupId: Joi.number()
+        .integer()
+        .required()
+        .error(new BadRequestError('groupId는 숫자입니다.')),
     });
 
     try {
       logger.info(`JoiHelper.checkIndex Request`);
       await check.validateAsync(req.query);
     } catch (e) {
-      next(e);
+      if (req.query.groupId === undefined) {
+        // groupId가 없는 경우 index 유효성 검사
+        const checkIndex = Joi.object().keys({
+          index: Joi.number()
+            .integer()
+            .required()
+            .error(new BadRequestError('index는 숫자입니다.')),
+        });
+        try {
+          await checkIndex.validateAsync(req.query);
+        } catch (err) {
+          next(err);
+        }
+      } else {
+        next(e);
+      }
     }
     next();
   },
