@@ -116,6 +116,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      buttonContent: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      tplCode: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
