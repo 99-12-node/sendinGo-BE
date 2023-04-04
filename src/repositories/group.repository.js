@@ -24,7 +24,9 @@ module.exports = class GroupRepository {
       where: {
         userId: userId,
         companyId: companyId,
-        groupName: { [Op.like]: `%${groupName}%` },
+        groupName:
+          // { [Op.like]: `%(${groupName})%` },
+          { [Op.regexp]: `^(${groupName})(\(\d{1,}\))?` },
       },
       raw: true,
     });
