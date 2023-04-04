@@ -13,24 +13,37 @@ module.exports = class GroupService {
   // 빈 Group 생성
   createGroup = async ({ userId, companyId, groupName, groupDescription }) => {
     logger.info(`GroupService.createGroup Request`);
+    //동일 그룹명 있는지 확인
     const existGroupName = await this.groupRepository.findSameGroup({
       userId,
       companyId,
       groupName,
     });
+    //동일 그룹명이 1개 이상일 때 숫자표기
+    if (existGroupName.length > 0) {
+      const groupData = await this.groupRepository.createGroup({
+        userId,
+        companyId,
+        groupName: `${groupName}(${existGroupName.length})`,
+        groupDescription,
+      });
+      if (!groupData) {
+        throw new BadRequestError('그룹 생성에 실패하였습니다.');
+      }
+      return groupData;
+    } else {
+      const groupData = await this.groupRepository.createGroup({
+        userId,
+        companyId,
+        groupName,
+        groupDescription,
+      });
+      if (!groupData) {
+        throw new BadRequestError('그룹 생성에 실패하였습니다.');
+      }
 
-    const groupData = await this.groupRepository.createGroup({
-      userId,
-      companyId,
-      groupName: `${groupName}(${existGroupName.length})`,
-      groupDescription,
-    });
-    console.log(existGroupName.length);
-    if (!groupData) {
-      throw new BadRequestError('그룹 생성에 실패하였습니다.');
+      return groupData;
     }
-
-    return groupData;
   };
 
   //그룹 전체 조회
