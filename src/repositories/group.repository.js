@@ -18,6 +18,19 @@ module.exports = class GroupRepository {
     return createGroup;
   };
 
+  findSameGroup = async ({ userId, companyId, groupName }) => {
+    logger.info(`GroupRepository.findSameGroup Request`);
+    const sameGroup = await Groups.findAll({
+      where: {
+        userId: userId,
+        companyId: companyId,
+        groupName: { [Op.like]: `%${groupName}%` },
+      },
+      raw: true,
+    });
+    return sameGroup;
+  };
+
   //그룹 전체 조회
   getAllGroup = async ({ userId, companyId }) => {
     logger.info(`GroupRepository.getAllGroup Request`);

@@ -42,26 +42,14 @@ module.exports = class TalkContentRepository {
   };
 
   // clientId, groupId로 등록된 클라이언트 조회
-  getContentByClientIdAndGroupId = async ({
-    userId,
-    companyId,
-    groupId,
-    clientId,
-  }) => {
-    logger.info(`TalkContentRepository.getContentByClientIdAndGroupId Request`);
+  getContentByClientId = async ({ userId, companyId, clientId }) => {
+    logger.info(`TalkContentRepository.getContentByClientId Request`);
     const client = await TalkContents.findOne({
       attributes: {
-        exclude: [
-          'clientId',
-          'userId',
-          'companyId',
-          'groupId',
-          'createdAt',
-          'updatedAt',
-        ],
+        exclude: ['clientId', 'userId', 'companyId', 'createdAt', 'updatedAt'],
       },
       where: {
-        [Op.and]: [{ userId }, { companyId }, { groupId }, { clientId }],
+        [Op.and]: [{ userId }, { companyId }, { clientId }],
       },
       raw: true,
     });

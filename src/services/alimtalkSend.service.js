@@ -87,12 +87,7 @@ module.exports = class AlimtalkSendService {
   };
 
   //등록된 클라이언트 알림톡 전송 내용 조회
-  getTalkContentsByClientId = async ({
-    userId,
-    companyId,
-    groupId,
-    clientIds,
-  }) => {
+  getContentByClientIds = async ({ userId, companyId, groupId, clientIds }) => {
     logger.info(`ClientService.getTalkContentsByClientId Request`);
 
     // 존재하는 그룹인지 확인
@@ -125,13 +120,13 @@ module.exports = class AlimtalkSendService {
         clientId,
       });
 
-      const talkContent =
-        await this.talkContentRepository.getContentByClientIdAndGroupId({
+      const talkContent = await this.talkContentRepository.getContentByClientId(
+        {
           userId,
           companyId,
-          groupId,
           clientId,
-        });
+        }
+      );
       const result = { client, talkContent };
       results.push(result);
     }

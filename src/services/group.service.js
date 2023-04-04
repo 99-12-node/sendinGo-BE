@@ -13,16 +13,23 @@ module.exports = class GroupService {
   // 빈 Group 생성
   createGroup = async ({ userId, companyId, groupName, groupDescription }) => {
     logger.info(`GroupService.createGroup Request`);
+    const existGroupName = await this.groupRepository.findSameGroup({
+      userId,
+      companyId,
+      groupName,
+    });
 
     const groupData = await this.groupRepository.createGroup({
       userId,
       companyId,
-      groupName,
+      groupName: `${groupName}(${existGroupName.length})`,
       groupDescription,
     });
+    console.log(existGroupName.length);
     if (!groupData) {
       throw new BadRequestError('그룹 생성에 실패하였습니다.');
     }
+
     return groupData;
   };
 
