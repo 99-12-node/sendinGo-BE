@@ -50,8 +50,14 @@ const JoiHelper = {
   checkIndex: async (req, res, next) => {
     const check = Joi.object().keys({
       index: Joi.number()
+        .integer()
         .required()
         .error(new BadRequestError('index는 숫자입니다.')),
+
+      groupId: Joi.number()
+        .integer()
+        .optional()
+        .error(new BadRequestError('groupId는 숫자입니다.')),
     });
 
     try {
@@ -68,7 +74,8 @@ const JoiHelper = {
     const check = Joi.object().keys({
       groupName: Joi.string()
         .required()
-        .regex(/^([a-zA-Z0-9ㄱ-ㅎ가-힣])*$/)
+        .trim()
+        .regex(/^([a-zA-Z0-9ㄱ-ㅎ가-힣 ])*$/)
         .error(new BadRequestError('그룹명을 입력해주세요.')),
 
       groupDescription: Joi.string().allow('').allow(null).required(),
