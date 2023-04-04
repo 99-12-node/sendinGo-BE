@@ -41,13 +41,23 @@ module.exports = class ClientService {
   };
 
   //클라이언트 조회 (쿼리로 조건 조회)
-  getClients = async ({ userId, companyId, groupId, index }) => {
+  getClients = async ({ userId, companyId, groupId, index, keyWord }) => {
     logger.info(`ClientService.getClients Request`);
 
     if (index == 0) {
       throw new BadRequestError('올바르지 않은 요청입니다.');
     }
     const offset = index ? parseInt(index - 1) : 0;
+
+    if (!groupId && keyWord) {
+      keyWord = await this.clientRepository.findKeyWord({
+        userId,
+        companyId,
+        keyWord,
+        offset,
+      });
+      return { keyWord };
+    }
 
     // 전체 조회
     if (!groupId) {

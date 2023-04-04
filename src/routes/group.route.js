@@ -12,7 +12,12 @@ router.post(
   JoiHelper.groupCheck,
   groupController.createGroup
 );
-router.get('/', authMiddleware, groupController.getAllGroup);
+router.get(
+  '/',
+  authMiddleware,
+  JoiHelper.groupKeyWord,
+  groupController.getAllGroup
+);
 router.delete(
   '/:groupId',
   authMiddleware,

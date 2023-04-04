@@ -33,6 +33,36 @@ module.exports = class GroupRepository {
     return sameGroup;
   };
 
+  //그룹 키워드 검색
+  findKeyWord = async ({ userId, companyId, keyWord }) => {
+    logger.info(`GroupRepository.findKeyWord Request`);
+
+    const findData = await Groups.findAll({
+      where: {
+        userId,
+        companyId,
+        [Op.or]: [{ groupName: { [Op.like]: `%${keyWord}%` } }],
+      },
+      attributes: [
+        'groupId',
+        'groupName',
+        'createdAt',
+        [sequelize.fn('COUNT', sequelize.col('clientId')), 'clientCount'],
+      ],
+      include: [
+        {
+          model: ClientGroups,
+          attributes: [],
+        },
+      ],
+      group: ['Groups.groupId'],
+      order: [['createdAt', 'DESC']],
+      raw: true,
+    });
+
+    return findData;
+  };
+
   //그룹 전체 조회
   getAllGroup = async ({ userId, companyId }) => {
     logger.info(`GroupRepository.getAllGroup Request`);
