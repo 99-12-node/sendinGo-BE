@@ -25,7 +25,7 @@ module.exports = class TalkContentRepository {
 
   // 톡 전송 내용 Id로 조회
   getTalkContentById = async ({ userId, companyId, talkContentId }) => {
-    logger.info(`TalkContentRepository.getTalkContent Request`);
+    logger.info(`TalkContentRepository.getTalkContentById Request`);
     try {
       const talkcontent = await TalkContents.findOne({
         where: { [Op.and]: [{ userId }, { companyId }, { talkContentId }] },
@@ -45,7 +45,14 @@ module.exports = class TalkContentRepository {
     logger.info(`TalkContentRepository.getContentByClientId Request`);
     const client = await TalkContents.findOne({
       attributes: {
-        exclude: ['clientId', 'userId', 'companyId', 'updatedAt'],
+        exclude: [
+          'clientId',
+          'userId',
+          'companyId',
+          'trackingUUID',
+          'trackingUrl',
+          'updatedAt',
+        ],
       },
       where: {
         [Op.and]: [{ userId }, { companyId }, { clientId }],

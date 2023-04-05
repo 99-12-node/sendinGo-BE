@@ -3,10 +3,14 @@ const ClientRepository = require('../repositories/client.repository');
 const TalkContentRepository = require('../repositories/talkcontent.repository');
 const TalkTemplateRepository = require('../repositories/talktemplate.repository');
 const TalkSendRepository = require('../repositories/talksend.repository');
+const TalkClickRepository = require('../repositories/talkclick.repository');
 const GroupRepository = require('../repositories/group.repository');
 const { BadRequestError, NotFoundError } = require('../exceptions/errors');
+
 require('dotenv').config();
 const { API_DOMAIN, PORT } = process.env;
+
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = class AlimtalkSendService {
   constructor() {
@@ -15,6 +19,7 @@ module.exports = class AlimtalkSendService {
     this.talkTemplateRepository = new TalkTemplateRepository();
     this.talkSendRepository = new TalkSendRepository();
     this.groupRepository = new GroupRepository();
+    this.talkClickRepository = new TalkClickRepository();
   }
 
   // 알림톡 전송 내용 저장
@@ -140,94 +145,118 @@ module.exports = class AlimtalkSendService {
   };
 
   // 알림톡 발송 데이터 준비
-  setSendAlimTalkData = async (userId, companyId, datas) => {
+  setSendAlimTalkData = async ({
+    userId,
+    companyId,
+    talkContentId,
+    clientId,
+    talkTemplateId,
+    groupId,
+  }) => {
     logger.info(`AlimtalkSendService.setSendAlimTalkData`);
 
-    const talksendAligoParams = [];
-    const talkSendDatas = [];
+    // 버튼형 템플릿인 경우, 트래킹 작업
+    if (parseInt(talkTemplateId) === 4) {
+      const trackingUUID = uuidv4();
+      const trackingUrl = `${API_DOMAIN}/api/talk/click/${trackingUUID}`;
 
-    for (const data of datas) {
-      const { talkContentId, clientId, talkTemplateId, groupId } = data;
-
-      // clientId, talkContentId, talkTemplateId, groupId로 데이터 조회
-      const talkSendPromises = [
-        await this.clientRepository.getClientByClientId({
-          userId,
-          companyId,
-          clientId,
-        }),
-        await this.talkContentRepository.getTalkContentById({
-          userId,
-          companyId,
-          talkContentId,
-        }),
-        await this.talkTemplateRepository.getTemplateById({ talkTemplateId }),
-        await this.groupRepository.findGroupId({ userId, companyId, groupId }),
-      ];
-
-      // 관련 Promise 에러 핸들링
-      const talkSendPromiseData = await Promise.allSettled(talkSendPromises);
-      const rawResult = talkSendPromiseData.map((result, idx) => {
-        if (!result.value || result.status === 'rejected') {
-          throw new NotFoundError(
-            '클라이언트 or 전송내용 or 템플릿 조회를 실패하였습니다.'
-          );
-        }
-        return result;
-      });
-
-      const [client, talkcontent, talkTemplate, group] = talkSendPromises;
-
-      if (parseInt(talkTemplateId) === 4) {
-        const trackingUrl = `${API_DOMAIN}/api/talk/click?userId=${userId}&clientId=${clientId}&talkTemplateId=${talkTemplateId}&talkContentId=${talkContentId}`;
-
-        // 트래킹 URL 생성
-        const updateTalkContent =
-          await this.talkContentRepository.updateTalkContentById({
-            talkContentId,
-            trackingUrl,
-          });
-      }
-
-      // 위 데이터로 알리고로 전송 요청을 위한 파라미터 만들기
-      const talksendAligoParam = {
-        talkTemplateCode: talkTemplate.talkTemplateCode,
-        receiver: client.contact,
-        recvname: client.clientName,
-        subject: group.groupName,
-        message: talkTemplate.talkTemplateContent,
-        talkSendData: talkcontent,
-      };
-      talksendAligoParams.push(talksendAligoParam);
-      talkSendDatas.push(data);
-    }
-
-    return { talksendAligoParams, talkSendDatas };
-  };
-
-  // 알림톡 발송 요청 응답 데이터 저장
-  saveSendAlimTalkResponse = async ({ userId, companyId, data }) => {
-    logger.info(`AlimtalkSendService.saveSendAlimTalkResponse`);
-    const { aligoResult, talkSend } = data;
-    const result = [];
-    for (const send of talkSend) {
-      const { code, message } = aligoResult;
-      const { talkContentId, clientId, talkTemplateId, groupId } = send;
-      const newTalkSend = await this.talkSendRepository.createTalkSend({
+      // 전송 내용에 트래킹 URL 생성
+      await this.talkContentRepository.updateTalkContentById({
         talkContentId,
-        clientId,
-        talkTemplateId,
+        trackingUUID,
+        trackingUrl,
+      });
+      // 발송 전 트래킹을 위한 식별값 redis에 저장
+      await this.talkClickRepository.saveTrackingUUID({
+        trackingUUID,
         userId,
         companyId,
         groupId,
-        code,
-        message,
-        mid: aligoResult.info.mid,
-        scnt: aligoResult.info.scnt,
-        fcnt: aligoResult.info.fcnt,
+        clientId,
+        talkContentId,
       });
-      result.push(newTalkSend);
     }
-    return result;
+
+    // clientId, talkContentId, talkTemplateId, groupId로 데이터 조회
+    const talkSendPromises = [
+      await this.clientRepository.getClientByClientId({
+        userId,
+        companyId,
+        clientId,
+      }),
+      await this.talkContentRepository.getTalkContentById({
+        userId,
+        companyId,
+        talkContentId,
+      }),
+      await this.talkTemplateRepository.getTemplateById({ talkTemplateId }),
+      await this.groupRepository.findGroupId({ userId, companyId, groupId }),
+    ];
+    // 관련 Promise 에러 핸들링
+    const talkSendPromiseData = await Promise.allSettled(talkSendPromises);
+    const rawResult = talkSendPromiseData.map((result) => {
+      if (!result.value || result.status === 'rejected') {
+        throw new NotFoundError(
+          '클라이언트 or 전송내용 or 템플릿 조회를 실패하였습니다.'
+        );
+      }
+      return result;
+    });
+
+    const [client, talkcontent, talkTemplate, group] = talkSendPromises;
+
+    // 위 데이터로 알리고로 전송 요청을 위한 파라미터 만들기
+    const talksendAligoParam = {
+      talkTemplateCode: talkTemplate.talkTemplateCode,
+      receiver: client.contact,
+      recvname: client.clientName,
+      subject: group.groupName,
+      message: talkTemplate.talkTemplateContent,
+      talkSendData: talkcontent,
+    };
+
+    return talksendAligoParam;
+  };
+
+  // 알림톡 발송 요청 응답 데이터 저장
+  saveSendAlimTalkResponse = async ({
+    userId,
+    companyId,
+    aligoResult,
+    talkSend,
+  }) => {
+    logger.info(`AlimtalkSendService.saveSendAlimTalkResponse`);
+
+    const { code, message } = aligoResult;
+    const { talkContentId, clientId, talkTemplateId, groupId } = talkSend;
+
+    const newTalkSend = await this.talkSendRepository.createTalkSend({
+      talkContentId,
+      clientId,
+      talkTemplateId,
+      userId,
+      companyId,
+      groupId,
+      code,
+      message,
+      mid: aligoResult.info.mid,
+      scnt: aligoResult.info.scnt,
+      fcnt: aligoResult.info.fcnt,
+    });
+
+    // 버튼형 템플릿
+    if (talkTemplateId === 4) {
+      // sendId 값 redis에 업데이트 redis에 저장
+      await this.talkClickRepository.saveTrackingUUIDByContentId({
+        talkContentId,
+        userId,
+        companyId,
+        groupId,
+        clientId,
+        talkSendId: newTalkSend.talkSendId,
+      });
+    }
+
+    return newTalkSend;
   };
 };
