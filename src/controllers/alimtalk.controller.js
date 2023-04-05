@@ -216,7 +216,7 @@ module.exports = class AlimtalkController {
     const { companyId } = res.locals.company;
 
     try {
-      const result = await this.aligoService.getAlimTalkResult({
+      const talkResultList = await this.aligoService.getAlimTalkResult({
         page,
         limit,
         startdate: startdate ?? '',
@@ -226,7 +226,7 @@ module.exports = class AlimtalkController {
       const redirectSaveResult = await axios.post(
         `http://localhost:${PORT}/api/talk/results/list/save`,
         {
-          data: result,
+          talkResultList,
           groupId,
           userId,
           companyId,
@@ -245,22 +245,27 @@ module.exports = class AlimtalkController {
   saveSendAlimTalkResult = async (req, res, next) => {
     logger.info(`AlimtalkController.saveSendAlimTalkResult`);
 
-    const { data, groupId, userId, companyId } = req.body;
+    const { talkResultList, groupId, userId, companyId } = req.body;
     try {
-      if (!data) {
-        throw new BadRequestError('결과 조회에 실패하였습니다.');
+      if (!talkResultList.length) {
+        throw new BadRequestError('결과조회 실패하였습니다.');
       }
 
-      const result = await this.alimtalkResultService.saveAlimTalkResult(
-        data,
-        groupId,
-        userId,
-        companyId
-      );
-      return res.status(201).json({
+      const response = [];
+      for (const talkResult of talkResultList) {
+        const result = await this.alimtalkResultService.saveAlimTalkResult({
+          talkResult,
+          groupId,
+          userId,
+          companyId,
+        });
+        if (result) response.push(result);
+      }
+
+      return res.status(200).json({
         data: {
           message: '결과조회 성공하였습니다.',
-          list: result,
+          list: response,
         },
       });
     } catch (e) {
