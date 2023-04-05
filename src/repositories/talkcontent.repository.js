@@ -63,6 +63,7 @@ module.exports = class TalkContentRepository {
     return client;
   };
 
+  // contentId로 정보 업데이트
   updateTalkContentById = async ({ talkContentId, ...talkContentData }) => {
     logger.info(`TalkContentRepository.updateTalkContentById Request`);
     const newTalkContent = await TalkContents.update(
@@ -74,5 +75,14 @@ module.exports = class TalkContentRepository {
       }
     );
     return newTalkContent;
+  };
+
+  // 인증 및 인가 없이 contentId로 조회
+  getTalkContentInNoAuth = async ({ talkContentId }) => {
+    logger.info(`TalkContentRepository.getTalkContentInNoAuth Request`);
+    const talkcontent = await TalkContents.findOne({
+      where: { talkContentId },
+    });
+    return talkcontent;
   };
 };
