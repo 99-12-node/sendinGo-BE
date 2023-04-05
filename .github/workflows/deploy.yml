@@ -32,6 +32,7 @@ jobs:
           echo PORT=${{ vars.PORT }} >> .env
           echo PORT_2=${{ vars.PORT_2 }} >> .env
           echo PORT_DEV=${{ vars.PORT_DEV }} >> .env
+          echo API_DOMAIN=${{ secrets.API_DOMAIN }} >> .env
           echo ALIGO_BASE_URL=${{ secrets.ALIGO_BASE_URL }} >> .env
           echo ALIGO_USERID=${{ secrets.ALIGO_USERID }} >> .env
           echo ALIGO_APIKEY=${{ secrets.ALIGO_APIKEY }} >> .env
