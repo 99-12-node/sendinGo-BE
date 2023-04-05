@@ -25,7 +25,7 @@ module.exports = class TalkContentRepository {
 
   // 톡 전송 내용 Id로 조회
   getTalkContentById = async ({ userId, companyId, talkContentId }) => {
-    logger.info(`TalkContentRepository.getTalkContent Request`);
+    logger.info(`TalkContentRepository.getTalkContentById Request`);
     try {
       const talkcontent = await TalkContents.findOne({
         where: { [Op.and]: [{ userId }, { companyId }, { talkContentId }] },
@@ -45,7 +45,14 @@ module.exports = class TalkContentRepository {
     logger.info(`TalkContentRepository.getContentByClientId Request`);
     const client = await TalkContents.findOne({
       attributes: {
-        exclude: ['clientId', 'userId', 'companyId', 'updatedAt'],
+        exclude: [
+          'clientId',
+          'userId',
+          'companyId',
+          'trackingUUID',
+          'trackingUrl',
+          'updatedAt',
+        ],
       },
       where: {
         [Op.and]: [{ userId }, { companyId }, { clientId }],
@@ -56,6 +63,7 @@ module.exports = class TalkContentRepository {
     return client;
   };
 
+  // contentId로 정보 업데이트
   updateTalkContentById = async ({ talkContentId, ...talkContentData }) => {
     logger.info(`TalkContentRepository.updateTalkContentById Request`);
     const newTalkContent = await TalkContents.update(
@@ -67,5 +75,14 @@ module.exports = class TalkContentRepository {
       }
     );
     return newTalkContent;
+  };
+
+  // 인증 및 인가 없이 contentId로 조회
+  getTalkContentInNoAuth = async ({ talkContentId }) => {
+    logger.info(`TalkContentRepository.getTalkContentInNoAuth Request`);
+    const talkcontent = await TalkContents.findOne({
+      where: { talkContentId },
+    });
+    return talkcontent;
   };
 };

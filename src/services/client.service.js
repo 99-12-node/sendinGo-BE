@@ -49,7 +49,7 @@ module.exports = class ClientService {
     }
     const offset = index ? parseInt(index - 1) : 0;
 
-    if (!groupId && keyword) {
+    if (keyword) {
       keyword = await this.clientRepository.findkeyword({
         userId,
         companyId,
@@ -74,17 +74,6 @@ module.exports = class ClientService {
       return { clients: allData, clientCount };
     }
 
-    // // 그룹별 클라이언트 검색
-    // if (groupId && keyword) {
-    //   keyword = await this.clientRepository.findkeywordBygroupId({
-    //     userId,
-    //     companyId,
-    //     groupId,
-    //     keyword,
-    //     offset,
-    //   });
-    //   return { keyword };
-    // }
     //그룹별 클라이언트 조회
     const existGroup = await this.groupRepository.findGroupId({
       userId,

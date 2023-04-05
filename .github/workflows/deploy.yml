@@ -32,6 +32,7 @@ jobs:
           echo PORT=${{ vars.PORT }} >> .env
           echo PORT_2=${{ vars.PORT_2 }} >> .env
           echo PORT_DEV=${{ vars.PORT_DEV }} >> .env
+          echo API_DOMAIN=${{ secrets.API_DOMAIN }} >> .env
           echo ALIGO_BASE_URL=${{ secrets.ALIGO_BASE_URL }} >> .env
           echo ALIGO_USERID=${{ secrets.ALIGO_USERID }} >> .env
           echo ALIGO_APIKEY=${{ secrets.ALIGO_APIKEY }} >> .env
@@ -53,6 +54,8 @@ jobs:
           echo PROD_DB_DATABASE=${{ vars.DB_DATABASE_PROD }} >> .env
           echo PROD_DB_HOST=${{ secrets.DB_HOST }} >> .env
           echo PROD_DB_DIALECT=${{ env.DIALECT }} >> .env
+          echo REDIS_HOST=${{ secrets.REDIS_HOST }} >> .env
+          echo REDIS_PORT=${{ vars.REDIS_PORT }} >> .env
           cat .env
 
       - name: zip file

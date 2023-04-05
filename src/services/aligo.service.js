@@ -101,8 +101,13 @@ module.exports = class AligoService {
     logger.info(`AligoService.getAlimTalkResult`);
 
     const TIME_ZONE = 9 * 60 * 60 * 1000; // 9시간
+    const BEFORE_TODAY = 5 * 24 * 60 * 60 * 1000; // 5일
     const today = Date.now() + TIME_ZONE; // 한국 현지 시각
     const formatToday = new Date(today)
+      .toISOString()
+      .slice(0, 10)
+      .replace(/-/g, ''); // yyyymmdd
+    const formatStartDate = new Date(today - BEFORE_TODAY)
       .toISOString()
       .slice(0, 10)
       .replace(/-/g, ''); // yyyymmdd
@@ -111,7 +116,7 @@ module.exports = class AligoService {
       ...authParams,
       page: page ?? 1,
       limit: limit ?? 50,
-      startdate: startdate ?? formatToday - 7,
+      startdate: startdate ?? formatStartDate,
       enddate: enddate ?? formatToday, // 현재시각을 기본값,
     });
 

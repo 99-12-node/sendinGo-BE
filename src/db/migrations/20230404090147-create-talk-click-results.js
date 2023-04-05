@@ -39,6 +39,10 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: true,
         },
+        clickOs: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
         clickBrowser: {
           type: Sequelize.STRING,
           allowNull: true,
@@ -73,6 +77,14 @@ module.exports = {
           references: {
             model: 'Clients',
             key: 'clientId',
+          },
+        },
+        talkContentId: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'TalkContents',
+            key: 'talkContentId',
           },
         },
         createdAt: {
