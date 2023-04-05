@@ -27,7 +27,6 @@ module.exports = class ClientRepository {
     return createData;
   };
 
-  // 클라이언트 목록에서 검색
   findkeyword = async ({ userId, companyId, keyword, offset }) => {
     logger.info(`ClientRepository.findkeyword Request`);
 
@@ -51,11 +50,13 @@ module.exports = class ClientRepository {
       include: [
         {
           model: ClientGroups,
-          attributes: ['userId'],
+          attributes: [groupId],
+          where: { userId },
           include: [
             {
               model: Groups,
-              attributes: ['groupName'],
+              attributes: ['groupId', 'groupName'],
+              where: { groupName: { [Op.like]: `%${keyword}%` } },
             },
           ],
         },
