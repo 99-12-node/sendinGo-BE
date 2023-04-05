@@ -66,8 +66,8 @@ module.exports = class AligoService {
               name: '사용법바로가기',
               linkType: 'WL',
               linkTypeName: '웹링크',
-              linkMo: `http://localhost/api/talk/click`,
-              linkPc: `http://${talkVariableValue.useLink}`,
+              linkMo: `http://${talkVariableValue.trackingUrl}`,
+              linkPc: `http://${talkVariableValue.trackingUrl}`,
             },
           ],
         });
