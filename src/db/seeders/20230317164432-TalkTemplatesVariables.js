@@ -86,6 +86,10 @@ module.exports = {
           talkTemplateId: 6,
           talkVariableId: 10,
         },
+        {
+          talkTemplateId: 4,
+          talkVariableId: 11,
+        },
       ],
       {}
     );

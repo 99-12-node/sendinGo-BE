@@ -1,25 +1,20 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class TalkResultDetails extends Model {
+  class TalkClickResults extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      this.belongsTo(models.TalkResultDetails, {
+        targetKey: 'talkResultDetailId',
+        foreignKey: 'talkResultDetailId',
+      });
       this.belongsTo(models.TalkSends, {
         targetKey: 'talkSendId',
         foreignKey: 'talkSendId',
-        onDelete: 'CASCADE',
-      });
-      this.belongsTo(models.Clients, {
-        targetKey: 'clientId',
-        foreignKey: 'clientId',
-      });
-      this.belongsTo(models.Groups, {
-        targetKey: 'groupId',
-        foreignKey: 'groupId',
       });
       this.belongsTo(models.Users, {
         targetKey: 'userId',
@@ -29,24 +24,55 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'companyId',
         foreignKey: 'companyId',
       });
+      this.belongsTo(models.Groups, {
+        targetKey: 'groupId',
+        foreignKey: 'groupId',
+      });
+      this.belongsTo(models.Clients, {
+        targetKey: 'clientId',
+        foreignKey: 'clientId',
+      });
     }
   }
-  TalkResultDetails.init(
+  TalkClickResults.init(
     {
-      talkResultDetailId: {
+      talkClickResultId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
-      talkSendId: {
-        type: DataTypes.INTEGER,
+      talkResultDetailId: {
         allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'TalkResultDetails',
+          key: 'talkResultDetailId',
+        },
+      },
+      talkSendId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
         references: {
           model: 'TalkSends',
           key: 'talkSendId',
         },
-        onDelete: 'CASCADE',
+      },
+      originLink: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      trackingUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      clickDevice: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      clickBrowser: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       userId: {
         type: DataTypes.INTEGER,
@@ -64,14 +90,6 @@ module.exports = (sequelize, DataTypes) => {
           key: 'companyId',
         },
       },
-      clientId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Clients',
-          key: 'clientId',
-        },
-      },
       groupId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -80,65 +98,25 @@ module.exports = (sequelize, DataTypes) => {
           key: 'groupId',
         },
       },
-      msgid: {
+      clientId: {
         type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      phone: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      msgContent: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      sendDate: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      sendState: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      resultDate: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      resultState: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      lastReportDate: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      resultMessage: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      buttonContent: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      tplCode: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+        references: {
+          model: 'Clients',
+          key: 'clientId',
+        },
       },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
-      updatedAt: {
-        allowNull: false,
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
     },
     {
+      timestamps: false,
       sequelize,
-      modelName: 'TalkResultDetails',
+      modelName: 'TalkClickResults',
     }
   );
-  return TalkResultDetails;
+  return TalkClickResults;
 };

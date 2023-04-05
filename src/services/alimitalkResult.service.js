@@ -1,5 +1,5 @@
 const { logger } = require('../middlewares/logger');
-const { NotFoundError } = require('../exceptions/errors');
+const { NotFoundError, BadRequestError } = require('../exceptions/errors');
 const TalkResultRepository = require('../repositories/talkresult.repository');
 const TalkSendRepository = require('../repositories/talksend.repository');
 
@@ -64,12 +64,12 @@ module.exports = class AlimtalkResultService {
 
     const { talkSendId, clientId, groupId } = talkSendData;
 
-    let response = [];
+    const response = [];
     for (const result of results) {
       const { msgid } = result;
 
       const existTalkResult =
-        await this.talkResultRepository.getExistTalkResult({
+        await this.talkResultRepository.getTalkResultByMsgId({
           msgid,
           userId,
           companyId,
