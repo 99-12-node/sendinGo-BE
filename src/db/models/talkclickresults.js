@@ -74,6 +74,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      clickOs: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       clickBrowser: {
         type: DataTypes.STRING,
         allowNull: true,

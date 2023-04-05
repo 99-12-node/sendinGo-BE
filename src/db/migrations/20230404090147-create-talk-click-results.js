@@ -39,6 +39,10 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull: true,
         },
+        clickOs: {
+          type: Sequelize.STRING,
+          allowNull: true,
+        },
         clickBrowser: {
           type: Sequelize.STRING,
           allowNull: true,
