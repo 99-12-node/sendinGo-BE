@@ -44,6 +44,10 @@ module.exports = {
         talkVariableEng: 'customerName',
         talkVariableKor: '고객명',
       },
+      {
+        talkVariableEng: 'useLink',
+        talkVariableKor: '사용법링크',
+      },
     ]);
   },
 

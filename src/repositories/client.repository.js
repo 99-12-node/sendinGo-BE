@@ -171,7 +171,7 @@ module.exports = class ClientRepository {
         },
       },
       raw: true,
-    }).then((model) => parseSequelizePrettier(model));
+    }).then((model) => (model ? parseSequelizePrettier(model) : null));
     return client;
   };
 };

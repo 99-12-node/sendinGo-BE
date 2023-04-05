@@ -4,9 +4,9 @@ const TalkContentRepository = require('../repositories/talkcontent.repository');
 const TalkTemplateRepository = require('../repositories/talktemplate.repository');
 const TalkSendRepository = require('../repositories/talksend.repository');
 const GroupRepository = require('../repositories/group.repository');
-const AligoService = require('./aligo.service');
 const { BadRequestError, NotFoundError } = require('../exceptions/errors');
-const aligoService = new AligoService();
+require('dotenv').config();
+const { API_DOMAIN, PORT } = process.env;
 
 module.exports = class AlimtalkSendService {
   constructor() {
@@ -119,6 +119,9 @@ module.exports = class AlimtalkSendService {
         groupId,
         clientId,
       });
+      if (!client) {
+        throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+      }
 
       const talkContent = await this.talkContentRepository.getContentByClientId(
         {
@@ -127,18 +130,21 @@ module.exports = class AlimtalkSendService {
           clientId,
         }
       );
+      if (!talkContent) {
+        throw new NotFoundError('전송 내용 조회에 실패하였습니다.');
+      }
       const result = { client, talkContent };
       results.push(result);
     }
     return results;
   };
 
-  // 알림톡 발송
-  sendAlimTalk = async (userId, companyId, datas) => {
-    logger.info(`AlimtalkSendService.sendAlimTalk`);
+  // 알림톡 발송 데이터 준비
+  setSendAlimTalkData = async (userId, companyId, datas) => {
+    logger.info(`AlimtalkSendService.setSendAlimTalkData`);
 
+    const talksendAligoParams = [];
     const talkSendDatas = [];
-    const talkSendParams = [];
 
     for (const data of datas) {
       const { talkContentId, clientId, talkTemplateId, groupId } = data;
@@ -172,8 +178,19 @@ module.exports = class AlimtalkSendService {
 
       const [client, talkcontent, talkTemplate, group] = talkSendPromises;
 
+      if (parseInt(talkTemplateId) === 4) {
+        const trackingUrl = `${API_DOMAIN}/api/talk/click?userId=${userId}&clientId=${clientId}&talkTemplateId=${talkTemplateId}&talkContentId=${talkContentId}`;
+
+        // 트래킹 URL 생성
+        const updateTalkContent =
+          await this.talkContentRepository.updateTalkContentById({
+            talkContentId,
+            trackingUrl,
+          });
+      }
+
       // 위 데이터로 알리고로 전송 요청을 위한 파라미터 만들기
-      const talksendAligoParams = {
+      const talksendAligoParam = {
         talkTemplateCode: talkTemplate.talkTemplateCode,
         receiver: client.contact,
         recvname: client.clientName,
@@ -181,18 +198,11 @@ module.exports = class AlimtalkSendService {
         message: talkTemplate.talkTemplateContent,
         talkSendData: talkcontent,
       };
-      talkSendDatas.push(talksendAligoParams);
-      talkSendParams.push(data);
+      talksendAligoParams.push(talksendAligoParam);
+      talkSendDatas.push(data);
     }
 
-    // 파라미터로 알리고에 알림톡 전송 요청
-    const aligoResult = await aligoService.sendAlimTalk(talkSendDatas);
-
-    return {
-      message: '성공적으로 전송요청 하였습니다.',
-      aligoResult,
-      talkSend: talkSendParams,
-    };
+    return { talksendAligoParams, talkSendDatas };
   };
 
   // 알림톡 발송 요청 응답 데이터 저장

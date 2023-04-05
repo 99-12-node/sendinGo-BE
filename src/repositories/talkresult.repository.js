@@ -16,6 +16,8 @@ module.exports = class TalkResultRepository {
     rslt,
     reportdate,
     rslt_message,
+    button_json,
+    tpl_code,
     talkSendId,
     clientId,
     groupId,
@@ -33,6 +35,8 @@ module.exports = class TalkResultRepository {
       resultState: rslt,
       lastReportDate: reportdate,
       resultMessage: rslt_message,
+      buttonContent: button_json,
+      tplCode: tpl_code,
       talkSendId,
       clientId,
       groupId,
@@ -43,10 +47,14 @@ module.exports = class TalkResultRepository {
   };
 
   // 톡 상새결과 ID로 존재 확인
-  getExistTalkResult = async ({ msgid, userId, companyId }) => {
-    logger.info(`TalkResultRepository.isExistTalkResultByMsgId Request`);
+  getExistTalkResultDetail = async ({
+    talkResultDetailId,
+    userId,
+    companyId,
+  }) => {
+    logger.info(`TalkResultRepository.getExistTalkResultDetail Request`);
     const talkResult = await TalkResultDetails.findOne({
-      where: { [Op.and]: [{ msgid }, { userId }, { companyId }] },
+      where: { [Op.and]: [{ talkResultDetailId }, { userId }, { companyId }] },
     });
     return talkResult;
   };
@@ -55,25 +63,16 @@ module.exports = class TalkResultRepository {
   getTalkResultByMsgId = async ({ msgid, userId, companyId }) => {
     logger.info(`TalkResultRepository.getTalkResultByMsgId Request`);
     const talkResult = await TalkResultDetails.findOne({
+      attributes: {
+        exclude: ['userId', 'companyId', 'msgid', 'buttonContent', 'tplCode'],
+      },
       where: { [Op.and]: [{ msgid }, { userId }, { companyId }] },
-      attributes: [
-        'talkResultDetailId',
-        'talkSendId',
-        'phone',
-        'msgContent',
-        'sendDate',
-        'resultState',
-        'resultMessage',
-        'resultDate',
-        'groupId',
-        'clientId',
-      ],
       include: {
         model: Clients,
         attributes: ['clientName'],
       },
       raw: true,
-    }).then((model) => parseSequelizePrettier(model));
+    }).then((model) => (model ? parseSequelizePrettier(model) : null));
     return talkResult;
   };
 };
