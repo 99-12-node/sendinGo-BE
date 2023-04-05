@@ -4,15 +4,26 @@ const parseSequelizePrettier = require('../helpers/parse.sequelize');
 const { Op } = require('sequelize');
 const { redisSet, redisGet } = require('../db/config/redis');
 
-const { v4: uuidv4 } = require('uuid');
-//uuidv4();
-
 module.exports = class TalkClickRepository {
   constructor() {}
   // 클릭결과 생성
-  createTalkClick = async ({}) => {
+  createTalkClick = async ({
+    clickBrowser,
+    clickOs,
+    clickDevice,
+    originLink,
+    trackingUrl,
+    ...value
+  }) => {
     logger.info(`TalkClickRepository.createTalkClick Request`);
-    const newTalkClick = await TalkClickResults.create({});
+    const newTalkClick = await TalkClickResults.create({
+      clickBrowser,
+      clickOs,
+      clickDevice,
+      originLink,
+      trackingUrl,
+      ...value,
+    });
     return newTalkClick;
   };
 
@@ -38,9 +49,17 @@ module.exports = class TalkClickRepository {
     await redisSet(
       trackingUUID,
       JSON.stringify({
+        talkContentId,
         ...ids,
       })
     );
     return;
+  };
+
+  // trackingUUID로 값 조회
+  getValueByTrackingUUID = async ({ trackingUUID }) => {
+    logger.info(`TalkClickRepository.getValueByTrackingUUID Request`);
+    const value = await redisGet(trackingUUID);
+    return JSON.parse(value);
   };
 };

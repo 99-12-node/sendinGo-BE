@@ -54,4 +54,7 @@ router.get(
 // 알림톡 전송 결과 상세 데이터 저장
 router.post('/results/detail/save', alimtalkController.saveTalkResultDetail);
 
+// [클라이언트용] 알림톡 버튼 클릭 로그 생성
+router.get('/click/:uuid', alimtalkController.saveTalkClick);
+
 module.exports = router;
