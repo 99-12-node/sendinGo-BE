@@ -13,22 +13,9 @@ module.exports = class TalkClickService {
     const value = await this.talkClickRepository.getValueByTrackingUUID({
       trackingUUID,
     });
-    const {
-      userId,
-      companyId,
-      groupId,
-      clientId,
-      talkSendId,
-      talkResultDetailId,
-    } = value;
     // 버튼 클릭 DB 생성
     const newTalkClick = await this.talkClickRepository.createTalkClick({
-      userId,
-      companyId,
-      groupId,
-      clientId,
-      talkSendId,
-      talkResultDetailId,
+      ...value,
       trackingUrl: trackingUUID,
     });
     return newTalkClick;

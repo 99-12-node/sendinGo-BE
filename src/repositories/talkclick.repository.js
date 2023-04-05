@@ -7,23 +7,10 @@ const { redisSet, redisGet } = require('../db/config/redis');
 module.exports = class TalkClickRepository {
   constructor() {}
   // 클릭결과 생성
-  createTalkClick = async ({
-    userId,
-    companyId,
-    groupId,
-    clientId,
-    talkSendId,
-    talkResultDetailId,
-    trackingUrl,
-  }) => {
+  createTalkClick = async ({ trackingUrl, ...value }) => {
     logger.info(`TalkClickRepository.createTalkClick Request`);
     const newTalkClick = await TalkClickResults.create({
-      userId,
-      companyId,
-      groupId,
-      clientId,
-      talkSendId,
-      talkResultDetailId,
+      ...value,
       trackingUrl,
     });
     return newTalkClick;
@@ -51,6 +38,7 @@ module.exports = class TalkClickRepository {
     await redisSet(
       trackingUUID,
       JSON.stringify({
+        talkContentId,
         ...ids,
       })
     );
