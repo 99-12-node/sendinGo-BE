@@ -5,9 +5,10 @@ const TalkTemplateService = require('../services/talktemplate.service');
 const AligoService = require('../services/aligo.service');
 const TalkClickService = require('../services/talkclick.service');
 const axios = require('axios');
+const parser = require('ua-parser-js');
 const { BadRequestError, ForbiddenError } = require('../exceptions/errors');
 require('dotenv').config();
-const { PORT } = process.env;
+const { PORT, API_DOMAIN } = process.env;
 
 module.exports = class AlimtalkController {
   constructor() {
@@ -347,12 +348,18 @@ module.exports = class AlimtalkController {
   saveTalkClick = async (req, res, next) => {
     logger.info(`AlimtalkController.saveTalkClick`);
     const { uuid } = req.params;
+    const ua = parser(req.headers['user-agent']);
+    const { host } = req.headers;
+    const { baseUrl, path } = req;
 
     try {
-      const result = await this.talkClickService.createTalkClick({
+      const talkClickData = await this.talkClickService.createTalkClick({
         trackingUUID: uuid,
+        ua,
+        originUrl: host + baseUrl + path,
       });
-      return res.status(200).json({ message: '리다이렉트 하기!' });
+      const { originLink } = talkClickData;
+      return res.redirect(`http://${originLink}`);
     } catch (e) {
       next(e);
     }
