@@ -3,6 +3,7 @@ const AlimtalkSendService = require('../services/alimtalkSend.service');
 const AlimtalkResultService = require('../services/alimitalkResult.service');
 const TalkTemplateService = require('../services/talktemplate.service');
 const AligoService = require('../services/aligo.service');
+const TalkClickService = require('../services/talkclick.service');
 const axios = require('axios');
 const { BadRequestError, ForbiddenError } = require('../exceptions/errors');
 require('dotenv').config();
@@ -14,6 +15,7 @@ module.exports = class AlimtalkController {
     this.alimtalkResultService = new AlimtalkResultService();
     this.talkTemplateService = new TalkTemplateService();
     this.aligoService = new AligoService();
+    this.talkClickService = new TalkClickService();
   }
   // 토큰 생성
   generateSendToken = async (_req, res, next) => {
@@ -344,6 +346,15 @@ module.exports = class AlimtalkController {
   // 알림톡 버튼 클릭 DB 저장
   saveTalkClick = async (req, res, next) => {
     logger.info(`AlimtalkController.saveTalkClick`);
-    return;
+    const { uuid } = req.params;
+
+    try {
+      const result = await this.talkClickService.createTalkClick({
+        trackingUUID: uuid,
+      });
+      return res.status(200).json({ message: '리다이렉트 하기!' });
+    } catch (e) {
+      next(e);
+    }
   };
 };
