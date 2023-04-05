@@ -55,4 +55,17 @@ module.exports = class TalkContentRepository {
     });
     return client;
   };
+
+  updateTalkContentById = async ({ talkContentId, ...talkContentData }) => {
+    logger.info(`TalkContentRepository.updateTalkContentById Request`);
+    const newTalkContent = await TalkContents.update(
+      { ...talkContentData },
+      {
+        where: {
+          talkContentId,
+        },
+      }
+    );
+    return newTalkContent;
+  };
 };
