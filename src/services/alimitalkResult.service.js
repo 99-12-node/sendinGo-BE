@@ -2,11 +2,15 @@ const { logger } = require('../middlewares/logger');
 const { NotFoundError, BadRequestError } = require('../exceptions/errors');
 const TalkResultRepository = require('../repositories/talkresult.repository');
 const TalkSendRepository = require('../repositories/talksend.repository');
+const TalkContentRepository = require('../repositories/talkcontent.repository');
+const TalkClickRepository = require('../repositories/talkclick.repository');
 
 module.exports = class AlimtalkResultService {
   constructor() {
     this.talkSendRepository = new TalkSendRepository();
     this.talkResultRepository = new TalkResultRepository();
+    this.talkContentRepository = new TalkContentRepository();
+    this.talkClickRepository = new TalkClickRepository();
   }
 
   // 알림톡 전송 결과 저장
@@ -61,8 +65,7 @@ module.exports = class AlimtalkResultService {
     companyId,
   }) => {
     logger.info(`AlimtalkResultService.saveTalkResultDetail`);
-
-    const { talkSendId, clientId, groupId } = talkSendData;
+    const { talkSendId, clientId, groupId, talkContentId } = talkSendData;
 
     const response = [];
     for (const result of results) {
@@ -80,6 +83,25 @@ module.exports = class AlimtalkResultService {
           { msgid, userId, companyId }
         );
         response.push(talkResult);
+
+        const talkContent = await this.talkContentRepository.getTalkContentById(
+          {
+            userId,
+            companyId,
+            talkContentId,
+          }
+        );
+        // resultDetailId 값 redis에 업데이트 redis에 저장
+        await this.talkClickRepository.saveTrackingUUID({
+          trackingUUID: talkContent.trackingUUID,
+          userId,
+          companyId,
+          groupId,
+          clientId,
+          talkContentId,
+          talkSendId,
+          talkResultDetailId: existTalkResult.talkResultDetailId,
+        });
       } else {
         // DB에 없다면, 전송 상세 결과 DB에 생성
         const talkResultData = await this.talkResultRepository.createTalkResult(
@@ -92,6 +114,26 @@ module.exports = class AlimtalkResultService {
             companyId,
           }
         );
+
+        const talkContent = await this.talkContentRepository.getTalkContentById(
+          {
+            userId,
+            companyId,
+            talkContentId,
+          }
+        );
+        console.log('talkContent : ', talkContent);
+        // resultDetailId 값 redis에 업데이트 redis에 저장
+        await this.talkClickRepository.saveTrackingUUID({
+          trackingUUID: talkContent.trackingUUID,
+          userId,
+          companyId,
+          groupId,
+          clientId,
+          talkContentId,
+          talkSendId,
+          talkResultDetailId: talkResultData.talkResultDetailId,
+        });
         // 원하는 결과 상세 데이터 컬럼 반환
         const talkResult = await this.talkResultRepository.getTalkResultByMsgId(
           {
@@ -125,6 +167,7 @@ module.exports = class AlimtalkResultService {
       clientId: talkSend.clientId,
       talkTemplateId: talkSend.talkTemplateId,
       groupId: talkSend.groupId,
+      talkContentId: talkSend.talkContentId,
       mid: talkSend.mid,
     };
     return talkSendResultData;
