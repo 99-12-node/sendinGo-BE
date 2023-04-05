@@ -75,6 +75,14 @@ module.exports = {
             key: 'clientId',
           },
         },
+        talkContentId: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+            model: 'TalkContents',
+            key: 'talkContentId',
+          },
+        },
         createdAt: {
           allowNull: false,
           type: Sequelize.DATE,

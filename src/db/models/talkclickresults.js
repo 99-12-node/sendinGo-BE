@@ -32,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'clientId',
         foreignKey: 'clientId',
       });
+      this.belongsTo(models.TalkContents, {
+        targetKey: 'talkContentId',
+        foreignKey: 'talkContentId',
+      });
     }
   }
   TalkClickResults.init(
@@ -104,6 +108,14 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: 'Clients',
           key: 'clientId',
+        },
+      },
+      talkContentId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'TalkContents',
+          key: 'talkContentId',
         },
       },
       createdAt: {
