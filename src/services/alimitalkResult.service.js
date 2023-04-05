@@ -35,11 +35,13 @@ module.exports = class AlimtalkResultService {
           sendDate,
         });
       // 업데이트된 TalkSend 반환
-      const updatedTalkSend = await this.talkSendRepository.getTalkSendByMid({
-        mid,
-        userId,
-        companyId,
-      });
+      const updatedTalkSend =
+        await this.talkSendRepository.getTalkSendByMidAndGroup({
+          mid,
+          userId,
+          companyId,
+          groupId,
+        });
       return updatedTalkSend;
     }
   };
@@ -53,7 +55,8 @@ module.exports = class AlimtalkResultService {
   }) => {
     logger.info(`AlimtalkResultService.saveTalkResultDetail`);
 
-    const { talkSendId, clientId, groupId, mid, talkTemplateId } = talkSendData;
+    const { talkSendId, clientId, groupId, talkContentId, talkTemplateId } =
+      talkSendData;
     const { msgid } = result;
 
     const existTalkResult =
