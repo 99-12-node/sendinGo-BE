@@ -227,7 +227,7 @@ module.exports = class AlimtalkController {
         `http://localhost:${PORT}/api/talk/results/list/save`,
         {
           talkResultList,
-          groupId,
+          groupId: parseInt(groupId),
           userId,
           companyId,
         }

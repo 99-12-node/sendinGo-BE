@@ -57,7 +57,7 @@ module.exports = class TalkSendRepository {
 
   //mid로 전송 내용 존재 조회
   getExistTalkSendByMid = async ({ mid, userId, companyId }) => {
-    logger.info(`TalkSendRepository.getTalkSendByMid Request`);
+    logger.info(`TalkSendRepository.getExistTalkSendByMid Request`);
     const talkSend = await TalkSends.findOne({
       where: {
         [Op.and]: [{ mid }, { userId }, { companyId }],
@@ -85,11 +85,14 @@ module.exports = class TalkSendRepository {
   };
 
   // 전송 결과 리스트 조회 (mid로 그룹)
-  getTalkSendByMid = async ({ mid, userId, companyId }) => {
-    logger.info(`TalkSendRepository.getTalkSendByMid Request`);
+  getTalkSendByMidAndGroup = async ({ mid, userId, companyId, groupId }) => {
+    logger.info(`TalkSendRepository.getTalkSendByMidAndGroup Request`);
+
     const talkSend = await TalkSends.findOne({
       where: {
-        [Op.and]: [{ mid }, { userId }, { companyId }],
+        [Op.and]: groupId
+          ? [{ mid }, { userId }, { companyId }, { groupId }]
+          : [{ mid }],
       },
       attributes: {
         // 필요 컬럼: talkSendId, mid, scnt, fcnt, msgCount, sendState, sendDate, groupId, groupName,
@@ -114,7 +117,7 @@ module.exports = class TalkSendRepository {
         },
       ],
       raw: true,
-    }).then((model) => parseSequelizePrettier(model));
+    }).then((model) => (model ? parseSequelizePrettier(model) : null));
     return talkSend;
   };
 
