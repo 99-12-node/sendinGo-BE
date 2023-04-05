@@ -25,7 +25,7 @@ module.exports = class TalkContentRepository {
 
   // 톡 전송 내용 Id로 조회
   getTalkContentById = async ({ userId, companyId, talkContentId }) => {
-    logger.info(`TalkContentRepository.getTalkContent Request`);
+    logger.info(`TalkContentRepository.getTalkContentById Request`);
     try {
       const talkcontent = await TalkContents.findOne({
         where: { [Op.and]: [{ userId }, { companyId }, { talkContentId }] },
