@@ -53,6 +53,8 @@ jobs:
           echo PROD_DB_DATABASE=${{ vars.DB_DATABASE_PROD }} >> .env
           echo PROD_DB_HOST=${{ secrets.DB_HOST }} >> .env
           echo PROD_DB_DIALECT=${{ env.DIALECT }} >> .env
+          echo REDIS_HOST=${{ secrets.REDIS_HOST }} >> .env
+          echo REDIS_PORT=${{ vars.REDIS_PORT }} >> .env
           cat .env
 
       - name: zip file
