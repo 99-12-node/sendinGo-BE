@@ -5,8 +5,11 @@ const TalkTemplateRepository = require('../repositories/talktemplate.repository'
 const TalkSendRepository = require('../repositories/talksend.repository');
 const GroupRepository = require('../repositories/group.repository');
 const { BadRequestError, NotFoundError } = require('../exceptions/errors');
+const { redisClient, redisSet, redisGet } = require('../db/config/redis');
 require('dotenv').config();
 const { API_DOMAIN, PORT } = process.env;
+
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = class AlimtalkSendService {
   constructor() {
@@ -179,14 +182,28 @@ module.exports = class AlimtalkSendService {
       const [client, talkcontent, talkTemplate, group] = talkSendPromises;
 
       if (parseInt(talkTemplateId) === 4) {
-        const trackingUrl = `${API_DOMAIN}/api/talk/click?userId=${userId}&clientId=${clientId}&talkTemplateId=${talkTemplateId}&talkContentId=${talkContentId}`;
+        const trackingUUID = uuidv4();
+        const trackingUrl = `dev.sendingo-be.store/api/talk/click/${trackingUUID}`;
 
-        // 트래킹 URL 생성
+        // 전송 내용에 트래킹 URL 생성
         const updateTalkContent =
           await this.talkContentRepository.updateTalkContentById({
             talkContentId,
+            trackingUUID,
             trackingUrl,
           });
+
+        // 발송 전 트래킹을 위한 식별값 redis에 저장
+        await redisSet(
+          trackingUUID,
+          JSON.stringify({
+            userId,
+            companyId,
+            groupId,
+            clientId,
+            talkContentId,
+          })
+        );
       }
 
       // 위 데이터로 알리고로 전송 요청을 위한 파라미터 만들기
