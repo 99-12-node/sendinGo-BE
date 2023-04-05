@@ -3,9 +3,10 @@ const ClientRepository = require('../repositories/client.repository');
 const TalkContentRepository = require('../repositories/talkcontent.repository');
 const TalkTemplateRepository = require('../repositories/talktemplate.repository');
 const TalkSendRepository = require('../repositories/talksend.repository');
+const TalkClickRepository = require('../repositories/talkclick.repository');
 const GroupRepository = require('../repositories/group.repository');
 const { BadRequestError, NotFoundError } = require('../exceptions/errors');
-const { redisClient, redisSet, redisGet } = require('../db/config/redis');
+
 require('dotenv').config();
 const { API_DOMAIN, PORT } = process.env;
 
@@ -18,6 +19,7 @@ module.exports = class AlimtalkSendService {
     this.talkTemplateRepository = new TalkTemplateRepository();
     this.talkSendRepository = new TalkSendRepository();
     this.groupRepository = new GroupRepository();
+    this.talkClickRepository = new TalkClickRepository();
   }
 
   // 알림톡 전송 내용 저장
@@ -186,24 +188,21 @@ module.exports = class AlimtalkSendService {
         const trackingUrl = `dev.sendingo-be.store/api/talk/click/${trackingUUID}`;
 
         // 전송 내용에 트래킹 URL 생성
-        const updateTalkContent =
-          await this.talkContentRepository.updateTalkContentById({
-            talkContentId,
-            trackingUUID,
-            trackingUrl,
-          });
+        await this.talkContentRepository.updateTalkContentById({
+          talkContentId,
+          trackingUUID,
+          trackingUrl,
+        });
 
         // 발송 전 트래킹을 위한 식별값 redis에 저장
-        await redisSet(
+        await this.talkClickRepository.saveTrackingUUID({
           trackingUUID,
-          JSON.stringify({
-            userId,
-            companyId,
-            groupId,
-            clientId,
-            talkContentId,
-          })
-        );
+          userId,
+          companyId,
+          groupId,
+          clientId,
+          talkContentId,
+        });
       }
 
       // 위 데이터로 알리고로 전송 요청을 위한 파라미터 만들기
@@ -243,6 +242,23 @@ module.exports = class AlimtalkSendService {
         scnt: aligoResult.info.scnt,
         fcnt: aligoResult.info.fcnt,
       });
+
+      const talkContent = await this.talkContentRepository.getTalkContentById({
+        userId,
+        companyId,
+        talkContentId,
+      });
+      // sendId 값 redis에 업데이트 redis에 저장
+      await this.talkClickRepository.saveTrackingUUID({
+        trackingUUID: talkContent.trackingUUID,
+        userId,
+        companyId,
+        groupId,
+        clientId,
+        talkContentId,
+        talkSendId: newTalkSend.talkSendId,
+      });
+
       result.push(newTalkSend);
     }
     return result;
