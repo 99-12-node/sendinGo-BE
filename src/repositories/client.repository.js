@@ -28,17 +28,17 @@ module.exports = class ClientRepository {
   };
 
   // 클라이언트 목록에서 검색
-  findKeyWord = async ({ userId, companyId, keyWord, offset }) => {
-    logger.info(`ClientRepository.findKeyWord Request`);
+  findkeyword = async ({ userId, companyId, keyword, offset }) => {
+    logger.info(`ClientRepository.findkeyword Request`);
 
     const findData = await Clients.findAll({
       where: {
         userId,
         companyId,
         [Op.or]: [
-          { clientName: { [Op.like]: `%${keyWord}%` } },
-          { contact: { [Op.like]: `%${keyWord}%` } },
-          { clientEmail: { [Op.like]: `%${keyWord}%` } },
+          { clientName: { [Op.like]: `%${keyword}%` } },
+          { contact: { [Op.like]: `%${keyword}%` } },
+          { clientEmail: { [Op.like]: `%${keyword}%` } },
         ],
       },
       attributes: [
@@ -47,6 +47,18 @@ module.exports = class ClientRepository {
         'contact',
         'clientEmail',
         'createdAt',
+      ],
+      include: [
+        {
+          model: ClientGroups,
+          attributes: ['userId'],
+          include: [
+            {
+              model: Groups,
+              attributes: ['groupName'],
+            },
+          ],
+        },
       ],
       order: [['createdAt', 'DESC']],
       offset: offset * OFFSET_CONSTANT,

@@ -35,13 +35,11 @@ module.exports = class GroupController {
     logger.info(`GroupController.getAllGroup Request`);
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
-    const { keyWord } = req.query;
 
     try {
       const allGroupData = await this.groupService.getAllGroup({
         userId,
         companyId,
-        keyWord,
       });
       res.status(200).json({ data: allGroupData });
     } catch (error) {

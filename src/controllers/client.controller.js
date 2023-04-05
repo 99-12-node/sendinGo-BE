@@ -39,14 +39,14 @@ module.exports = class ClientController {
     logger.info(`ClientController.getClients Request`);
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
-    const { groupId, index, keyWord } = req.query;
+    const { groupId, index, keyword } = req.query;
     try {
       const allData = await this.clientService.getClients({
         userId,
         companyId,
         groupId,
         index,
-        keyWord,
+        keyword,
       });
 
       return res.status(200).json({ data: allData });

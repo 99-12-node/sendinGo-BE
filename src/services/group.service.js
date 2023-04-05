@@ -46,28 +46,15 @@ module.exports = class GroupService {
     }
   };
 
-  //그룹 조회
-  getAllGroup = async ({ userId, companyId, keyWord }) => {
+  //그룹 전체 조회
+  getAllGroup = async ({ userId, companyId }) => {
     logger.info(`GroupService.getAllGroup Request`);
 
-    let allGroupData = [];
-    //그룹 검색
-    if (keyWord) {
-      const keyWordData = await this.groupRepository.findKeyWord({
-        userId,
-        companyId,
-        keyWord,
-      });
-      allGroupData = [...keyWordData];
-    } else {
-      const allGroup = await this.groupRepository.getAllGroup({
-        userId,
-        companyId,
-      });
-      allGroupData = [...allGroup];
-    }
-
-    return { allGroupData };
+    const allGroupData = await this.groupRepository.getAllGroup({
+      userId,
+      companyId,
+    });
+    return allGroupData;
   };
 
   //그룹 삭제

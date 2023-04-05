@@ -51,7 +51,7 @@ const JoiHelper = {
     const check = Joi.object().keys({
       index: Joi.number()
         .integer()
-        .optional()
+        .required()
         .error(new BadRequestError('index는 숫자입니다.')),
 
       groupId: Joi.number()
@@ -59,7 +59,7 @@ const JoiHelper = {
         .optional()
         .error(new BadRequestError('groupId는 숫자입니다.')),
 
-      keyWord: Joi.string()
+      keyword: Joi.string()
         .optional()
         .trim()
         .regex(/^\S+$/)
@@ -96,16 +96,16 @@ const JoiHelper = {
   },
 
   //group목록 조회에서 키워드 검색
-  groupKeyWord: async (req, res, next) => {
+  groupkeyword: async (req, res, next) => {
     const check = Joi.object().keys({
-      keyWord: Joi.string()
+      keyword: Joi.string()
         .optional()
         .trim()
         .regex(/^\S+$/)
         .error(new BadRequestError('검색 내용을 찾을 수 없습니다.')),
     });
     try {
-      logger.info(`JoiHelper.groupKeyWord Request`);
+      logger.info(`JoiHelper.groupkeyword Request`);
       await check.validateAsync(req.body);
     } catch (e) {
       next(e);

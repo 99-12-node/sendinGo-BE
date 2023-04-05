@@ -41,7 +41,7 @@ module.exports = class ClientService {
   };
 
   //클라이언트 조회 (쿼리로 조건 조회)
-  getClients = async ({ userId, companyId, groupId, index, keyWord }) => {
+  getClients = async ({ userId, companyId, groupId, index, keyword }) => {
     logger.info(`ClientService.getClients Request`);
 
     if (index == 0) {
@@ -49,14 +49,15 @@ module.exports = class ClientService {
     }
     const offset = index ? parseInt(index - 1) : 0;
 
-    if (!groupId && keyWord) {
-      keyWord = await this.clientRepository.findKeyWord({
+    if (!groupId && keyword) {
+      keyword = await this.clientRepository.findkeyword({
         userId,
         companyId,
-        keyWord,
+        keyword,
         offset,
       });
-      return { keyWord };
+
+      return { keyword };
     }
 
     // 전체 조회
@@ -73,7 +74,18 @@ module.exports = class ClientService {
       return { clients: allData, clientCount };
     }
 
-    // 그룹별 조회
+    // // 그룹별 클라이언트 검색
+    // if (groupId && keyword) {
+    //   keyword = await this.clientRepository.findkeywordBygroupId({
+    //     userId,
+    //     companyId,
+    //     groupId,
+    //     keyword,
+    //     offset,
+    //   });
+    //   return { keyword };
+    // }
+    //그룹별 클라이언트 조회
     const existGroup = await this.groupRepository.findGroupId({
       userId,
       companyId,
