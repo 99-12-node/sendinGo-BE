@@ -27,6 +27,47 @@ module.exports = class ClientRepository {
     return createData;
   };
 
+  // 클라이언트 목록에서 검색
+  findkeyword = async ({ userId, companyId, keyword, offset }) => {
+    logger.info(`ClientRepository.findkeyword Request`);
+
+    const findData = await Clients.findAll({
+      where: {
+        userId,
+        companyId,
+        [Op.or]: [
+          { clientName: { [Op.like]: `%${keyword}%` } },
+          { contact: { [Op.like]: `%${keyword}%` } },
+          { clientEmail: { [Op.like]: `%${keyword}%` } },
+        ],
+      },
+      attributes: [
+        'clientId',
+        'clientName',
+        'contact',
+        'clientEmail',
+        'createdAt',
+      ],
+      include: [
+        {
+          model: ClientGroups,
+          attributes: ['userId'],
+          include: [
+            {
+              model: Groups,
+              attributes: ['groupName'],
+            },
+          ],
+        },
+      ],
+      order: [['createdAt', 'DESC']],
+      offset: offset * OFFSET_CONSTANT,
+      limit: OFFSET_CONSTANT,
+    });
+
+    return findData;
+  };
+
   //클라이언트 전체 조회
   getAllClients = async ({ userId, companyId, offset }) => {
     logger.info(`ClientRepository.getAllClients Request`);
@@ -115,6 +156,28 @@ module.exports = class ClientRepository {
     const client = await Clients.findOne({
       where: { [Op.and]: [{ userId }, { companyId }, { clientId }] },
       attributes: ['clientId', 'clientName', 'contact'],
+    });
+    return client;
+  };
+
+  validClientInfo = async ({
+    userId,
+    companyId,
+    clientName,
+    contact,
+    clientEmail,
+  }) => {
+    logger.info(`ClientRepository.alidClientInfo Request`);
+    const client = await Clients.findOne({
+      where: {
+        [Op.and]: [
+          { userId },
+          { companyId },
+          { clientName },
+          { contact },
+          { clientEmail },
+        ],
+      },
     });
     return client;
   };
