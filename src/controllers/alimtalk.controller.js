@@ -129,15 +129,25 @@ module.exports = class AlimtalkController {
     logger.info(`AlimtalkController.sendAlimTalk`);
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
-    const datas = req.body.data;
+    const talkSendDatas = req.body.data;
+
+    const talksendAligoParams = [];
     try {
-      // 알림톡 발송을 위한 데이터, 파라미터 생성
-      const { talksendAligoParams, talkSendDatas } =
-        await this.alimtalkSendService.setSendAlimTalkData(
-          userId,
-          companyId,
-          datas
-        );
+      for (const tallkSendData of talkSendDatas) {
+        const { talkContentId, clientId, talkTemplateId, groupId } =
+          tallkSendData;
+        // 알림톡 발송을 위한 데이터, 파라미터 생성
+        const talksendAligoParam =
+          await this.alimtalkSendService.setSendAlimTalkData({
+            userId,
+            companyId,
+            talkContentId,
+            clientId,
+            talkTemplateId,
+            groupId,
+          });
+        talksendAligoParams.push(talksendAligoParam);
+      }
 
       // 파라미터로 알리고에 알림톡 전송 요청
       const aligoResult = await this.aligoService.sendAlimTalk(
@@ -145,7 +155,6 @@ module.exports = class AlimtalkController {
       );
 
       const data = {
-        message: '성공적으로 전송요청 하였습니다.',
         aligoResult,
         talkSend: talkSendDatas,
       };
@@ -154,7 +163,6 @@ module.exports = class AlimtalkController {
       const redirectSaveResponse = await axios.post(
         `http://localhost:${PORT}/api/talk/sends/response`,
         {
-          message: data.message,
           data,
           userId,
           companyId,
@@ -171,18 +179,21 @@ module.exports = class AlimtalkController {
   // 알림톡 발송 요청 응답 데이터 저장
   saveSendAlimTalkResponse = async (req, res, next) => {
     logger.info(`AlimtalkController.saveSendAlimTalkResponse`);
-    const { message, userId, companyId, data } = req.body;
+    const { userId, companyId, data } = req.body;
     try {
       if (!data) {
-        return res.status(400).json({ message });
+        return res
+          .status(400)
+          .json({ message: '알림톡 전송에 실패하였습니다.' });
       }
+
       const result = await this.alimtalkSendService.saveSendAlimTalkResponse({
         userId,
         companyId,
         data,
       });
       return res.status(201).json({
-        message,
+        message: data.message,
         // data: result,
       });
     } catch (e) {
