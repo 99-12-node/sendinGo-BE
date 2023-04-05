@@ -16,9 +16,25 @@ module.exports = class TalkClickRepository {
     return newTalkClick;
   };
 
-  // 트래킹 데이터 캐싱
+  // 트래킹 데이터 생성
   saveTrackingUUID = async ({ trackingUUID, ...ids }) => {
     logger.info(`TalkClickRepository.saveTrackingUUID Request`);
+    await redisSet(
+      trackingUUID,
+      JSON.stringify({
+        ...ids,
+      })
+    );
+    return;
+  };
+
+  // talkContentID로 트래킹 데이터 업데이트
+  saveTrackingUUIDByContentId = async ({ talkContentId, ...ids }) => {
+    logger.info(`TalkClickRepository.saveTrackingUUIDByContentId Request`);
+    const existTalkContent = await TalkContents.findOne({
+      where: { talkContentId },
+    });
+    const trackingUUID = existTalkContent.trackingUUID;
     await redisSet(
       trackingUUID,
       JSON.stringify({
