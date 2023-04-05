@@ -63,40 +63,16 @@ module.exports = class TalkResultRepository {
   getTalkResultByMsgId = async ({ msgid, userId, companyId }) => {
     logger.info(`TalkResultRepository.getTalkResultByMsgId Request`);
     const talkResult = await TalkResultDetails.findOne({
+      attributes: {
+        exclude: ['userId', 'companyId', 'msgid', 'buttonContent', 'tplCode'],
+      },
       where: { [Op.and]: [{ msgid }, { userId }, { companyId }] },
-      attributes: [
-        'talkResultDetailId',
-        'talkSendId',
-        'phone',
-        'msgContent',
-        'sendDate',
-        'resultState',
-        'resultMessage',
-        'resultDate',
-        'groupId',
-        'clientId',
-      ],
       include: {
         model: Clients,
         attributes: ['clientName'],
       },
       raw: true,
-    });
-    return talkResult;
-  };
-
-  // 톡 상세결과 ID로 모든 컬럼 조회
-  getTalkResultByMsgId = async ({ msgid, userId, companyId }) => {
-    logger.info(`TalkResultRepository.getTalkResultByMsgId Request`);
-    const talkResult = await TalkResultDetails.findOne({
-      where: { [Op.and]: [{ msgid }, { userId }, { companyId }] },
-
-      include: {
-        model: Clients,
-        attributes: ['clientName'],
-      },
-      raw: true,
-    });
+    }).then((model) => (model ? parseSequelizePrettier(model) : null));
     return talkResult;
   };
 };
