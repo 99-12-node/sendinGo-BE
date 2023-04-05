@@ -47,10 +47,14 @@ module.exports = class TalkResultRepository {
   };
 
   // 톡 상새결과 ID로 존재 확인
-  getExistTalkResult = async ({ msgid, userId, companyId }) => {
-    logger.info(`TalkResultRepository.isExistTalkResultByMsgId Request`);
+  getExistTalkResultDetail = async ({
+    talkResultDetailId,
+    userId,
+    companyId,
+  }) => {
+    logger.info(`TalkResultRepository.getExistTalkResultDetail Request`);
     const talkResult = await TalkResultDetails.findOne({
-      where: { [Op.and]: [{ msgid }, { userId }, { companyId }] },
+      where: { [Op.and]: [{ talkResultDetailId }, { userId }, { companyId }] },
     });
     return talkResult;
   };
@@ -77,7 +81,22 @@ module.exports = class TalkResultRepository {
         attributes: ['clientName'],
       },
       raw: true,
-    }).then((model) => parseSequelizePrettier(model));
+    });
+    return talkResult;
+  };
+
+  // 톡 상세결과 ID로 모든 컬럼 조회
+  getTalkResultByMsgId = async ({ msgid, userId, companyId }) => {
+    logger.info(`TalkResultRepository.getTalkResultByMsgId Request`);
+    const talkResult = await TalkResultDetails.findOne({
+      where: { [Op.and]: [{ msgid }, { userId }, { companyId }] },
+
+      include: {
+        model: Clients,
+        attributes: ['clientName'],
+      },
+      raw: true,
+    });
     return talkResult;
   };
 };
