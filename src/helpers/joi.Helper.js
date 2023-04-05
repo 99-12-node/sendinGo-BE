@@ -95,24 +95,6 @@ const JoiHelper = {
     next();
   },
 
-  //group목록 조회에서 키워드 검색
-  groupkeyword: async (req, res, next) => {
-    const check = Joi.object().keys({
-      keyword: Joi.string()
-        .optional()
-        .trim()
-        .regex(/^\S+$/)
-        .error(new BadRequestError('검색 내용을 찾을 수 없습니다.')),
-    });
-    try {
-      logger.info(`JoiHelper.groupkeyword Request`);
-      await check.validateAsync(req.body);
-    } catch (e) {
-      next(e);
-    }
-    next();
-  },
-
   //groupId
   groupId: async (req, res, next) => {
     const check = Joi.object().keys({
