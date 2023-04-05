@@ -45,7 +45,14 @@ module.exports = class TalkContentRepository {
     logger.info(`TalkContentRepository.getContentByClientId Request`);
     const client = await TalkContents.findOne({
       attributes: {
-        exclude: ['clientId', 'userId', 'companyId', 'updatedAt'],
+        exclude: [
+          'clientId',
+          'userId',
+          'companyId',
+          'trackingUUID',
+          'trackingUrl',
+          'updatedAt',
+        ],
       },
       where: {
         [Op.and]: [{ userId }, { companyId }, { clientId }],
