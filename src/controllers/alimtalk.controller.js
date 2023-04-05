@@ -131,15 +131,30 @@ module.exports = class AlimtalkController {
     const { companyId } = res.locals.company;
     const datas = req.body.data;
     try {
-      const { message, ...data } = await this.alimtalkSendService.sendAlimTalk(
-        userId,
-        companyId,
-        datas
+      // 알림톡 발송을 위한 데이터, 파라미터 생성
+      const { talksendAligoParams, talkSendDatas } =
+        await this.alimtalkSendService.setSendAlimTalkData(
+          userId,
+          companyId,
+          datas
+        );
+
+      // 파라미터로 알리고에 알림톡 전송 요청
+      const aligoResult = await this.aligoService.sendAlimTalk(
+        talksendAligoParams
       );
+
+      const data = {
+        message: '성공적으로 전송요청 하였습니다.',
+        aligoResult,
+        talkSend: talkSendDatas,
+      };
+
+      // 알림톡 전송 요청 데이터 저장
       const redirectSaveResponse = await axios.post(
         `http://localhost:${PORT}/api/talk/sends/response`,
         {
-          message,
+          message: data.message,
           data,
           userId,
           companyId,

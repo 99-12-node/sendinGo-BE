@@ -42,7 +42,7 @@ module.exports = class AligoService {
     // 알리고 알림톡 전송 API 양식에 맞게 데이터 정리
     const sendbulkData = {};
     for (let i = 0; i < data.length; i++) {
-      console.log('talkVariableValue :', data[i].talkSendData);
+      const templateCode = data[i].talkTemplateCode;
       const talkVariableValue = data[i].talkSendData.dataValues;
       sendbulkData[`receiver_${i + 1}`] = data[i].receiver;
       sendbulkData[`recvname_${i + 1}`] = data[i].recvname;
@@ -58,21 +58,21 @@ module.exports = class AligoService {
         .replaceAll('#{택배회사명}', talkVariableValue.deliveryCompany)
         .replaceAll('#{택배배송시간}', talkVariableValue.deliveryTime)
         .replaceAll('#{송장번호}', talkVariableValue.deliveryNumber);
-      sendbulkData[`button_${i + 1}`] = JSON.stringify({
-        button: [
-          {
-            name: '사용법바로가기',
-            linkType: 'WL',
-            linkTypeName: '웹링크',
-            linkMo: 'http://google.com',
-            linkPc: 'http://google.com',
-          },
-        ],
-      });
-      // linkMo: `http://${talkVariableValue.buttonLink}`,
-      // linkPc: `http://${talkVariableValue.buttonLink}`,
+
+      if (templateCode === 'TM_2220') {
+        sendbulkData[`button_${i + 1}`] = JSON.stringify({
+          button: [
+            {
+              name: '사용법바로가기',
+              linkType: 'WL',
+              linkTypeName: '웹링크',
+              linkMo: `http://${talkVariableValue.trackingUrl}`,
+              linkPc: `http://${talkVariableValue.trackingUrl}`,
+            },
+          ],
+        });
+      }
     }
-    console.log('sendbulkData :', sendbulkData);
 
     // 알리고 알림톡 전송 API Parameter 만들기
     const params = new url.URLSearchParams({

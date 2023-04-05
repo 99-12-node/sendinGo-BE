@@ -63,9 +63,6 @@ module.exports = {
         talkTemplateContent: `#{고객명}고객님 우리 회사와 거래하여 주셔서 감사합니다.
 
 구매하신 제품의 사용(이용)법을 확인해 보세요.`,
-        talkTemplateBtnName: '사용법바로가기',
-        talkTemplateBtnLinkMobile: 'http://#{사용법바로가기}',
-        talkTemplateBtnLinkWeb: 'http://#{사용법바로가기}',
         // 웹링크 버튼이름 : 사용법바로가기
         // 링크(모바일웹) : http://#{사용법바로가기}
         // 링크(PC): http://#{사용법바로가기},
