@@ -52,17 +52,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      phoneNumber: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       provider: {
         type: DataTypes.TINYINT,
         allowNull: false,
+        defaultValue: 0,
       },
       role: {
         type: DataTypes.TINYINT,

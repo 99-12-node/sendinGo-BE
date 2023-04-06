@@ -27,17 +27,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      phoneNumber: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       provider: {
         type: Sequelize.TINYINT,
         allowNull: false,
+        defaultValue: 0,
       },
       role: {
         type: Sequelize.TINYINT,
