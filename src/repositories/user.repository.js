@@ -14,9 +14,7 @@ class UserRepository {
   createUser = async ({
     email,
     password,
-    phoneNumber,
     provider,
-    name,
     role,
     status,
     companyId,
@@ -25,9 +23,7 @@ class UserRepository {
     const newUser = await Users.create({
       email,
       password,
-      phoneNumber,
       provider,
-      name,
       role,
       status,
       companyId,
@@ -41,8 +37,6 @@ class UserRepository {
     companyName,
     companyEmail,
     companyNumber,
-    phoneNumber,
-    name,
     provider,
     role,
   }) => {
@@ -57,9 +51,7 @@ class UserRepository {
           {
             email,
             password,
-            phoneNumber,
             provider,
-            name,
             role,
             companyId: newCompany.companyId,
           },
