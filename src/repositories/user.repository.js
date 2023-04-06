@@ -11,21 +11,12 @@ class UserRepository {
 
     return user;
   };
-  createUser = async ({
-    email,
-    password,
-    provider,
-    role,
-    status,
-    companyId,
-  }) => {
+  createUser = async ({ email, password, role, companyId }) => {
     logger.info(`UserRepository.createUser Request`);
     const newUser = await Users.create({
       email,
       password,
-      provider,
       role,
-      status,
       companyId,
     });
     return newUser;
@@ -37,8 +28,6 @@ class UserRepository {
     companyName,
     companyEmail,
     companyNumber,
-    provider,
-    role,
   }) => {
     logger.info(`UserRepository.createNewUserAndCompany Request`);
     try {
@@ -51,8 +40,6 @@ class UserRepository {
           {
             email,
             password,
-            provider,
-            role,
             companyId: newCompany.companyId,
           },
           { transaction: t }
