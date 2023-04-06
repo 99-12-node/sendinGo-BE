@@ -41,6 +41,8 @@ class UserService {
     phoneNumber,
     name,
     role,
+    groupName,
+    groupDescription,
   }) => {
     logger.info(`UserService.createUser Request`);
     let result;
@@ -62,6 +64,8 @@ class UserService {
         provider: 0,
         name,
         role,
+        groupName,
+        groupDescription,
       });
     } else {
       result = await this.userRepository.createUser({

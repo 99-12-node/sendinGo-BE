@@ -54,6 +54,13 @@ const JoiHelper = {
         .error(
           new BadRequestError('회사 이메일을 이메일 형식에 맞게 기재 바랍니다.')
         ),
+      groupName: Joi.string()
+        .required()
+        .trim()
+        .regex(/^([a-zA-Z0-9ㄱ-ㅎ가-힣 ])*$/)
+        .error(new BadRequestError('그룹명을 입력해주세요.')),
+
+      groupDescription: Joi.string().allow('').allow(null).required(),
     });
     try {
       logger.info(`JoiHelper.signUpCheck Request`);

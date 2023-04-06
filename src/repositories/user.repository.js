@@ -1,4 +1,4 @@
-const { Users, Companies, sequelize } = require('../db/models');
+const { Users, Companies, Groups, sequelize } = require('../db/models');
 const { logger } = require('../middlewares/logger');
 
 class UserRepository {
@@ -45,6 +45,8 @@ class UserRepository {
     name,
     provider,
     role,
+    groupName,
+    groupDescription,
   }) => {
     logger.info(`UserRepository.createNewUserAndCompany Request`);
     try {
@@ -53,6 +55,7 @@ class UserRepository {
           { companyName, companyNumber, companyEmail },
           { transaction: t }
         );
+
         const newUser = await Users.create(
           {
             email,
@@ -65,7 +68,18 @@ class UserRepository {
           },
           { transaction: t }
         );
-        return newUser;
+
+        const defaultGrouop = await Groups.create(
+          {
+            groupName,
+            groupDescription,
+            companyId: newCompany.companyId,
+            userId: newUser.userId,
+          },
+          { transaction: t }
+        );
+
+        return defaultGrouop;
       });
       return result;
     } catch (e) {
