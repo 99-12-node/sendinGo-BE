@@ -38,8 +38,6 @@ class UserService {
     companyName,
     companyNumber,
     companyEmail,
-    phoneNumber,
-    name,
     role,
   }) => {
     logger.info(`UserService.createUser Request`);
@@ -58,18 +56,14 @@ class UserService {
         companyName,
         companyNumber,
         companyEmail,
-        phoneNumber,
         provider: 0,
-        name,
         role,
       });
     } else {
       result = await this.userRepository.createUser({
         email,
         password: hashedPassword,
-        phoneNumber,
         provider: 0,
-        name,
         role,
         companyId: existCompany.companyId,
       });
