@@ -90,7 +90,7 @@ module.exports = {
         allowNull: true,
       },
       trackingUUID: {
-        type: DataTypes.STRING,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       trackingUrl: {
