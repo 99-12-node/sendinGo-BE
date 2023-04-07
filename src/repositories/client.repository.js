@@ -128,6 +128,57 @@ module.exports = class ClientRepository {
     return allData;
   };
 
+  //클라이언트 그룹별 검색
+  findClientsByKeywordAndGroup = async ({
+    userId,
+    companyId,
+    groupId,
+    keyword,
+    offset,
+  }) => {
+    logger.info(`ClientRepository.findClientsByKeywordAndGroup Request`);
+
+    const findData = await Clients.findAll({
+      where: {
+        [Op.and]: [{ userId }, { companyId }],
+        [Op.or]: [
+          { clientName: { [Op.like]: `%${keyword}%` } },
+          { contact: { [Op.like]: `%${keyword}%` } },
+          { clientEmail: { [Op.like]: `%${keyword}%` } },
+        ],
+      },
+      attributes: [
+        'clientId',
+        'clientName',
+        'contact',
+        'clientEmail',
+        'createdAt',
+      ],
+      include: [
+        {
+          model: ClientGroups,
+          attributes: ['groupId'],
+          include: [
+            {
+              model: Groups,
+              attributes: ['groupName'],
+              where: { groupId },
+            },
+          ],
+        },
+      ],
+      order: [
+        ['createdAt', 'DESC'],
+        ['clientId', 'DESC'],
+      ],
+      offset: offset * OFFSET_CONSTANT,
+      limit: OFFSET_CONSTANT,
+      raw: true,
+    }).then((model) => model.map(parseSequelizePrettier));
+
+    return findData;
+  };
+
   //클라이언트 수정
   editClientInfo = async ({
     userId,
