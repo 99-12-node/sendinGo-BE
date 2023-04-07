@@ -62,10 +62,7 @@ module.exports = class ClientController {
     const { groupId } = req.params;
     const { index, keyword } = req.query;
     try {
-      if (index == 0) {
-        throw new BadRequestError('올바르지 않은 요청입니다.');
-      }
-      // 파라미터로 검색 및 페이지네이션 인덱스 가져오기
+      // 파라미터로 그룹별 검색 및 페이지네이션 인덱스 가져오기
       const allData = await this.clientService.getClientsByGroup({
         userId,
         companyId,
