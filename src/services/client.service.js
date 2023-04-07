@@ -53,18 +53,14 @@ module.exports = class ClientService {
     });
 
     // 키워드 검색
-    if (keyword) {
-      const clientsByKeyword = await this.clientRepository.findClientsByKeyword(
-        {
-          userId,
-          companyId,
-          keyword,
-          offset,
-        }
-      );
+    const clientsByKeyword = await this.clientRepository.findClientsByKeyword({
+      userId,
+      companyId,
+      keyword: keyword ?? '%',
+      offset,
+    });
 
-      return { clients: clientsByKeyword, clientCount };
-    }
+    return { clients: clientsByKeyword, clientCount };
 
     const allData = await this.clientRepository.getAllClients({
       userId,
@@ -85,9 +81,6 @@ module.exports = class ClientService {
   }) => {
     logger.info(`ClientService.getClientsByGroup Request`);
 
-    if (index == 0) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
-    }
     const offset = index ? parseInt(index - 1) : 0;
 
     if (keyword) {
