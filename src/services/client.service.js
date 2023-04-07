@@ -40,9 +40,50 @@ module.exports = class ClientService {
     return createClient;
   };
 
-  //클라이언트 조회 (쿼리로 조건 조회)
-  getClients = async ({ userId, companyId, groupId, index, keyword }) => {
+  //클라이언트 전체 조회 (쿼리로 조건 조회)
+  getClients = async ({ userId, companyId, index, keyword }) => {
     logger.info(`ClientService.getClients Request`);
+
+    const offset = index ? parseInt(index - 1) : 0;
+
+    // 그룹별 클라이언트 개수
+    const clientCount = await this.clientRepository.getAllClientsCount({
+      userId,
+      companyId,
+    });
+
+    // 키워드 검색
+    if (keyword) {
+      const clientsByKeyword = await this.clientRepository.findClientsByKeyword(
+        {
+          userId,
+          companyId,
+          keyword,
+          offset,
+        }
+      );
+
+      return { clients: clientsByKeyword, clientCount };
+    }
+
+    const allData = await this.clientRepository.getAllClients({
+      userId,
+      companyId,
+      offset,
+    });
+
+    return { clients: allData, clientCount };
+  };
+
+  //클라이언트 그룹별 조회
+  getClientsByGroup = async ({
+    userId,
+    companyId,
+    groupId,
+    index,
+    keyword,
+  }) => {
+    logger.info(`ClientService.getClientsByGroup Request`);
 
     if (index == 0) {
       throw new BadRequestError('올바르지 않은 요청입니다.');
