@@ -18,6 +18,7 @@ module.exports = {
             model: 'TalkResultDetails',
             key: 'talkResultDetailId',
           },
+          onDelete: 'CASCADE',
         },
         talkSendId: {
           allowNull: false,
