@@ -60,7 +60,10 @@ module.exports = class ClientRepository {
           ],
         },
       ],
-      order: [['createdAt', 'DESC']],
+      order: [
+        ['createdAt', 'DESC'],
+        ['clientId', 'DESC'],
+      ],
       offset: offset * OFFSET_CONSTANT,
       limit: OFFSET_CONSTANT,
       raw: true,
