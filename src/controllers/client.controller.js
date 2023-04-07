@@ -34,14 +34,39 @@ module.exports = class ClientController {
     }
   };
 
-  //클라이언트 조회 (쿼리로 조건 조회)
+  //클라이언트 전체 조회 (쿼리로 조건 조회)
   getClients = async (req, res, next) => {
     logger.info(`ClientController.getClients Request`);
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
-    const { groupId, index, keyword } = req.query;
+    const { index, keyword } = req.query;
     try {
       const allData = await this.clientService.getClients({
+        userId,
+        companyId,
+        index,
+        keyword,
+      });
+
+      return res.status(200).json({ data: allData });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  //클라이언트 그룹별 조회 (쿼리로 조건 조회)
+  getClientsByGroup = async (req, res, next) => {
+    logger.info(`ClientController.getClientsByGroup Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+    const { groupId } = req.params;
+    const { index, keyword } = req.query;
+    try {
+      if (index == 0) {
+        throw new BadRequestError('올바르지 않은 요청입니다.');
+      }
+      // 파라미터로 검색 및 페이지네이션 인덱스 가져오기
+      const allData = await this.clientService.getClientsByGroup({
         userId,
         companyId,
         groupId,
@@ -54,6 +79,7 @@ module.exports = class ClientController {
       next(error);
     }
   };
+
   //클라이언트 수정
   editClientInfo = async (req, res, next) => {
     logger.info(`ClientController.editClientInfo Request`);
