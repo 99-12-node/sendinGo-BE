@@ -80,38 +80,11 @@ module.exports = class ClientService {
       userId,
       companyId,
       groupId,
+      index,
       keyword: keyword ?? '%',
       offset,
     });
     return clients;
-
-    // 전체 조회
-    // if (!groupId) {
-    //   const allData = await this.clientRepository.getAllClients({
-    //     userId,
-    //     companyId,
-    //     offset,
-    //   });
-    //   const clientCount = await this.clientRepository.getAllClientsCount({
-    //     userId,
-    //     companyId,
-    //   });
-    //   return { clients: allData, clientCount };
-    // }
-
-    //그룹별 클라이언트 조회
-    const existGroup = await this.groupRepository.findGroupId({
-      userId,
-      companyId,
-      groupId,
-    });
-    const allData = await this.clientRepository.getClientsByGroup({
-      userId,
-      companyId,
-      groupId,
-      offset,
-    });
-    return allData;
   };
 
   //클라이언트 수정
