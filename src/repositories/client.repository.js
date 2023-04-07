@@ -28,7 +28,7 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 키워드 검색
-  findClientsByKeyword = async ({ userId, companyId, keyword, offset }) => {
+  findAllClientsByKeyword = async ({ userId, companyId, keyword, offset }) => {
     logger.info(`ClientRepository.findClientsByKeyword Request`);
 
     const findData = await Clients.findAll({
@@ -51,7 +51,6 @@ module.exports = class ClientRepository {
         {
           model: ClientGroups,
           attributes: ['groupId'],
-          where: { [Op.and]: [{ userId }, { companyId }] },
           include: [
             {
               model: Groups,
