@@ -24,14 +24,12 @@ module.exports = class ClientGroupService {
       throw new NotFoundError('존재하지 않는 고객입니다.');
     }
 
-    //if (groupId === 0)
-    if ({ groupId: 0 }) {
+    if (groupId === 0 || groupId === '0') {
       const defaultGroup = await this.groupRepository.findDefaultGroup({
         userId,
         companyId,
       });
-
-      defaultGroup.groupId = groupId;
+      groupId = defaultGroup.groupId;
     }
 
     // 존재하는 groupId 인지 확인

@@ -21,7 +21,7 @@ module.exports = class GroupRepository {
   //미지정 그룹 찾기
   findDefaultGroup = async ({ userId, companyId }) => {
     logger.info(`GroupRepository.findDefaultGroup Request`);
-    const defaultGroup = await Groups.findAll({
+    const defaultGroup = await Groups.findOne({
       where: {
         [Op.and]: [{ userId }, { companyId }, { groupName: '미지정' }],
       },
