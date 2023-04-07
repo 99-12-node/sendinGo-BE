@@ -45,8 +45,6 @@ class UserRepository {
     name,
     provider,
     role,
-    groupName,
-    groupDescription,
   }) => {
     logger.info(`UserRepository.createNewUserAndCompany Request`);
     try {
@@ -71,8 +69,7 @@ class UserRepository {
 
         const defaultGrouop = await Groups.create(
           {
-            groupName,
-            groupDescription,
+            groupName: '미지정',
             companyId: newCompany.companyId,
             userId: newUser.userId,
           },
