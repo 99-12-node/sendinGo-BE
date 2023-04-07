@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.TalkResultDetails, {
         targetKey: 'talkResultDetailId',
         foreignKey: 'talkResultDetailId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.TalkSends, {
         targetKey: 'talkSendId',
@@ -53,6 +54,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'TalkResultDetails',
           key: 'talkResultDetailId',
         },
+        onDelete: 'CASCADE',
       },
       talkSendId: {
         allowNull: false,

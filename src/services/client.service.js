@@ -56,7 +56,6 @@ module.exports = class ClientService {
         keyword,
         offset,
       });
-
       return { keyword };
     }
 

@@ -32,8 +32,7 @@ module.exports = class ClientRepository {
 
     const findData = await Clients.findAll({
       where: {
-        userId,
-        companyId,
+        [Op.and]: [{ userId }, { companyId }],
         [Op.or]: [
           { clientName: { [Op.like]: `%${keyword}%` } },
           { contact: { [Op.like]: `%${keyword}%` } },
@@ -50,13 +49,16 @@ module.exports = class ClientRepository {
       include: [
         {
           model: ClientGroups,
-          attributes: [groupId],
-          where: { userId },
+          attributes: ['groupId'],
+          where: { [Op.and]: [{ userId }, { companyId }] },
           include: [
             {
               model: Groups,
-              attributes: ['groupId', 'groupName'],
-              where: { groupName: { [Op.like]: `%${keyword}%` } },
+              attributes: ['groupName'],
+
+              // where: {
+              //   groupName: { [Op.like]: `%${keyword}%` },
+              // },
             },
           ],
         },
