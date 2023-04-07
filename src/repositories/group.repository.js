@@ -18,6 +18,18 @@ module.exports = class GroupRepository {
     return createGroup;
   };
 
+  //미지정 그룹 찾기
+  findDefaultGroup = async ({ userId, companyId }) => {
+    logger.info(`GroupRepository.findDefaultGroup Request`);
+    const defaultGroup = await Groups.findAll({
+      where: {
+        [Op.and]: [{ userId }, { companyId }, { groupName: '미지정' }],
+      },
+      attributes: ['groupName', 'groupId'],
+    });
+    return defaultGroup;
+  };
+
   findSameGroup = async ({ userId, companyId, groupName }) => {
     logger.info(`GroupRepository.findSameGroup Request`);
     const sameGroup = await Groups.findAll({

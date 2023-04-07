@@ -1,9 +1,5 @@
 const { logger } = require('../middlewares/logger');
-const {
-  BadRequestError,
-  NotFoundError,
-  ForbiddenError,
-} = require('../exceptions/errors');
+const { BadRequestError, NotFoundError } = require('../exceptions/errors');
 const ClientGroupRepository = require('../repositories/clientGroup.repository');
 const GroupRepository = require('../repositories/group.repository');
 const ClientRepository = require('../repositories/client.repository');
@@ -28,13 +24,27 @@ module.exports = class ClientGroupService {
       throw new NotFoundError('존재하지 않는 고객입니다.');
     }
 
+    //if (groupId === 0)
+    if ({ groupId: 0 }) {
+      const defaultGroup = await this.groupRepository.findDefaultGroup({
+        userId,
+        companyId,
+      });
+
+      defaultGroup.groupId = groupId;
+    }
+
     // 존재하는 groupId 인지 확인
     const existGroup = await this.groupRepository.findGroupId({
       userId,
       companyId,
       groupId,
     });
-    if (!existGroup) {
+
+    if (existGroup === null) {
+      throw new NotFoundError('존재하지 않는 그룹입니다.');
+    }
+    if (existGroup === undefined) {
       throw new NotFoundError('그룹 조회에 실패했습니다.');
     }
 
