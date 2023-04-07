@@ -27,8 +27,9 @@ module.exports = class ClientRepository {
     return createData;
   };
 
-  findkeyword = async ({ userId, companyId, keyword, offset }) => {
-    logger.info(`ClientRepository.findkeyword Request`);
+  //클라이언트 키워드 검색
+  findClientsByKeyword = async ({ userId, companyId, keyword, offset }) => {
+    logger.info(`ClientRepository.findClientsByKeyword Request`);
 
     const findData = await Clients.findAll({
       where: {
@@ -55,10 +56,6 @@ module.exports = class ClientRepository {
             {
               model: Groups,
               attributes: ['groupName'],
-
-              // where: {
-              //   groupName: { [Op.like]: `%${keyword}%` },
-              // },
             },
           ],
         },
@@ -66,7 +63,8 @@ module.exports = class ClientRepository {
       order: [['createdAt', 'DESC']],
       offset: offset * OFFSET_CONSTANT,
       limit: OFFSET_CONSTANT,
-    });
+      raw: true,
+    }).then((model) => model.map(parseSequelizePrettier));
 
     return findData;
   };
@@ -74,8 +72,9 @@ module.exports = class ClientRepository {
   //클라이언트 전체 조회
   getAllClients = async ({ userId, companyId, offset }) => {
     logger.info(`ClientRepository.getAllClients Request`);
-    const allData = await sequelize.query(
-      'SELECT c.clientId, c.clientName, c.contact, c.clientEmail, c.createdAt, cg.groupId, g.groupName \
+    const allData = await sequelize
+      .query(
+        'SELECT c.clientId, c.clientName, c.contact, c.clientEmail, c.createdAt, cg.groupId, g.groupName \
       FROM Clients AS c \
       LEFT OUTER JOIN ClientGroups cg ON c.clientId = cg.clientId \
       LEFT OUTER JOIN `Groups` g ON g.groupId = cg.groupId \
@@ -84,16 +83,17 @@ module.exports = class ClientRepository {
       ORDER BY c.createdAt DESC\
       LIMIT :limit\
       OFFSET :offset;',
-      {
-        replacements: {
-          userId,
-          companyId,
-          limit: OFFSET_CONSTANT,
-          offset: OFFSET_CONSTANT * offset,
-        },
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
+        {
+          replacements: {
+            userId,
+            companyId,
+            limit: OFFSET_CONSTANT,
+            offset: OFFSET_CONSTANT * offset,
+          },
+          type: sequelize.QueryTypes.SELECT,
+        }
+      )
+      .then((model) => parseSequelizePrettier(model));
     return allData;
   };
 
