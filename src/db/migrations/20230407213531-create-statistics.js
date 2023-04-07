@@ -41,14 +41,10 @@ module.exports = {
           allowNull: false,
           defaultValue: 0,
         },
-        accumulateSuccessRatio: {
+        accumulateClickRatio: {
           type: Sequelize.FLOAT,
           allowNull: false,
           defaultValue: 0,
-        },
-        talkSendId: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
         },
         createdAt: {
           allowNull: false,
