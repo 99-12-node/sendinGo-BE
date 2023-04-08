@@ -22,17 +22,37 @@ class UserRepository {
     companyId,
   }) => {
     logger.info(`UserRepository.createUser Request`);
-    const newUser = await Users.create({
-      email,
-      password,
-      phoneNumber,
-      provider,
-      name,
-      role,
-      status,
-      companyId,
-    });
-    return newUser;
+    try {
+      const result = await sequelize.transaction(async (t) => {
+        const newUser = await Users.create(
+          {
+            email,
+            password,
+            phoneNumber,
+            provider,
+            name,
+            role,
+            status,
+            companyId,
+          },
+          { transaction: t }
+        );
+
+        const defaultGrouop = await Groups.create(
+          {
+            groupName: '미지정',
+            companyId: newUser.companyId,
+            userId: newUser.userId,
+          },
+          { transaction: t }
+        );
+
+        return defaultGrouop;
+      });
+      return result;
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   createNewUserAndCompany = async ({
