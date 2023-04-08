@@ -1,11 +1,10 @@
 const {
-  Statistics,
+  HourlyStatistics,
   Users,
   Clients,
   Groups,
   TalkSends,
   TalkClickResults,
-  sequelize,
 } = require('../db/models');
 const { logger } = require('../middlewares/logger');
 const { Op } = require('sequelize');
@@ -92,12 +91,12 @@ class StatisticsRepository {
     return clickSuccessCount;
   };
 
-  // 통계 저장
-  createDailyStatistics = async ({ ...statisticsFields }) => {
-    const newDailyStatistics = await Statistics.create({
+  // 시간별 통계 저장
+  createHourlyStatistics = async ({ ...statisticsFields }) => {
+    const newHourlyStatistics = await HourlyStatistics.create({
       ...statisticsFields,
     });
-    return newDailyStatistics;
+    return newHourlyStatistics;
   };
 }
 
