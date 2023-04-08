@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Statistics extends Model {
+  class HourlyStatistics extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,18 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {}
   }
-  Statistics.init(
+  HourlyStatistics.init(
     {
-      statisticsId: {
+      hourlyStatisticsId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER,
-      },
-      userAfterJoinDate: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
       },
       totalClientCount: {
         type: DataTypes.INTEGER,
@@ -61,8 +56,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       timestamps: false,
       sequelize,
-      modelName: 'Statistics',
+      modelName: 'HourlyStatistics',
     }
   );
-  return Statistics;
+  return HourlyStatistics;
 };

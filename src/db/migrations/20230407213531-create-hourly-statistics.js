@@ -3,18 +3,13 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      'Statistics',
+      'HourlyStatistics',
       {
-        statisticsId: {
+        hourlyStatisticsId: {
           allowNull: false,
           autoIncrement: true,
           primaryKey: true,
           type: Sequelize.INTEGER,
-        },
-        userAfterJoinDate: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          defaultValue: 0,
         },
         totalClientCount: {
           type: Sequelize.INTEGER,
