@@ -2,6 +2,7 @@ const express = require('express');
 const { logger } = require('./src/middlewares/logger');
 const cookieparser = require('cookie-parser');
 const errorMiddleware = require('./src/middlewares/error.middleware');
+const createDailyStatistic = require('./src/utils/daily.statistic.schedule');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const router = require('./src/routes');
@@ -25,6 +26,8 @@ app.use(
     exposedHeaders: ['*', 'Authorization', 'Content-Type'],
   })
 );
+
+app.use(createDailyStatistic);
 
 app.use('/api', router);
 app.get('/', (_req, res) => res.send('루트 경로에 연결되었습니다.'));
