@@ -30,6 +30,8 @@ module.exports = class ClientRepository {
   //클라이언트 키워드 검색
   findAllClientsByKeyword = async ({ userId, companyId, keyword, offset }) => {
     logger.info(`ClientRepository.findClientsByKeyword Request`);
+    // findAllClientsByKeyword = async ({ userId, companyId, keyword, offset }) => {
+    //   logger.info(`ClientRepository.findClientsByKeyword Request`);
 
     const findData = await Clients.findAll({
       where: {
@@ -51,6 +53,7 @@ module.exports = class ClientRepository {
         {
           model: ClientGroups,
           attributes: ['groupId'],
+          where: { [Op.and]: [{ userId }, { companyId }] },
           include: [
             {
               model: Groups,
@@ -66,7 +69,8 @@ module.exports = class ClientRepository {
       offset: offset * OFFSET_CONSTANT,
       limit: OFFSET_CONSTANT,
       raw: true,
-    }).then((model) => model.map(parseSequelizePrettier));
+    });
+    // .then((model) => model.map(parseSequelizePrettier));
 
     return findData;
   };
@@ -129,15 +133,17 @@ module.exports = class ClientRepository {
   };
 
   //클라이언트 그룹별 검색
-  findClientsByKeywordAndGroup = async ({
-    userId,
-    companyId,
-    groupId,
-    keyword,
-    offset,
-  }) => {
-    logger.info(`ClientRepository.findClientsByKeywordAndGroup Request`);
+  // findkeyword = async ({
+  //   userId,
+  //   companyId,
+  //   groupId,
+  //   keyword,
+  //   offset,
+  // }) => {
+  //   logger.info(`ClientRepository.findClientsByKeywordAndGroup Request`);
 
+  findkeyword = async ({ userId, companyId, keyword, offset }) => {
+    logger.info(`ClientRepository.findkeyword Request`);
     const findData = await Clients.findAll({
       where: {
         [Op.and]: [{ userId }, { companyId }],
@@ -158,11 +164,12 @@ module.exports = class ClientRepository {
         {
           model: ClientGroups,
           attributes: ['groupId'],
+          where: { [Op.and]: [{ userId }, { companyId }] },
           include: [
             {
               model: Groups,
               attributes: ['groupName'],
-              where: { groupId },
+              //             where: { groupId },
             },
           ],
         },
@@ -173,8 +180,9 @@ module.exports = class ClientRepository {
       ],
       offset: offset * OFFSET_CONSTANT,
       limit: OFFSET_CONSTANT,
-      raw: true,
-    }).then((model) => model.map(parseSequelizePrettier));
+      //     raw: true,
+    });
+    // then((model) => model.map(parseSequelizePrettier));
 
     return findData;
   };
