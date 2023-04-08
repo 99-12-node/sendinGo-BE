@@ -25,13 +25,13 @@ router.get(
   clientController.getClients
 );
 
-// router.get(
-//   '/:groupId',
-//   authMiddleware,
-//   JoiHelper.groupId,
-//   JoiHelper.checkIndex,
-//   clientController.getClientsByGroup
-// );
+router.get(
+  '/:groupId',
+  authMiddleware,
+  JoiHelper.groupId,
+  JoiHelper.checkIndex,
+  clientController.getClientsByGroup
+);
 
 router.patch(
   '/:clientId',
