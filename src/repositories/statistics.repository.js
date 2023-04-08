@@ -1,5 +1,6 @@
 const {
   HourlyStatistics,
+  DailyStatistics,
   Users,
   Clients,
   Groups,
@@ -97,6 +98,14 @@ class StatisticsRepository {
       ...statisticsFields,
     });
     return newHourlyStatistics;
+  };
+
+  // 일별 통계 저장
+  createDaliyStatistics = async ({ ...statisticsFields }) => {
+    const newDailyStatistics = await DailyStatistics.create({
+      ...statisticsFields,
+    });
+    return newDailyStatistics;
   };
 }
 
