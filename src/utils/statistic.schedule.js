@@ -31,11 +31,23 @@ module.exports = async (req, res, next) => {
       );
     }
 
-    logger.info(`daily.middleware.createDailyStat`);
-    const RULE = '0 0 * * * *'; // 주기 : 매 정각
-    const dailyStatisticsJob = schedule.scheduleJob(rule, async () => {
+    logger.info(`createStatistics`);
+
+    const HOURLYRULE = '0 0 * * * *'; // 주기 : 매시 정각
+    const DAILYRULE = '0 0 0 * * *'; // 주기 : 매일 0시
+    // 시간 단위
+    const hourlyStatisticsJob = schedule.scheduleJob(HOURLYRULE, async () => {
+      await statisticsService.createHourlyStatistics({ userId, companyId });
+    });
+    // 일 단위
+    const dailyStatisticsJob = schedule.scheduleJob(DAILYRULE, async () => {
       await statisticsService.createDailyStatistics({ userId, companyId });
     });
+
+    // 주 단위 TO DO
+    // const weeklytatisticsJob = schedule.scheduleJob(DAILYRULE, async () => {
+    //   await statisticsService.createHourlyStatistics({ userId, companyId });
+    // });
     next();
   } catch (error) {
     next(error);
