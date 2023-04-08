@@ -26,6 +26,7 @@
     "joi": "^17.8.3",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.1.2",
+    "node-schedule": "^2.1.1",
     "nodemon": "^2.0.20",
     "redis": "^4.6.5",
     "sequelize": "^6.29.0",
