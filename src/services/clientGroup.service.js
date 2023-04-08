@@ -39,9 +39,6 @@ module.exports = class ClientGroupService {
       groupId,
     });
 
-    if (existGroup === null) {
-      throw new NotFoundError('존재하지 않는 그룹입니다.');
-    }
     if (existGroup === undefined) {
       throw new NotFoundError('그룹 조회에 실패했습니다.');
     }
