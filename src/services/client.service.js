@@ -8,7 +8,6 @@ const ClientRepository = require('../repositories/client.repository');
 const GroupRepository = require('../repositories/group.repository');
 const TalkContentRepository = require('../repositories/talkcontent.repository');
 const TalkTemplateRepository = require('../repositories/talktemplate.repository');
-const { forbidden } = require('joi');
 
 module.exports = class ClientService {
   constructor() {

@@ -70,7 +70,6 @@ module.exports = class ClientController {
         index,
         keyword,
       });
-
       return res.status(200).json({ data: allData });
     } catch (error) {
       next(error);
