@@ -52,12 +52,8 @@ const JoiHelper = {
       index: Joi.number()
         .integer()
         .required()
-        .error(new BadRequestError('index는 숫자입니다.')),
-
-      groupId: Joi.number()
-        .integer()
-        .optional()
-        .error(new BadRequestError('groupId는 숫자입니다.')),
+        .positive()
+        .error(new BadRequestError('index는 1부터 시작하는 양의 정수입니다.')),
 
       keyword: Joi.string()
         .optional()

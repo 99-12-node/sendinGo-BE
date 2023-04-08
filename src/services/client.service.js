@@ -40,52 +40,51 @@ module.exports = class ClientService {
     return createClient;
   };
 
-  //클라이언트 조회 (쿼리로 조건 조회)
-  getClients = async ({ userId, companyId, groupId, index, keyword }) => {
+  //클라이언트 전체 조회 (쿼리로 조건 조회)
+  getClients = async ({ userId, companyId, index, keyword }) => {
     logger.info(`ClientService.getClients Request`);
 
-    if (index == 0) {
-      throw new BadRequestError('올바르지 않은 요청입니다.');
-    }
     const offset = index ? parseInt(index - 1) : 0;
 
-    if (keyword) {
-      keyword = await this.clientRepository.findkeyword({
-        userId,
-        companyId,
-        keyword,
-        offset,
-      });
-      return { keyword };
-    }
-
-    // 전체 조회
-    if (!groupId) {
-      const allData = await this.clientRepository.getAllClients({
-        userId,
-        companyId,
-        offset,
-      });
-      const clientCount = await this.clientRepository.getAllClientsCount({
-        userId,
-        companyId,
-      });
-      return { clients: allData, clientCount };
-    }
-
-    //그룹별 클라이언트 조회
-    const existGroup = await this.groupRepository.findGroupId({
+    // 그룹별 클라이언트 개수
+    const clientCount = await this.clientRepository.getAllClientsCount({
       userId,
       companyId,
-      groupId,
     });
-    const allData = await this.clientRepository.getClientsByGroup({
+
+    // 키워드 검색
+    const clientsByKeyword =
+      await this.clientRepository.findAllClientsByKeyword({
+        userId,
+        companyId,
+        keyword: keyword ?? '%',
+        offset,
+      });
+
+    return { clients: clientsByKeyword, clientCount };
+  };
+
+  //클라이언트 그룹별 조회
+  getClientsByGroup = async ({
+    userId,
+    companyId,
+    groupId,
+    index,
+    keyword,
+  }) => {
+    logger.info(`ClientService.getClientsByGroup Request`);
+
+    const offset = index ? parseInt(index - 1) : 0;
+
+    const clients = await this.clientRepository.findClientsByKeywordAndGroup({
       userId,
       companyId,
       groupId,
+      index,
+      keyword: keyword ?? '%',
       offset,
     });
-    return allData;
+    return clients;
   };
 
   //클라이언트 수정
