@@ -1,5 +1,6 @@
 const StatisticsRepository = require('../repositories/statistics.repository');
 const { logger } = require('../middlewares/logger');
+const { CurrentStatisticsDto } = require('../dtos/statistic.dto');
 
 class StatisticsService {
   constructor() {
@@ -164,12 +165,24 @@ class StatisticsService {
 
   // 현재 통계 조회
   getCurrentStatistic = async ({ userId, companyId }) => {
+    logger.info(`StatisticsService.getCurrentStatistic Request`);
     const currentStatistic =
       await this.statisticsRepository.getLatestHourlyStatistic({
         userId,
         companyId,
       });
     return currentStatistic;
+  };
+
+  // 시간별 통계 조회
+  getHourlyStatistic = async ({ userId, companyId }) => {
+    logger.info(`StatisticsService.getHourlyStatistic Request`);
+    const hourlyStatistic = await this.statisticsRepository.getHourlyStatistic({
+      userId,
+      companyId,
+    });
+
+    return hourlyStatistic.map((data) => new CurrentStatisticsDto(data));
   };
 }
 
