@@ -3,6 +3,7 @@ const {
   BadRequestError,
   NotFoundError,
   ForbiddenError,
+  Conflict,
 } = require('../exceptions/errors');
 const ClientRepository = require('../repositories/client.repository');
 const GroupRepository = require('../repositories/group.repository');
@@ -25,6 +26,17 @@ module.exports = class ClientService {
     clientEmail,
   }) => {
     logger.info(`ClientService.createClient Request`);
+
+    const dulicatedClient = await this.clientRepository.getDuplicatedClient({
+      userId,
+      companyId,
+      clientName,
+      contact,
+      clientEmail,
+    });
+    if (dulicatedClient) {
+      throw new Conflict('중복된 클라이언트가 존재합니다.');
+    }
 
     const createClient = await this.clientRepository.createClient({
       userId,
