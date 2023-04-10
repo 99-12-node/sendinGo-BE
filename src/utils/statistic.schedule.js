@@ -14,6 +14,9 @@ module.exports = async (req, res, next) => {
   const [tokenType, token] = (authorization ?? '').split(' ');
 
   try {
+    if (!(tokenType && token)) {
+      next();
+    }
     logger.info(`auth.TokenDecoded`);
     const decodedToken = jwt.verify(token, KEY);
     const { userId, companyId } = decodedToken;
