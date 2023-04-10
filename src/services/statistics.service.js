@@ -63,6 +63,8 @@ class StatisticsService {
       // 시간별 통계 생성
       const hourlyStatistics =
         await this.statisticsRepository.createHourlyStatistics({
+          userId,
+          companyId,
           totalClientCount,
           totalGroupCount,
           accumulateSendCount,
@@ -143,6 +145,8 @@ class StatisticsService {
       // 데일리 통계 생성
       const dailyStatistics =
         await this.statisticsRepository.createDaliyStatistics({
+          userId,
+          companyId,
           userAfterJoinDate,
           totalClientCount,
           totalGroupCount,
@@ -157,6 +161,9 @@ class StatisticsService {
       console.error(e);
     }
   };
+
+  // 현재 통계 조회
+  getCurrentStatistic = async ({ userId }) => {};
 }
 
 module.exports = StatisticsService;
