@@ -163,7 +163,14 @@ class StatisticsService {
   };
 
   // 현재 통계 조회
-  getCurrentStatistic = async ({ userId }) => {};
+  getCurrentStatistic = async ({ userId, companyId }) => {
+    const currentStatistic =
+      await this.statisticsRepository.getLatestHourlyStatistic({
+        userId,
+        companyId,
+      });
+    return currentStatistic;
+  };
 }
 
 module.exports = StatisticsService;
