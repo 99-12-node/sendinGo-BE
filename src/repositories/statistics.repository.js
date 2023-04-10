@@ -119,6 +119,16 @@ class StatisticsRepository {
     });
     return latestHourlyStatistics;
   };
+
+  // 시간별 통계 조회
+  getHourlyStatistic = async ({ userId, companyId }) => {
+    logger.info(`StatisticsRepository.getHourlyStatistic Request`);
+    const hourlyStatistics = await HourlyStatistics.findAll({
+      where: { [Op.and]: [{ userId }, { companyId }] },
+      order: [['createdAt']],
+    });
+    return hourlyStatistics;
+  };
 }
 
 module.exports = StatisticsRepository;
