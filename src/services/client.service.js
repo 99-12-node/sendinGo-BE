@@ -186,7 +186,28 @@ module.exports = class ClientService {
     if (!existedTemplate) {
       throw new BadRequestError('템플릿 조회에 실패하였습니다.');
     }
-    // 클라이언트 생성
+
+    // 중복된 클라이언트 확인
+    const dulicatedClient = await this.clientRepository.getDuplicatedClient({
+      userId,
+      companyId,
+      clientName,
+      contact,
+      clientEmail,
+    });
+    // 중복된 클라이언트인 경우, 기존 데이터에 덮어쓰기
+    if (dulicatedClient) {
+      const updatedTalkContent =
+        await this.talkContentRepository.updateContentByExistClient({
+          userId,
+          companyId,
+          clientId: dulicatedClient.clientId,
+          talkTemplateId,
+          ...talkContentData,
+        });
+      return dulicatedClient;
+    }
+    // 동일한 정보가 없는 경우만, 클라이언트 생성
     const newClient = await this.clientRepository.createClient({
       userId,
       companyId,
