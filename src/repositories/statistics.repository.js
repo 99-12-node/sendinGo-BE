@@ -94,6 +94,7 @@ class StatisticsRepository {
 
   // 시간별 통계 저장
   createHourlyStatistics = async ({ ...statisticsFields }) => {
+    logger.info(`StatisticsRepository.createHourlyStatistics Request`);
     const newHourlyStatistics = await HourlyStatistics.create({
       ...statisticsFields,
     });
@@ -102,10 +103,21 @@ class StatisticsRepository {
 
   // 일별 통계 저장
   createDaliyStatistics = async ({ ...statisticsFields }) => {
+    logger.info(`StatisticsRepository.createDaliyStatistics Request`);
     const newDailyStatistics = await DailyStatistics.create({
       ...statisticsFields,
     });
     return newDailyStatistics;
+  };
+
+  // 가장 최신 시간별 통계 조회
+  getLatestHourlyStatistic = async ({ userId, companyId }) => {
+    logger.info(`StatisticsRepository.createDaliyStatistics Request`);
+    const latestHourlyStatistics = await HourlyStatistics.findOne({
+      where: { [Op.and]: [{ userId }, { companyId }] },
+      order: [['createdAt', 'DESC']],
+    });
+    return latestHourlyStatistics;
   };
 }
 
