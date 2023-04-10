@@ -31,8 +31,25 @@ module.exports = class StatisticController {
           .json({ data: new CurrentStatisticsDto(newStatistic) });
       }
       return res
-        .status(201)
+        .status(200)
         .json({ data: new CurrentStatisticsDto(statisticData) });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // 시간별 통계 조회
+  getHourlyStatistic = async (req, res, next) => {
+    logger.info(`StatisticController.getHourlyStatistic Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+
+    try {
+      const statisticDataList = await this.statisticService.getHourlyStatistic({
+        userId,
+        companyId,
+      });
+      return res.status(200).json({ data: statisticDataList });
     } catch (error) {
       next(error);
     }
