@@ -216,14 +216,15 @@ module.exports = class ClientRepository {
     return client;
   };
 
-  validClientInfo = async ({
+  // 이메일, 이름, 연락처로 클라이언트 중복 정보 조회
+  getDuplicatedClient = async ({
     userId,
     companyId,
     clientName,
     contact,
     clientEmail,
   }) => {
-    logger.info(`ClientRepository.alidClientInfo Request`);
+    logger.info(`ClientRepository.getDuplicatedClient Request`);
     const client = await Clients.findOne({
       where: {
         [Op.and]: [

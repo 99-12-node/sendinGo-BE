@@ -85,4 +85,29 @@ module.exports = class TalkContentRepository {
     });
     return talkcontent;
   };
+
+  // 고객 ID와 템플릿 ID로 content 업데이트
+  updateContentByExistClient = async ({
+    userId,
+    companyId,
+    clientId,
+    talkTemplateId,
+    ...talkContentData
+  }) => {
+    logger.info(`TalkContentRepository.updateContentByExistClient Request`);
+    const updatedTalkContent = await TalkContents.update(
+      { ...talkContentData },
+      {
+        where: {
+          [Op.and]: [
+            { userId },
+            { companyId },
+            { clientId },
+            { talkTemplateId },
+          ],
+        },
+      }
+    );
+    return updatedTalkContent;
+  };
 };
