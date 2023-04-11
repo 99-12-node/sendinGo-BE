@@ -5,6 +5,9 @@ const JoiHelper = require('../helpers/joi.Helper');
 
 const ClientGroupController = require('../controllers/clientGroup.controller');
 const clientGroupController = new ClientGroupController();
+const { controllerLogger } = require('../middlewares/logger.middleware.js');
+
+router.use(controllerLogger);
 
 /**
  * Request.parameter.ClientGroup type

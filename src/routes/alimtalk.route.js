@@ -5,6 +5,9 @@ const AlimtalkController = require('../controllers/alimtalk.controller');
 const alimtalkController = new AlimtalkController();
 const authMiddleware = require('../middlewares/auth.middleware');
 const talkJoiHelper = require('../helpers/talk.joi.helper');
+const { controllerLogger } = require('../middlewares/logger.middleware.js');
+
+router.use(controllerLogger);
 
 // API 호출을 위한 토큰 생성
 router.get('/auth', alimtalkController.generateSendToken);

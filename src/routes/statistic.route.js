@@ -6,6 +6,10 @@ const JoiHelper = require('../helpers/joi.Helper');
 const StatisticController = require('../controllers/statistic.controller');
 const statisticController = new StatisticController();
 
+const { controllerLogger } = require('../middlewares/logger.middleware.js');
+
+router.use(controllerLogger);
+
 router.get('/current', authMiddleware, statisticController.getCurrentStatistic);
 router.get('/hourly', authMiddleware, statisticController.getHourlyStatistic);
 
