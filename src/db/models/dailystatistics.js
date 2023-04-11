@@ -7,7 +7,18 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {}
+    static associate(models) {
+      this.belongsTo(models.Users, {
+        targetKey: 'userId',
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+      });
+      this.belongsTo(models.Companies, {
+        targetKey: 'companyId',
+        foreignKey: 'companyId',
+        onDelete: 'CASCADE',
+      });
+    }
   }
   DailyStatistics.init(
     {
@@ -46,6 +57,24 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.FLOAT,
         allowNull: false,
         defaultValue: 0,
+      },
+      userId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'userId',
+        },
+        onDelete: 'CASCADE',
+      },
+      companyId: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Companies',
+          key: 'companyId',
+        },
+        onDelete: 'CASCADE',
       },
       createdAt: {
         allowNull: false,

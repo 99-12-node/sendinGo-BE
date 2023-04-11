@@ -24,6 +24,26 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'companyId',
         onDelete: 'CASCADE',
       });
+      this.hasMany(models.HourlyStatistics, {
+        sourceKey: 'userId',
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+      });
+      this.hasMany(models.HourlyStatistics, {
+        sourceKey: 'companyId',
+        foreignKey: 'companyId',
+        onDelete: 'CASCADE',
+      });
+      this.hasMany(models.DailyStatistics, {
+        sourceKey: 'userId',
+        foreignKey: 'userId',
+        onDelete: 'CASCADE',
+      });
+      this.hasMany(models.DailyStatistics, {
+        sourceKey: 'companyId',
+        foreignKey: 'companyId',
+        onDelete: 'CASCADE',
+      });
     }
   }
   Users.init(

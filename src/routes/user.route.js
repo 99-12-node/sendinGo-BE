@@ -3,6 +3,7 @@ const router = express.Router();
 const JoiHelper = require('../helpers/user.joiHelper.js');
 const UserController = require('../controllers/user.controller');
 const authMiddleWare = require('../middlewares/auth.middleware');
+const createStatistic = require('../utils/statistic.schedule');
 const userController = new UserController();
 
 /**
@@ -74,18 +75,21 @@ router.post('/login', JoiHelper.loginCheck, userController.loginUser);
 router.get(
   '/:userId',
   authMiddleWare,
+  createStatistic,
   JoiHelper.userIdAndRequestIdCheck,
   userController.getUser
 );
 router.patch(
   '/:userId',
   authMiddleWare,
+  createStatistic,
   JoiHelper.editInfoCheck,
   userController.editUser
 );
 router.delete(
   '/:userId',
   authMiddleWare,
+  createStatistic,
   JoiHelper.userIdAndRequestIdCheck,
   userController.deleteUser
 );
