@@ -66,10 +66,6 @@ module.exports = class AlimtalkController {
     const { groupId, clientIds } = req.body;
 
     try {
-      if (!groupId || clientIds.length < 1) {
-        throw new BadRequestError('올바르지 않은 요청입니다.');
-      }
-
       const allData = await this.alimtalkSendService.getContentByClientIds({
         userId,
         companyId,
@@ -283,9 +279,6 @@ module.exports = class AlimtalkController {
     const { companyId } = res.locals.company;
     const { talkSendId } = req.params;
     try {
-      if (!talkSendId) {
-        throw new BadRequestError('입력값을 확인해주세요.');
-      }
       // talkSendId로 전송 데이터 존재 여부 확인
       const talkSendDatas =
         await this.alimtalkResultService.getTalkSendListBySendId({
