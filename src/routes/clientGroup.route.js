@@ -6,6 +6,7 @@ const JoiHelper = require('../helpers/joi.Helper');
 const ClientGroupController = require('../controllers/clientGroup.controller');
 const clientGroupController = new ClientGroupController();
 const { controllerLogger } = require('../middlewares/logger.middleware.js');
+const createStatistic = require('../utils/statistic.schedule');
 
 router.use(controllerLogger);
 
@@ -83,6 +84,7 @@ router.use(controllerLogger);
 router.post(
   '/clients/:clientId/groups/:groupId',
   authMiddleware,
+  createStatistic,
   JoiHelper.clientGroupCheck,
   clientGroupController.createClientGroup
 );
@@ -115,6 +117,7 @@ router.post(
 router.post(
   '/clients/:clientId/groups/:existGroupId/move/:newGroupId',
   authMiddleware,
+  createStatistic,
   JoiHelper.groupIdCheck,
   clientGroupController.moveClientGroup
 );
@@ -147,6 +150,7 @@ router.post(
 router.post(
   '/clients/:clientId/groups/:existGroupId/copy/:newGroupId',
   authMiddleware,
+  createStatistic,
   JoiHelper.groupIdCheck,
   clientGroupController.copyClientGroup
 );
@@ -188,6 +192,7 @@ router.post(
 router.post(
   '/groups/:groupId',
   authMiddleware,
+  createStatistic,
   clientGroupController.createClientGroupBulk
 );
 
@@ -218,6 +223,7 @@ router.post(
 router.post(
   '/groups',
   authMiddleware,
+  createStatistic,
   clientGroupController.createNewClientGroupBulk
 );
 

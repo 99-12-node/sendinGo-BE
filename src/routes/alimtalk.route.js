@@ -6,8 +6,7 @@ const alimtalkController = new AlimtalkController();
 const authMiddleware = require('../middlewares/auth.middleware');
 const talkJoiHelper = require('../helpers/talk.joi.helper');
 const { controllerLogger } = require('../middlewares/logger.middleware.js');
-
-router.use(controllerLogger);
+const createStatistic = require('../utils/statistic.schedule');
 
 // API 호출을 위한 토큰 생성
 router.get('/auth', alimtalkController.generateSendToken);
@@ -16,6 +15,7 @@ router.get('/auth', alimtalkController.generateSendToken);
 router.post(
   '/contents',
   authMiddleware,
+  createStatistic,
   talkJoiHelper.contentReqBodyCheck,
   alimtalkController.saveTalkContents
 );
@@ -24,17 +24,24 @@ router.post(
 router.post(
   '/clients/contents',
   authMiddleware,
+  createStatistic,
   talkJoiHelper.clientContentReq,
   alimtalkController.getContentByClientIds
 );
 
 // 알림톡 템플릿 목록 조회
-router.get('/templates', authMiddleware, alimtalkController.getTemplatesList);
+router.get(
+  '/templates',
+  authMiddleware,
+  createStatistic,
+  alimtalkController.getTemplatesList
+);
 
 // 알림톡 템플릿 상세 조회
 router.get(
   '/templates/:talkTemplateId',
   authMiddleware,
+  createStatistic,
   talkJoiHelper.templateIdParamsCheck,
   alimtalkController.getTemplateVariablesById
 );
@@ -43,6 +50,7 @@ router.get(
 router.post(
   '/sends',
   authMiddleware,
+  createStatistic,
   talkJoiHelper.talkSendBody,
   alimtalkController.sendAlimTalk
 );
@@ -54,6 +62,7 @@ router.post('/sends/response', alimtalkController.saveSendAlimTalkResponse);
 router.get(
   '/results/list',
   authMiddleware,
+  createStatistic,
   talkJoiHelper.sendResultParams,
   alimtalkController.getAlimTalkResult
 );
@@ -65,6 +74,7 @@ router.post('/results/list/save', alimtalkController.saveSendAlimTalkResult);
 router.get(
   '/results/detail/:talkSendId',
   authMiddleware,
+  createStatistic,
   talkJoiHelper.sendResultDetailParams,
   alimtalkController.getAlimTalkResultDetail
 );
