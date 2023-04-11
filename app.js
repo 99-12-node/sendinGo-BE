@@ -2,7 +2,7 @@ const express = require('express');
 const { logger } = require('./src/middlewares/logger');
 const cookieparser = require('cookie-parser');
 const errorMiddleware = require('./src/middlewares/error.middleware');
-const createStatistic = require('./src/utils/statistic.schedule');
+
 const cors = require('cors');
 const dotenv = require('dotenv');
 const router = require('./src/routes');
@@ -28,7 +28,6 @@ app.use(
 );
 
 app.use('/api', router);
-app.use(createStatistic);
 
 app.get('/', (_req, res) => res.send('루트 경로에 연결되었습니다.'));
 app.use(errorMiddleware);
