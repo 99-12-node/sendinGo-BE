@@ -8,6 +8,10 @@ const groupRouter = require('./group.route');
 const clientGroupRouter = require('./clientGroup.route');
 const statisticRouter = require('./statistic.route');
 
+const { routerLogger } = require('../middlewares/logger.middleware.js');
+
+router.use(routerLogger);
+
 router.use('/talk', [alimtalkRouter]);
 router.use('/clients', [clientRouter]);
 router.use('/users', [userRouter]);
