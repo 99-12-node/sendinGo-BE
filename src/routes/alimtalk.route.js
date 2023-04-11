@@ -4,17 +4,24 @@ const { logger } = require('../middlewares/logger');
 const AlimtalkController = require('../controllers/alimtalk.controller');
 const alimtalkController = new AlimtalkController();
 const authMiddleware = require('../middlewares/auth.middleware');
+const talkJoiHelper = require('../helpers/talk.joi.helper');
 
 // API 호출을 위한 토큰 생성
 router.get('/auth', alimtalkController.generateSendToken);
 
 // 알림톡 전송 내용 일괄 저장
-router.post('/contents', authMiddleware, alimtalkController.saveTalkContents);
+router.post(
+  '/contents',
+  authMiddleware,
+  talkJoiHelper.contentReqBodyCheck,
+  alimtalkController.saveTalkContents
+);
 
 // 클라이언트 전송 내용 조회
 router.post(
   '/clients/contents',
   authMiddleware,
+  talkJoiHelper.clientContentReq,
   alimtalkController.getContentByClientIds
 );
 
@@ -25,11 +32,17 @@ router.get('/templates', authMiddleware, alimtalkController.getTemplatesList);
 router.get(
   '/templates/:talkTemplateId',
   authMiddleware,
+  talkJoiHelper.templateIdParamsCheck,
   alimtalkController.getTemplateVariablesById
 );
 
 // 알림톡 보내기
-router.post('/sends', authMiddleware, alimtalkController.sendAlimTalk);
+router.post(
+  '/sends',
+  authMiddleware,
+  talkJoiHelper.talkSendBody,
+  alimtalkController.sendAlimTalk
+);
 
 // 알림톡 발송 요청 응답 데이터 저장
 router.post('/sends/response', alimtalkController.saveSendAlimTalkResponse);
@@ -38,6 +51,7 @@ router.post('/sends/response', alimtalkController.saveSendAlimTalkResponse);
 router.get(
   '/results/list',
   authMiddleware,
+  talkJoiHelper.sendResultParams,
   alimtalkController.getAlimTalkResult
 );
 
@@ -48,6 +62,7 @@ router.post('/results/list/save', alimtalkController.saveSendAlimTalkResult);
 router.get(
   '/results/detail/:talkSendId',
   authMiddleware,
+  talkJoiHelper.sendResultDetailParams,
   alimtalkController.getAlimTalkResultDetail
 );
 
