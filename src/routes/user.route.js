@@ -95,8 +95,8 @@ router.post('/signup', JoiHelper.signUpCheck, userController.createUser);
  * @summary 이메일 중복확인
  * @tags Users
  * @param {Email} request.body.required - 이메일
- * @return {object} 200 - success response
- * @return {object} 400 - Bad request response
+ * @return {object<Response>} 200 - success response
+ * @return {object<Response>} 400 - Bad request response
  */
 router.post(
   '/signup/existemail',
@@ -109,9 +109,9 @@ router.post(
  * @summary 로그인
  * @tags Users
  * @param {Login} request.body.required
- * @return {object} 200 - Success response
- * @return {object} 400 - Bad request response
- * @return {object} 404 - Not found response
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 400 - Bad request response
+ * @return {object<Response>} 404 - Not found response
  * @example response - 200 - 로그인 성공
  * {
  * "message": "로그인이 정상적으로 처리되었습니다."
@@ -145,11 +145,11 @@ router.post('/login', JoiHelper.loginCheck, userController.loginUser);
  * @summary 회원 정보 조회(마이페이지)
  * @tags Users
  * @param {number} userId.path.required - userId param description
- * @return {Array} 200 - Success response
- * @return {object} 400 - Bad request response
- * @return {object} 401 - Bad request response
- * @return {object} 403 - Forbidden response
- * @return {object} 404 - Not found response
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 400 - Bad request response
+ * @return {object<Response>} 401 - Bad request response
+ * @return {object<Response>} 403 - Forbidden response
+ * @return {object<Response>} 404 - Not found response
  * @example response - 200 - 마이페이지 조회 성공
  * {
  * "data": {
@@ -196,11 +196,11 @@ router.get(
  * @tags Users
  * @param {number} userId.path.required - userId param description
  * @param {EditClientInfo} request.body.required
- * @return {object} 200 - Success response
- * @return {object} 400 - Bad request response
- * @return {object} 401 - Bad request response
- * @return {object} 403 - Forbidden response
- * @return {object} 404 - Not found response
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 400 - Bad request response
+ * @return {object<Response>} 401 - Bad request response
+ * @return {object<Response>} 403 - Forbidden response
+ * @return {object<Response>} 404 - Not found response
  * @example response - 200 - 마이페이지 조회 성공
  * {
  * "message" : "회원 정보 수정이 완료 되었습니다."
@@ -251,7 +251,7 @@ router.patch(
  * @summary 회원 탈퇴
  * @tags Users
  * @param {number} userId.path.required
- * @return {object<Response>}  200 - Success response
+ * @return {object<Response>} 200 - Success response
  * @return {object<Response>} 400 - Bad request response
  * @return {object<Response>} 401 - Bad request response
  * @return {object<Response>} 403 - Bad request response

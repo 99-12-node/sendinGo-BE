@@ -52,8 +52,8 @@ const clientController = new ClientController();
  * @summary 클라이언트 등록
  * @tags Clients
  * @param {Clients} request.body.required
- * @return {object} 201 - Success response
- * @return {object} 400 - Bad request response
+ * @return {object<Response>} 201 - Success response
+ * @return {object<Response>} 400 - Bad request response
  * @example response - 201 - 클라이언트 등록 성공
  * { "cliendtId" : 1,
  * "message": "등록이 완료되었습니다."
@@ -75,9 +75,9 @@ router.post(
  * @summary 클라이언트 대량 등록
  * @tags Clients
  * @param {ClientTemplate} request.body.required
- * @return {object} 201 - Success response
- * @return {object} 400 - Bad request response
- * @return {object} 404 - Not found
+ * @return {object<Response>} 201 - Success response
+ * @return {object<Response>} 400 - Bad request response
+ * @return {object<Response>} 404 - Not found
  * @example response - 201 - 클라이언트 대량 등록 성공
  * {
  *      "clientId" : [1,2,3,… ],
@@ -111,8 +111,8 @@ router.post(
  * @summary 클라이언트 조회
  * @tags Clients
  * @param {number} Index.query.required
- * @return {Array} 200 - Success response
- * @return {object} 404 - Not found
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 404 - Not found
  * @example response - 200 - 클라이언트 조회 성공
  * { "data": {
  * "clients": [
@@ -145,8 +145,8 @@ router.get(
  * @tags Clients
  * @param {number} groupId.path.required - groupId Request parameter
  * @param {number} Index.query.required
- * @return {Array} 200 - Success response
- * @return {object} 404 - Not found
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 404 - Not found
  * @example response - 200 - 그룹별 클라이언트 조회 성공
  * {
  * "data": [
@@ -181,10 +181,10 @@ router.get(
  * @tags Clients
  * @param {Clients} request.body.required
  * @param {number} clientId.path.required
- * @return {object} 200 - Success response
- * @return {object} 400 - Bad request
- * @return {object} 403 - Forbidden
- * @return {object} 404 - Not found
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 400 - Bad request
+ * @return {object<Response>} 403 - Forbidden
+ * @return {object<Response>} 404 - Not found
  * @example response - 200 - 클라이언트 정보 수정 성공
  *{
  * "message": "수정이 완료되었습니다."
@@ -215,10 +215,10 @@ router.patch(
  * @summary 클라이언트 삭제
  * @tags Clients
  * @param {number} clientId.path.required
- * @return {object} 200 - Success response
- * @return {object} 400 - Bad Request
- * @return {object} 403 - Forbidden
- * @return {object} 404 - Not found
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 400 - Bad Request
+ * @return {object<Response>} 403 - Forbidden
+ * @return {object<Response>} 404 - Not found
  * @example response - 200 - 클라이언트 삭제 성공
  *{
  * "message": "삭제가 완료되었습니다."
