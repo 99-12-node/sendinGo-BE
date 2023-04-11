@@ -5,6 +5,9 @@ const JoiHelper = require('../helpers/joi.Helper');
 
 const ClientGroupController = require('../controllers/clientGroup.controller');
 const clientGroupController = new ClientGroupController();
+const { controllerLogger } = require('../middlewares/logger.middleware.js');
+
+router.use(controllerLogger);
 
 // 클라이언트 기존 그룹에 추가 및 해제
 router.post(

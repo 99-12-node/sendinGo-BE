@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const JoiHelper = require('../helpers/joi.Helper');
 const authMiddleware = require('../middlewares/auth.middleware');
+const { controllerLogger } = require('../middlewares/logger.middleware.js');
+
+router.use(controllerLogger);
 
 const ClientController = require('../controllers/client.controller');
 const clientController = new ClientController();

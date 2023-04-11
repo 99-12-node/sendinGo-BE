@@ -5,6 +5,9 @@ const UserController = require('../controllers/user.controller');
 const authMiddleWare = require('../middlewares/auth.middleware');
 const createStatistic = require('../utils/statistic.schedule');
 const userController = new UserController();
+const { controllerLogger } = require('../middlewares/logger.middleware.js');
+
+router.use(controllerLogger);
 
 /**
  * Request.body.SignUp type

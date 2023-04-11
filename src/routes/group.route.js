@@ -6,6 +6,9 @@ const createStatistic = require('../utils/statistic.schedule');
 
 const GroupController = require('../controllers/group.controller');
 const groupController = new GroupController();
+const { controllerLogger } = require('../middlewares/logger.middleware.js');
+
+router.use(controllerLogger);
 
 router.post(
   '/',
