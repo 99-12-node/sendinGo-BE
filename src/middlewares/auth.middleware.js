@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { Users, Companies } = require('../db/models');
 const { UnauthorizedError } = require('../exceptions/errors');
-const { logger } = require('../middlewares/logger');
+const { logger } = require('./logger');
 require('dotenv').config();
 const { KEY } = process.env;
 

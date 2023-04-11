@@ -32,9 +32,10 @@ const logger = createLogger({
       level: 'info',
       format: format.combine(
         format.colorize(),
-        format.printf(
-          (info) => `${info.timestamp} ${info.level}: ${info.message}`
-        )
+        format.printf((info) => {
+          const { timestamp, level, message, ...meta } = info;
+          return `${timestamp} ${level}: ${message}`;
+        })
       ),
     }),
     dailyRotateFileTransport,
