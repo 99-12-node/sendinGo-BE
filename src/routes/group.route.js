@@ -34,11 +34,12 @@ router.use(controllerLogger);
  * @summary 빈 그룹 등록
  * @tags Groups
  * @param {Group} request.body.required
- * @return {object} 201 - Success response
- * @return {object} 400 - Bad request response
+ * @return {object<Response>} 201 - Success response
+ * @return {object<Response>} 400 - Bad request response
  * @example response - 201 - 그룹 생성 성공
- * { "groupId" : 1,
- * "message": "그룹 생성이 완료되었습니다."
+ * {
+ *     "groupId" : 1,
+ *     "message": "그룹 생성이 완료되었습니다."
  * }
  * @example response - 400 - 그룹 생성 실패
  * {
@@ -58,31 +59,23 @@ router.post(
   groupController.createGroup
 );
 
-
 /**
  * GET /groups
  * @summary 그룹 조회
  * @tags Groups
- * @return {object} 200 - Success response
- * @return {object} 400 - Bad request response
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 400 - Bad request response
  * @example response - 200 - 그룹 조회 성공
  * {
- * "data": [
- * {
- * "groupId": 1,
- * "groupName": "회사1 관리자 테스트",
- * "groupDescription": "그룹 설명 입니다.",
- * "createdAt": "2023-03-23T13:35:01.000Z",
- * "clientCount": 3
- * },
- * {
- * "groupId": 2,
- * "groupName": "회사2 관리자 테스트",
- * "groupDescription": "그룹 설명 입니다.",
- * "createdAt": "2023-03-23T13:35:01.000Z",
- * "clientCount": 0
- * }
- * ]
+ *  "data": [
+ *   {
+ *     "groupId": 8,
+ *     "groupName": "group3",
+ *     "groupDescription": "this is group3",
+ *     "createdAt": "2023-04-06T06:08:07.000Z",
+ *     "clientCount": 3
+ *   }
+ *  ]
  * }
  * @example response - 400 - 그룹 조회 실패
  * {
@@ -97,12 +90,12 @@ router.get('/', authMiddleware, createStatistic, groupController.getAllGroup);
  * @summary 그룹 삭제
  * @tags Groups
  * @param {number} groupId.path.required
- * @return {object} 200 - Success response
- * @return {object} 400 - Bad request response
- * @return {object} 404 - Not found response
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 400 - Bad request response
+ * @return {object<Response>} 404 - Not found response
  * @example response - 200 - 그룹 삭제 성공
  * {
- * "message": "그룹 삭제가 완료되었습니다."
+ *      "message": "그룹 삭제가 완료되었습니다."
  * }
  * @example response - 400 - 잘못된 파라미터 요청
  * {

@@ -163,7 +163,7 @@ router.post(
  * @return {object<Response>} 404 - Not found response
  * @example response - 201 - 그룹 추가 성공
  * {
- *      "message": "그룹 추가가 완료되었습니다."
+ *      "message": "그룹 추가가 완료되었습니다.",
  *      "groupId" : 1
  * }
  * @example response - 200 - 그룹 해제 성공
