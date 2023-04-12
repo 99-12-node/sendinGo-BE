@@ -6,14 +6,14 @@ const talkJoiHelper = {
   // talkContents Request Body
   contentReqBodyCheck: async (req, res, next) => {
     const content = Joi.object().keys({
-      groupId: Joi.required()
-        .number()
+      groupId: Joi.number()
+        .required()
         .error(new BadRequestError('올바른 그룹ID를 입력해주세요.')),
-      clientId: Joi.required()
-        .number()
+      clientId: Joi.number()
+        .required()
         .error(new BadRequestError('올바른 고객ID를 입력해주세요.')),
-      talkTemplateId: Joi.required()
-        .number()
+      talkTemplateId: Joi.number()
+        .required()
         .error(new BadRequestError('올바른 템플릿ID를 입력해주세요.')),
       organizationName: Joi.string().optional(),
       orderNumber: Joi.string().optional(),
@@ -27,7 +27,12 @@ const talkJoiHelper = {
       customerName: Joi.string().optional(),
       useLink: Joi.string().optional(),
     });
-    const schema = Joi.array().items(content);
+    const schema = Joi.object().keys({
+      data: Joi.array()
+        .items(content)
+        .required()
+        .error(new BadRequestError('입력값을 확인해주세요.')),
+    });
     try {
       logger.info(`talkJoiHelper.contentReqBodyCheck Request`);
       await schema.validateAsync(req.body);
