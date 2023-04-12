@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/auth.middleware');
 const JoiHelper = require('../helpers/joi.Helper');
+const batchJoiHelper = require('../helpers/batch.joi.helper');
 
 const ClientGroupController = require('../controllers/clientGroup.controller');
 const clientGroupController = new ClientGroupController();
@@ -188,6 +189,8 @@ router.post(
 router.post(
   '/groups/:groupId',
   authMiddleware,
+  batchJoiHelper.createClientGroupBulkParams,
+  batchJoiHelper.createClientGroupBulkBody,
   clientGroupController.createClientGroupBulk
 );
 
@@ -218,6 +221,7 @@ router.post(
 router.post(
   '/groups',
   authMiddleware,
+  batchJoiHelper.createClientBulkNewGroupBody,
   clientGroupController.createNewClientGroupBulk
 );
 
