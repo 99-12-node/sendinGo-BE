@@ -5,9 +5,10 @@ module.exports = {
     {
       name: 'sendingo-app',
       script: './app.js',
+      instances: '2',
+      exec_mode: 'cluster',
       env_production: {
         NODE_ENV: 'production',
-        PORT: process.env.PORT,
       },
     },
     {
@@ -15,7 +16,6 @@ module.exports = {
       script: './app.js',
       env_production: {
         NODE_ENV: 'production',
-        PORT: process.env.PORT_2,
       },
     },
     {
