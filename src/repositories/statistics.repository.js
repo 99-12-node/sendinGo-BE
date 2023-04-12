@@ -125,6 +125,7 @@ class StatisticsRepository {
     logger.info(`StatisticsRepository.getHourlyStatistic Request`);
     const hourlyStatistics = await HourlyStatistics.findAll({
       where: { [Op.and]: [{ userId }, { companyId }] },
+      group: 'createdAt',
       order: [['createdAt']],
     });
     return hourlyStatistics;
