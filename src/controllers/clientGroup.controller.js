@@ -45,29 +45,20 @@ module.exports = class ClientGroupController {
     const { clientIds } = req.body;
 
     try {
-      if (
-        !(groupId && clientIds && userId && companyId) ||
-        clientIds.length < 1
-      ) {
-        throw new BadRequestError('입력 값을 확인해주세요.');
+      const result = {};
+      for (const clientId of clientIds) {
+        const newGroup = await this.clientGroupService.createClientGroupBulk({
+          userId,
+          companyId,
+          groupId,
+          clientId,
+        });
+        result.groupId = newGroup.groupId;
       }
-
-      const result = await this.clientGroupService.createClientGroupBulk({
-        userId,
-        companyId,
-        groupId,
-        clientIds,
+      return res.status(201).json({
+        groupId: parseInt(result.groupId),
+        message: '그룹 추가가 완료되었습니다.',
       });
-      if (!result.groupId) {
-        return res.status(200).json({
-          message: '그룹 해제가 완료되었습니다.',
-        });
-      } else {
-        return res.status(201).json({
-          groupId: result.groupId,
-          message: '그룹 추가가 완료되었습니다.',
-        });
-      }
     } catch (error) {
       next(error);
     }
