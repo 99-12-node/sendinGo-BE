@@ -6,50 +6,33 @@ const talkJoiHelper = {
   // talkContents Request Body
   contentReqBodyCheck: async (req, res, next) => {
     const content = Joi.object().keys({
-      groupId: Joi.required()
-        .number()
+      groupId: Joi.number()
+        .required()
         .error(new BadRequestError('올바른 그룹ID를 입력해주세요.')),
-      clientId: Joi.required()
-        .number()
+      clientId: Joi.number()
+        .required()
         .error(new BadRequestError('올바른 고객ID를 입력해주세요.')),
-      talkTemplateId: Joi.required()
-        .number()
+      talkTemplateId: Joi.number()
+        .required()
         .error(new BadRequestError('올바른 템플릿ID를 입력해주세요.')),
-      organizationName: Joi.string()
-        .optional()
-        .error(new BadRequestError('올바른 회사명를 입력해주세요.')),
-      orderNumber: Joi.string()
-        .optional()
-        .error(new BadRequestError('올바른 주문번호를 입력해주세요.')),
-      region: Joi.string()
-        .optional()
-        .error(new BadRequestError('올바른 구 또는 면을 입력해주세요.')),
-      regionDetail: Joi.string()
-        .optional()
-        .error(new BadRequestError('올바른 동 또는 리를 입력해주세요.')),
-      deliveryDate: Joi.string()
-        .optional()
-        .error(new BadRequestError('올바른 배송월일을 입력해주세요.')),
-      paymentPrice: Joi.number()
-        .optional()
-        .error(new BadRequestError('올바른 결제금액을 입력해주세요.')),
-      deliveryCompany: Joi.number()
-        .optional()
-        .error(new BadRequestError('올바른 택배회사명을 입력해주세요.')),
-      deliveryTime: Joi.number()
-        .optional()
-        .error(new BadRequestError('올바른 택배배송시간을 입력해주세요.')),
-      deliveryNumber: Joi.number()
-        .optional()
-        .error(new BadRequestError('올바른 송장번호를 입력해주세요.')),
-      customerName: Joi.string()
-        .optional()
-        .error(new BadRequestError('올바른 고객명을 입력해주세요.')),
-      // useLink: Joi.string()
-      //   .optional()
-      //   .error(new BadRequestError('올바른 링크를 입력해주세요.')),
+      organizationName: Joi.string().optional(),
+      orderNumber: Joi.string().optional(),
+      region: Joi.string().optional(),
+      regionDetail: Joi.string().optional(),
+      deliveryDate: Joi.string().optional(),
+      paymentPrice: Joi.number().optional(),
+      deliveryCompany: Joi.string().optional(),
+      deliveryTime: Joi.string().optional(),
+      deliveryNumber: Joi.string().optional(),
+      customerName: Joi.string().optional(),
+      useLink: Joi.string().optional(),
     });
-    const schema = Joi.array().items(content);
+    const schema = Joi.object().keys({
+      data: Joi.array()
+        .items(content)
+        .required()
+        .error(new BadRequestError('입력값을 확인해주세요.')),
+    });
     try {
       logger.info(`talkJoiHelper.contentReqBodyCheck Request`);
       await schema.validateAsync(req.body);

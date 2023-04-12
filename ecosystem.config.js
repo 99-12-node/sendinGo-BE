@@ -2,26 +2,22 @@ require('dotenv').config();
 
 module.exports = {
   apps: [
+    // 배포용
     {
       name: 'sendingo-app',
       script: './app.js',
-      instances: '2',
+      instances: 2,
       exec_mode: 'cluster',
-      env_production: {
+      env: {
         NODE_ENV: 'production',
       },
     },
+    // 개발용
     {
-      name: 'sendingo-app-2',
+      name: 'sendingo-dev',
       script: './app.js',
-      env_production: {
-        NODE_ENV: 'production',
-      },
-    },
-    {
-      name: 'sendingo-app-dev',
-      script: './app.js',
-      env_development: {
+      instances: 1,
+      env: {
         NODE_ENV: 'development',
         PORT: process.env.PORT_DEV,
       },
