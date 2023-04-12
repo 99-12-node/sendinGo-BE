@@ -259,7 +259,6 @@ router.get(
 router.patch(
   '/:userId',
   authMiddleWare,
-  createStatistic,
   JoiHelper.editInfoCheck,
   userController.editUser
 );
@@ -299,7 +298,6 @@ router.patch(
 router.delete(
   '/:userId',
   authMiddleWare,
-  createStatistic,
   JoiHelper.userIdAndRequestIdCheck,
   userController.deleteUser
 );
