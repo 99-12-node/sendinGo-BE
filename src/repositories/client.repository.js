@@ -17,14 +17,41 @@ module.exports = class ClientRepository {
     clientEmail,
   }) => {
     logger.info(`ClientRepository.createClient Request`);
-    const createData = await Clients.create({
-      userId,
-      companyId,
-      clientName,
-      contact,
-      clientEmail,
-    });
-    return createData;
+    try {
+      const result = await sequelize.transaction(async (t) => {
+        const createClient = await Clients.create(
+          {
+            userId,
+            companyId,
+            clientName,
+            contact,
+            clientEmail,
+          },
+          { transaction: t }
+        );
+        const defaultGrouop = await Groups.create(
+          {
+            groupName: '미지정',
+            userId: createClient.userId,
+            companyId: createClient.companyId,
+          },
+          { transaction: t }
+        );
+        const defaultClientGrouop = await ClientGroups.create(
+          {
+            groupId: defaultGrouop.groupId,
+            userId: defaultGrouop.userId,
+            companyId: defaultGrouop.companyId,
+            clientId: createClient.clientId,
+          },
+          { transaction: t }
+        );
+        return defaultClientGrouop;
+      });
+      return result;
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   //클라이언트 키워드 검색
