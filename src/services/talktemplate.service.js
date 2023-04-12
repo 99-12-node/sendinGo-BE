@@ -45,9 +45,7 @@ module.exports = class TalkTemplateService {
     const allData = await this.talkTemplateRepository.getTemplatesList();
 
     // 필요한 템플릿만 조회 (1,4번 제외)
-    return allData.filter(
-      (data) => data.talkTemplateId !== 1 && data.talkTemplateId !== 4
-    );
+    return allData.filter((data) => data.talkTemplateId !== 1);
   };
 
   // 템플릿 ID로 변수들 상세 조회

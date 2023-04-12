@@ -66,9 +66,7 @@ module.exports = {
         // 웹링크 버튼이름 : 사용법바로가기
         // 링크(모바일웹) : http://#{사용법바로가기}
         // 링크(PC): http://#{사용법바로가기},
-        text: `<span id="#{고객명}">#{고객명}</span>고객님 우리 회사와 거래하여 주셔서 감사합니다.
-        구매하신 제품의 사용(이용)법을
-        확인해 보세요.`,
+        text: `<span id="#{고객명}">#{고객명}</span>고객님!\n    우리 회사와 거래하여\n 주셔서 감사합니다.\n구매하신 제품의 사용(이용)법을\n확인해 보세요. <button style="border: 1px solid #ECEDEE;background: #F6F7F8;width: 100%;font-size: 14px;margin-top: 30px;padding: 7px;border-radius: 7px;">사용법 바로가기</button>`,
         reqData: `["#{고객명}"]`,
         createdAt: new Date(),
         updatedAt: new Date(),
