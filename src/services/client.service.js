@@ -26,15 +26,14 @@ module.exports = class ClientService {
     clientEmail,
   }) => {
     logger.info(`ClientService.createClient Request`);
-
-    const dulicatedClient = await this.clientRepository.getDuplicatedClient({
+    const duplicatedClient = await this.clientRepository.getDuplicatedClient({
       userId,
       companyId,
       clientName,
       contact,
       clientEmail,
     });
-    if (dulicatedClient) {
+    if (duplicatedClient) {
       throw new Conflict('중복된 클라이언트가 존재합니다.');
     }
 
