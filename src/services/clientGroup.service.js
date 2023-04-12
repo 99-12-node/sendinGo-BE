@@ -75,7 +75,7 @@ module.exports = class ClientGroupService {
   };
 
   // ClientGroup 대량등록
-  createClientGroupBulk = async ({ userId, companyId, groupId, clientIds }) => {
+  createClientGroupBulk = async ({ userId, companyId, groupId, clientId }) => {
     logger.info(`ClientGrouopService.createClientGroupBulk Request`);
 
     // 존재하는 groupId 인지 확인
@@ -88,53 +88,38 @@ module.exports = class ClientGroupService {
       throw new NotFoundError('그룹 조회에 실패했습니다.');
     }
 
-    const result = {};
-    for (const clientId of clientIds) {
-      // clientId 존재여부 확인
-      const existClient = await this.clientRepository.getClientByClientId({
+    // clientId 존재여부 확인
+    const existClient = await this.clientRepository.getClientByClientId({
+      userId,
+      companyId,
+      clientId,
+    });
+    if (!existClient) {
+      throw new NotFoundError('클라이언트 조회에 실패했습니다.');
+    }
+
+    // 기존 등록 여부 확인
+    const existClientGroup =
+      await this.clientGroupRepository.getClientGroupById({
         userId,
         companyId,
+        groupId,
         clientId,
       });
-      if (!existClient) {
-        throw new NotFoundError('클라이언트 조회에 실패했습니다.');
-      }
 
-      // 기존 등록 여부 확인
-      const existClientGroup =
-        await this.clientGroupRepository.getClientGroupById({
+    // 기존에 등록되지 않은 경우, 추가
+    if (!existClientGroup) {
+      const clientGroupData =
+        await this.clientGroupRepository.createClientGroup({
           userId,
           companyId,
           groupId,
           clientId,
         });
 
-      // 등록된 경우, 해제
-      if (existClientGroup) {
-        const destoryResult =
-          await this.clientGroupRepository.deleteClientGroup({
-            userId,
-            companyId,
-            groupId,
-            clientId,
-          });
-
-        result.destoryResult = destoryResult;
-      } else {
-        // 등록되지 않은 경우, 추가
-        const clientGroupData =
-          await this.clientGroupRepository.createClientGroup({
-            userId,
-            companyId,
-            groupId,
-            clientId,
-          });
-
-        result.groupId = groupId;
-      }
+      return clientGroupData;
     }
-
-    return result;
+    return existClientGroup;
   };
 
   // ClientGroup 클라이언트 이동
