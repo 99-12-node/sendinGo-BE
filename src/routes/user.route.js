@@ -69,7 +69,7 @@ router.use(controllerLogger);
  * @return {object<Response>} 400 - Bad request response
  * @example response - 201 - 회원가입 성공
  * {
- *     "message": "회원가입이 완료되었습니다"
+ *     "message": "회원가입이 완료되었습니다."
  * }
  * @example response - 400 - 이메일 형식 오류
  * {
@@ -101,6 +101,18 @@ router.post('/signup', JoiHelper.signUpCheck, userController.createUser);
  * @param {Email} request.body.required - 이메일
  * @return {object<Response>} 200 - success response
  * @return {object<Response>} 400 - Bad request response
+ * @example response - 200 - 중복 이메일 없음
+ * {
+ *     "message": "사용 가능한 이메일입니다."
+ * }
+ * @example response - 400 - 중복 이메일
+ * {
+ *     "message": "중복된 이메일이 존재합니다."
+ * }
+ * @example response - 400 - 이메일 형식 오류
+ * {
+ *     "message": "이메일 형식에 맞춰 입력바랍니다."
+ * }
  */
 router.post(
   '/signup/existemail',
@@ -118,11 +130,11 @@ router.post(
  * @return {object<Response>} 404 - Not found response
  * @example response - 200 - 로그인 성공
  * {
- * "message": "로그인이 정상적으로 처리되었습니다."
+ *      "message": "로그인이 정상적으로 처리되었습니다."
  * }
  * @example response - 400 - 로그인 실패
  * {
- *     "message": "로그인에 실패하였습니다"
+ *     "message": "로그인에 실패하였습니다."
  * }
  * @example response - 400 - 이메일 형식 오류
  * {
@@ -157,17 +169,17 @@ router.post('/login', JoiHelper.loginCheck, userController.loginUser);
  * @example response - 200 - 마이페이지 조회 성공
  * {
  * "data": {
- * "user": {
- * "name": "edit2123.123123",
- * "phoneNumber": "01012481578",
- * "email": "te156156st@test.com"
- * },
- * "company": {
- * "companyName": "Company123123",
- * "companyNumber": "0221778997",
- * "companyEmail": "test12312351@test.com"
- * }
- * }
+ *  "user": {
+ *    "name": "홍길동",
+ *    "phoneNumber": "01012341234",
+ *    "email": "test1@test.com"
+ *  },
+ *  "company": {
+ *    "companyName": "Company",
+ *    "companyNumber": "0289890909",
+ *    "companyEmail": "company1@company.com"
+ *   }
+ *  }
  * }
  * @example response - 400 - 마이페이지 조회 실패
  * {
@@ -208,7 +220,7 @@ router.get(
  * @return {object<Response>} 404 - Not found response
  * @example response - 200 - 마이페이지 조회 성공
  * {
- * "message" : "회원 정보 수정이 완료 되었습니다."
+ *      "message" : "회원 정보 수정이 완료 되었습니다."
  * }
  * @example response - 400 - 회원 정보 수정 실패
  * {
@@ -220,7 +232,7 @@ router.get(
  * }
  * @example response - 400 - 이름 형식 오류
  * {
- *     "message": "이름 입력난을 다시 확인해주세요."
+ *     "message": "이름 입력란을 다시 확인해주세요."
  * }
  * @example response - 400 - 비밀번호 형식 오류
  * {
@@ -264,7 +276,7 @@ router.patch(
  * @return {object<Response>} 404 - Not found response
  * @example response - 200 - 탈퇴 성공
  * {
- * "message": "회원 탈퇴가 완료 되었습니다."
+ *      "message": "회원 탈퇴가 완료 되었습니다."
  * }
  * @example response - 400 - 탈퇴 실패
  * {

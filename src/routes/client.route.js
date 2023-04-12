@@ -60,8 +60,9 @@ const clientController = new ClientController();
  * @return {object<Response>} 201 - Success response
  * @return {object<Response>} 400 - Bad request response
  * @example response - 201 - 클라이언트 등록 성공
- * { "cliendtId" : 1,
- * "message": "등록이 완료되었습니다."
+ * {
+ *      "cliendtId" : 1,
+ *      "message": "등록이 완료되었습니다."
  * }
  * @example response - 400 - 클라이언트 등록 실패
  * {
@@ -85,7 +86,7 @@ router.post(
  * @return {object<Response>} 404 - Not found
  * @example response - 201 - 클라이언트 대량 등록 성공
  * {
- *      "clientId" : [1,2,3,… ],
+ *      "clientId" : [1,2,3],
  *      "message": "대량 등록이 완료되었습니다."
  * }
  * @example response - 400 - 입력값 오류
@@ -119,19 +120,22 @@ router.post(
  * @return {object<Response>} 200 - Success response
  * @return {object<Response>} 404 - Not found
  * @example response - 200 - 클라이언트 조회 성공
- * { "data": {
- * "clients": [
  * {
- * "clientId": 2,
- * "clientName": "이고객",
- * "contact": "01021212121",
- * "clientEmail": "client2@clinet.com",
- * "createdAt": "2023-03-23T13:35:01.000Z",
- * "groupId": 1,
- * "groupName": "회사1 관리자 테스트"
- * }],
- * "clientCount": 400}
- * }
+ *  "data": {
+ *  "clients": [
+ *    {
+ *      "clientId": 1,
+ *      "clientName": "이름",
+ *      "contact": "01099991111",
+ *      "clientEmail": "test123@never.com",
+ *      "createdAt": "2023-04-06T09:14:00.000Z",
+ *      "groupId": null,
+ *      "groupName": null
+ *    }
+ *  ],
+ *  "clientCount": 1
+ *    }
+ *  }
  * @example response - 404 - 클라이언트 조회 실패
  * {
  *     "message": "조회에 실패하였습니다"
@@ -154,18 +158,17 @@ router.get(
  * @return {object<Response>} 404 - Not found
  * @example response - 200 - 그룹별 클라이언트 조회 성공
  * {
- * "data": [
- * {
- * "clientId": 1,
- * "clientName": "일고객",
- * "contact": "01012121212",
- * "clientEmail": "client1@clinet.com",
- * "createdAt": "2023-03-23T13:35:01.000Z",
- * "groupId": 1,
- * "groupName": "회사1 관리자 테스트",
- * "groupDescription" : "그룹 설명란입니다."},
- * … {}
- * ]
+ *   "data": [
+ *  {
+ *    "clientId": 6,
+ *    "clientName": "사람1",
+ *    "contact": "01099998811",
+ *    "clientEmail": "메일1@never.com",
+ *    "createdAt": "2023-04-06T06:06:24.000Z",
+ *    "groupId": 7,
+ *    "groupName": "group2"
+ *    }
+ *   ]
  * }
  * @example response - 404 - 그룹별 클라이언트 조회 실패
  * {
