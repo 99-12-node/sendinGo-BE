@@ -6,7 +6,6 @@ const { controllerLogger } = require('../middlewares/logger.middleware.js');
 const createStatistic = require('../utils/statistic.schedule');
 
 router.use(controllerLogger);
-router.use(createStatistic);
 
 const ClientController = require('../controllers/client.controller');
 const clientController = new ClientController();
@@ -73,6 +72,7 @@ const clientController = new ClientController();
 router.post(
   '/',
   authMiddleware,
+  createStatistic,
   JoiHelper.clientCheck,
   clientController.createClient
 );
@@ -110,6 +110,7 @@ router.post(
 router.post(
   '/contents/bulk',
   authMiddleware,
+  createStatistic,
   clientController.createClientBulk
 );
 /**
@@ -145,6 +146,7 @@ router.post(
 router.get(
   '/',
   authMiddleware,
+  createStatistic,
   JoiHelper.checkIndex,
   clientController.getClients
 );
@@ -179,6 +181,7 @@ router.get(
 router.get(
   '/:groupId',
   authMiddleware,
+  createStatistic,
   JoiHelper.groupId,
   JoiHelper.checkIndex,
   clientController.getClientsByGroup
@@ -215,6 +218,7 @@ router.get(
 router.patch(
   '/:clientId',
   authMiddleware,
+  createStatistic,
   JoiHelper.clientId,
   clientController.editClientInfo
 );
@@ -248,6 +252,7 @@ router.patch(
 router.delete(
   '/:clientId',
   authMiddleware,
+  createStatistic,
   JoiHelper.clientId,
   clientController.deleteClient
 );
