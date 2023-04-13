@@ -106,6 +106,15 @@ module.exports = class ClientService {
 
     const offset = index ? parseInt(index - 1) : 0;
 
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패하였습니다.');
+    }
+
     const clients = await this.clientRepository.findClientsByKeywordAndGroup({
       userId,
       companyId,
