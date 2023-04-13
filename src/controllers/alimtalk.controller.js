@@ -46,7 +46,7 @@ module.exports = class AlimtalkController {
           ...talkContentReq
         } = data;
         const talkContentData = {
-          useLink: useLink.replace(/^https?:\/\//i, ''),
+          useLink: useLink ? useLink.replace(/^https?:\/\//i, '') : null,
           ...talkContentReq,
         };
         // 알림톡 전송 내용 저장
