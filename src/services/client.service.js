@@ -44,9 +44,12 @@ module.exports = class ClientService {
     });
     // 미지정 그룹 있으면 클라이언트만 생성
     if (existDefaultGroup) {
-      const createClient = await this.groupRepository.createClient({
+      const createClient = await this.clientRepository.createClient({
         userId,
         companyId,
+        clientName,
+        contact,
+        clientEmail,
       });
       if (!createClient) {
         throw new BadRequestError('클라이언트 등록에 실패하였습니다.');
