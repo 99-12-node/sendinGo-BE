@@ -54,7 +54,7 @@ module.exports = class ClientService {
       contact,
       clientEmail,
     });
-    console.log(createClient);
+
     if (!createClient) {
       throw new BadRequestError('클라이언트 등록에 실패하였습니다.');
     }
