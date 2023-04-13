@@ -115,7 +115,7 @@ module.exports = class AligoService {
     const params = new url.URLSearchParams({
       ...authParams,
       page: page ?? 1,
-      limit: limit ?? 50,
+      limit: limit ?? 100,
       startdate: startdate ?? formatStartDate,
       enddate: enddate ?? formatToday, // 현재시각을 기본값,
     });
