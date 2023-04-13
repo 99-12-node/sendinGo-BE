@@ -45,7 +45,7 @@ const batchJoiHelper = {
       groupName: Joi.string()
         .required()
         .error(new BadRequestError('올바른 그룹명을 입력해주세요.')),
-      groupDescription: Joi.string().optional(),
+      groupDescription: Joi.any().optional(),
     });
     try {
       logger.info(`batchJoiHelper.createClientBulkNewGroupBody Request`);
