@@ -9,7 +9,6 @@ module.exports = class TalkContentRepository {
     userId,
     companyId,
     clientId,
-    talkTemplateId,
     ...talkContentData
   }) => {
     logger.info(`TalkContentRepository.createTalkContent Request`);
@@ -17,7 +16,6 @@ module.exports = class TalkContentRepository {
       userId,
       companyId,
       clientId,
-      talkTemplateId,
       ...talkContentData,
     });
     return newTalkContent;
@@ -30,7 +28,7 @@ module.exports = class TalkContentRepository {
       const talkcontent = await TalkContents.findOne({
         where: { [Op.and]: [{ userId }, { companyId }, { talkContentId }] },
         attributes: {
-          exclude: ['clientId', 'talkTemplateId', 'createdAt', 'updatedAt'],
+          exclude: ['talkTemplateId', 'createdAt', 'updatedAt'],
         },
       });
       return talkcontent;
@@ -91,7 +89,6 @@ module.exports = class TalkContentRepository {
     userId,
     companyId,
     clientId,
-    talkTemplateId,
     ...talkContentData
   }) => {
     logger.info(`TalkContentRepository.updateContentByExistClient Request`);
@@ -99,12 +96,7 @@ module.exports = class TalkContentRepository {
       { ...talkContentData },
       {
         where: {
-          [Op.and]: [
-            { userId },
-            { companyId },
-            { clientId },
-            { talkTemplateId },
-          ],
+          [Op.and]: [{ userId }, { companyId }, { clientId }],
         },
       }
     );

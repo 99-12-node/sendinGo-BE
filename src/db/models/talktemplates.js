@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'talkTemplateId',
         onDelete: 'CASCADE',
       });
-      this.hasOne(models.TalkContents, {
+      this.hasMany(models.TalkSends, {
         sourceKey: 'talkTemplateId',
         foreignKey: 'talkTemplateId',
         onDelete: 'CASCADE',

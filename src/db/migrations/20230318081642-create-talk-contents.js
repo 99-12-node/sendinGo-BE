@@ -18,15 +18,6 @@ module.exports = {
         },
         onDelete: 'CASCADE',
       },
-      talkTemplateId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'TalkTemplates',
-          key: 'talkTemplateId',
-        },
-        onDelete: 'CASCADE',
-      },
       userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
