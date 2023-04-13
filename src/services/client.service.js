@@ -42,21 +42,11 @@ module.exports = class ClientService {
       userId,
       companyId,
     });
-    // 미지정 그룹 있으면 클라이언트만 생성
-    if (existDefaultGroup) {
-      const createClient = await this.clientRepository.createClient({
-        userId,
-        companyId,
-        clientName,
-        contact,
-        clientEmail,
-      });
-      if (!createClient) {
-        throw new BadRequestError('클라이언트 등록에 실패하였습니다.');
-      }
-      return createClient;
+    if (!existDefaultGroup) {
+      throw new NotFoundError('미지정 그룹을 찾을 수 없습니다.');
     }
-    // 미지정 그룹 없으면 클라이언트, 기본 그룹 동시 생성
+
+    //미지정 그룹에 고객 등록
     const createClient = await this.clientRepository.createClientAndGroup({
       userId,
       companyId,
@@ -64,6 +54,7 @@ module.exports = class ClientService {
       contact,
       clientEmail,
     });
+
     if (!createClient) {
       throw new BadRequestError('클라이언트 등록에 실패하였습니다.');
     }
