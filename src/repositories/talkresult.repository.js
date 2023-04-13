@@ -64,7 +64,7 @@ module.exports = class TalkResultRepository {
     logger.info(`TalkResultRepository.getTalkResultByMsgId Request`);
     const talkResult = await TalkResultDetails.findOne({
       attributes: {
-        exclude: ['userId', 'companyId', 'msgid', 'buttonContent', 'tplCode'],
+        exclude: ['userId', 'companyId', 'msgid', 'tplCode'],
       },
       where: { [Op.and]: [{ msgid }, { userId }, { companyId }] },
       include: {

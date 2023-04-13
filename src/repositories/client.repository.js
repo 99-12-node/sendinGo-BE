@@ -8,15 +8,15 @@ const OFFSET_CONSTANT = 14;
 
 module.exports = class ClientRepository {
   constructor() {}
-  // 클라이언트 생성
-  createClient = async ({
+  // 클라이언트 & 기본 그룹 생성
+  createClientAndGroup = async ({
     userId,
     companyId,
     clientName,
     contact,
     clientEmail,
   }) => {
-    logger.info(`ClientRepository.createClient Request`);
+    logger.info(`ClientRepository.createClientAndGroup Request`);
     try {
       const result = await sequelize.transaction(async (t) => {
         const createClient = await Clients.create(
@@ -52,6 +52,26 @@ module.exports = class ClientRepository {
     } catch (e) {
       console.error(e);
     }
+  };
+
+  // 클라이언트 개별 생성
+  createClient = async ({
+    userId,
+    companyId,
+    clientName,
+    contact,
+    clientEmail,
+  }) => {
+    logger.info(`ClientRepository.createClient Request`);
+    const createClient = await Clients.create({
+      userId,
+      companyId,
+      clientName,
+      contact,
+      clientEmail,
+    });
+
+    return createClient;
   };
 
   //클라이언트 키워드 검색
