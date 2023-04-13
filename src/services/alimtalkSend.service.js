@@ -29,6 +29,7 @@ module.exports = class AlimtalkSendService {
     groupId,
     clientId,
     talkTemplateId,
+    talkContentId,
     ...talkContentData
   }) => {
     logger.info(`AlimtalkSendService.saveTalkContents`);
@@ -51,13 +52,22 @@ module.exports = class AlimtalkSendService {
     if (!existGroup) {
       throw new NotFoundError('그룹 조회에 실패하였습니다.');
     }
-
     // 템플릿 존재 확인
     const existTalkTemplate = await this.talkTemplateRepository.getTemplateById(
       { talkTemplateId }
     );
     if (!existTalkTemplate) {
       throw new NotFoundError('템플릿 조회에 실패하였습니다.');
+    }
+    // 전송내용 존재 확인
+    const existTalkContent =
+      await this.talkContentRepository.getTalkContentById({
+        userId,
+        companyId,
+        talkContentId,
+      });
+    if (!existTalkContent) {
+      throw new NotFoundError('전송내용 조회에 실패하였습니다.');
     }
 
     // 해당 템플릿 변수들 불러오기
@@ -75,19 +85,18 @@ module.exports = class AlimtalkSendService {
       throw new BadRequestError('입력 데이터가 템플릿과 일치하지 않습니다.');
     }
 
-    // 템플릿 전송 내용 저장
-    const newTalkContent = await this.talkContentRepository.createTalkContent({
-      userId,
-      companyId,
-      clientId: existClient.clientId,
-      talkTemplateId: existTalkTemplate.talkTemplateId,
-      ...talkContentData,
-    });
+    // 템플릿 전송 내용 업데이트
+    const updatedTalkContent =
+      await this.talkContentRepository.updateTalkContentById({
+        talkContentId,
+        ...talkContentData,
+      });
+
     return {
-      talkContentId: newTalkContent.talkContentId,
-      clientId: newTalkContent.clientId,
+      talkContentId: updatedTalkContent.talkContentId,
+      clientId: updatedTalkContent.clientId,
       groupId: existGroup.groupId,
-      talkTemplateId: newTalkContent.talkTemplateId,
+      talkTemplateId: existTalkTemplate.talkTemplateId,
     };
   };
 
