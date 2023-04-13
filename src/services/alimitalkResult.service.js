@@ -117,7 +117,7 @@ module.exports = class AlimtalkResultService {
             userId,
             companyId,
           });
-        talkResult.buttonContent = talkResult.useLink;
+        talkResult.buttonContent = buttonTalkContent.useLink;
       }
       return talkResult;
     }

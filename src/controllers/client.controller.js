@@ -129,15 +129,9 @@ module.exports = class ClientController {
     const result = [];
     try {
       for (const data of datas) {
-        const {
-          clientName,
-          contact,
-          clientEmail,
-          talkTemplateId,
-          ...talkContentData
-        } = data;
+        const { clientName, contact, clientEmail, ...talkContentData } = data;
         if (
-          !(clientName && contact && clientEmail && talkTemplateId) ||
+          !(clientName && contact && clientEmail) ||
           Object.values(data).length === 0
         ) {
           throw new BadRequestError('입력 값을 확인해주세요.');
@@ -149,7 +143,6 @@ module.exports = class ClientController {
           clientName,
           contact,
           clientEmail,
-          talkTemplateId,
           ...talkContentData,
         });
         if (!newClients) {

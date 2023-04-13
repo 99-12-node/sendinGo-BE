@@ -15,6 +15,9 @@ const talkJoiHelper = {
       talkTemplateId: Joi.number()
         .required()
         .error(new BadRequestError('올바른 템플릿ID를 입력해주세요.')),
+      talkContentId: Joi.number()
+        .required()
+        .error(new BadRequestError('올바른 전송내용ID를 입력해주세요.')),
       organizationName: Joi.string().optional(),
       orderNumber: Joi.string().optional(),
       region: Joi.string().optional(),

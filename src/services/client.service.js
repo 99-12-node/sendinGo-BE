@@ -97,6 +97,15 @@ module.exports = class ClientService {
 
     const offset = index ? parseInt(index - 1) : 0;
 
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패하였습니다.');
+    }
+
     const clients = await this.clientRepository.findClientsByKeywordAndGroup({
       userId,
       companyId,
@@ -184,19 +193,9 @@ module.exports = class ClientService {
     clientName,
     contact,
     clientEmail,
-    talkTemplateId,
     ...talkContentData
   }) => {
     logger.info(`ClientService.createClientBulk Request`);
-
-    // 템플릿 존재 확인
-    const existedTemplate = await this.talkTemplateRepository.getTemplateById({
-      talkTemplateId,
-    });
-    if (!existedTemplate) {
-      throw new BadRequestError('템플릿 조회에 실패하였습니다.');
-    }
-
     // 중복된 클라이언트 확인
     const dulicatedClient = await this.clientRepository.getDuplicatedClient({
       userId,
@@ -212,7 +211,6 @@ module.exports = class ClientService {
           userId,
           companyId,
           clientId: dulicatedClient.clientId,
-          talkTemplateId,
           ...talkContentData,
         });
       return dulicatedClient;
@@ -234,7 +232,6 @@ module.exports = class ClientService {
           userId,
           companyId,
           clientId: newClient.clientId,
-          talkTemplateId: existedTemplate.talkTemplateId,
           ...talkContentData,
         }
       );
