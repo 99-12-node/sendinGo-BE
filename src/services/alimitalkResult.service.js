@@ -68,6 +68,16 @@ module.exports = class AlimtalkResultService {
 
     // 이미 상세 결과가 DB에 있는 경우, 원하는 컬럼만 조회
     if (existTalkResult) {
+      // 버튼형 템플릿의 useLink 가져오기
+      if (existTalkResult.buttonContent) {
+        const buttonTalkContent =
+          await this.talkContentRepository.getTalkContentById({
+            talkContentId,
+            userId,
+            companyId,
+          });
+        existTalkResult.buttonContent = buttonTalkContent.useLink;
+      }
       return existTalkResult;
     } else {
       // DB에 없다면, 전송 상세 결과 DB에 생성
@@ -98,6 +108,17 @@ module.exports = class AlimtalkResultService {
         userId,
         companyId,
       });
+
+      // 버튼형 템플릿의 useLink 가져오기
+      if (talkResult.buttonContent) {
+        const buttonTalkContent =
+          await this.talkContentRepository.getTalkContentById({
+            talkContentId,
+            userId,
+            companyId,
+          });
+        talkResult.buttonContent = talkResult.useLink;
+      }
       return talkResult;
     }
   };

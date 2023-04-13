@@ -38,7 +38,17 @@ module.exports = class AlimtalkController {
     try {
       const result = [];
       for (const data of datas) {
-        const { groupId, clientId, talkTemplateId, ...talkContentData } = data;
+        const {
+          groupId,
+          clientId,
+          talkTemplateId,
+          useLink,
+          ...talkContentReq
+        } = data;
+        const talkContentData = {
+          useLink: useLink.replace(/^https?:\/\//i, ''),
+          ...talkContentReq,
+        };
         // 알림톡 전송 내용 저장
         const createdData = await this.alimtalkSendService.saveTalkContents({
           userId,
