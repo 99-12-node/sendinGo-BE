@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'clientId',
         onDelete: 'CASCADE',
       });
-      this.belongsTo(models.TalkContents, {
+      this.belongsTo(models.TalkTemplates, {
         targetKey: 'talkTemplateId',
         foreignKey: 'talkTemplateId',
         onDelete: 'CASCADE',
