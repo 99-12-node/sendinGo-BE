@@ -1,5 +1,9 @@
 const { logger } = require('../middlewares/logger');
-const { BadRequestError, NotFoundError } = require('../exceptions/errors');
+const {
+  BadRequestError,
+  NotFoundError,
+  Conflict,
+} = require('../exceptions/errors');
 const ClientGroupRepository = require('../repositories/clientGroup.repository');
 const GroupRepository = require('../repositories/group.repository');
 const ClientRepository = require('../repositories/client.repository');
@@ -51,27 +55,16 @@ module.exports = class ClientGroupService {
         groupId,
         clientId,
       });
-
-    // 등록된 경우, 해제
     if (existClientGroup) {
-      const destoryResult = await this.clientGroupRepository.deleteClientGroup({
-        userId,
-        companyId,
-        groupId,
-        clientId,
-      });
-      return destoryResult;
-    } else {
-      // 등록되지 않은 경우, 추가
-      const clientGroupData =
-        await this.clientGroupRepository.createClientGroup({
-          userId,
-          companyId,
-          groupId,
-          clientId,
-        });
-      return clientGroupData;
+      throw new Conflict('이미 등록된 고객입니다.');
     }
+    const clientGroupData = await this.clientGroupRepository.createClientGroup({
+      userId,
+      companyId,
+      groupId,
+      clientId,
+    });
+    return clientGroupData;
   };
 
   // ClientGroup 대량등록
