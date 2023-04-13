@@ -76,46 +76,32 @@ module.exports = class ClientRepository {
 
   //클라이언트 키워드 검색
   findAllClientsByKeyword = async ({ userId, companyId, keyword, offset }) => {
-    logger.info(`ClientRepository.findClientsByKeyword Request`);
-
-    const findData = await Clients.findAll({
-      where: {
-        [Op.and]: [{ userId }, { companyId }],
-        [Op.or]: [
-          { clientName: { [Op.like]: `%${keyword}%` } },
-          { contact: { [Op.like]: `%${keyword}%` } },
-          { clientEmail: { [Op.like]: `%${keyword}%` } },
-        ],
-      },
-      attributes: [
-        'clientId',
-        'clientName',
-        'contact',
-        'clientEmail',
-        'createdAt',
-      ],
-      include: [
+    logger.info(`ClientRepository.findAllClientsByKeyword Request`);
+    const allData = await sequelize
+      .query(
+        'SELECT c.clientId, c.clientName, c.contact, c.clientEmail, c.createdAt, cg.groupId, g.groupName \
+      FROM Clients AS c \
+      LEFT OUTER JOIN ClientGroups cg ON c.clientId = cg.clientId \
+      LEFT OUTER JOIN `Groups` g ON g.groupId = cg.groupId \
+      WHERE c.userId = :userId AND c.companyId = :companyId \
+      AND ( c.clientName LIKE :keyword OR c.contact LIKE :keyword OR c.clientEmail LIKE :keyword) \
+      GROUP BY c.clientId \
+      ORDER BY c.createdAt DESC, c.clientId\
+      LIMIT :limit\
+      OFFSET :offset;',
         {
-          model: ClientGroups,
-          attributes: ['groupId'],
-          include: [
-            {
-              model: Groups,
-              attributes: ['groupName'],
-            },
-          ],
-        },
-      ],
-      order: [
-        ['createdAt', 'DESC'],
-        ['clientId', 'DESC'],
-      ],
-      offset: offset * OFFSET_CONSTANT,
-      limit: OFFSET_CONSTANT,
-      raw: true,
-    }).then((model) => model.map(parseSequelizePrettier));
-
-    return findData;
+          replacements: {
+            userId,
+            companyId,
+            keyword: `%${keyword}%`,
+            limit: OFFSET_CONSTANT,
+            offset: OFFSET_CONSTANT * offset,
+          },
+          type: sequelize.QueryTypes.SELECT,
+        }
+      )
+      .then((model) => parseSequelizePrettier(model));
+    return allData;
   };
 
   //클라이언트 전체 조회
