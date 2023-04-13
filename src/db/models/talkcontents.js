@@ -14,21 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'clientId',
         onDelete: 'CASCADE',
       });
-      this.belongsTo(models.TalkTemplates, {
-        targetKey: 'talkTemplateId',
-        foreignKey: 'talkTemplateId',
-        onDelete: 'CASCADE',
-      });
-      this.hasMany(models.TalkSends, {
-        sourceKey: 'talkTemplateId',
-        foreignKey: 'talkTemplateId',
-        onDelete: 'CASCADE',
-      });
-      this.hasMany(models.TalkSends, {
-        sourceKey: 'clientId',
-        foreignKey: 'clientId',
-        onDelete: 'CASCADE',
-      });
       this.belongsTo(models.Users, {
         targetKey: 'userId',
         foreignKey: 'userId',
@@ -55,15 +40,6 @@ module.exports = (sequelize, DataTypes) => {
         references: {
           model: 'Clients',
           key: 'clientId',
-        },
-        onDelete: 'CASCADE',
-      },
-      talkTemplateId: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'TalkTemplates',
-          key: 'talkTemplateId',
         },
         onDelete: 'CASCADE',
       },
