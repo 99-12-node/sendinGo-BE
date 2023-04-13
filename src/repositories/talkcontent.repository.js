@@ -28,7 +28,7 @@ module.exports = class TalkContentRepository {
       const talkcontent = await TalkContents.findOne({
         where: { [Op.and]: [{ userId }, { companyId }, { talkContentId }] },
         attributes: {
-          exclude: ['clientId', 'talkTemplateId', 'createdAt', 'updatedAt'],
+          exclude: ['talkTemplateId', 'createdAt', 'updatedAt'],
         },
       });
       return talkcontent;
