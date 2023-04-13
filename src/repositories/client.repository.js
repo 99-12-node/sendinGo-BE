@@ -77,9 +77,8 @@ module.exports = class ClientRepository {
   //클라이언트 키워드 검색
   findAllClientsByKeyword = async ({ userId, companyId, keyword, offset }) => {
     logger.info(`ClientRepository.findAllClientsByKeyword Request`);
-    const allData = await sequelize
-      .query(
-        'SELECT c.clientId, c.clientName, c.contact, c.clientEmail, c.createdAt, cg.groupId, g.groupName \
+    const allData = await sequelize.query(
+      'SELECT c.clientId, c.clientName, c.contact, c.clientEmail, c.createdAt, cg.groupId, g.groupName \
       FROM Clients AS c \
       LEFT OUTER JOIN ClientGroups cg ON c.clientId = cg.clientId \
       LEFT OUTER JOIN `Groups` g ON g.groupId = cg.groupId \
@@ -89,18 +88,17 @@ module.exports = class ClientRepository {
       ORDER BY c.createdAt DESC, c.clientId\
       LIMIT :limit\
       OFFSET :offset;',
-        {
-          replacements: {
-            userId,
-            companyId,
-            keyword: `%${keyword}%`,
-            limit: OFFSET_CONSTANT,
-            offset: OFFSET_CONSTANT * offset,
-          },
-          type: sequelize.QueryTypes.SELECT,
-        }
-      )
-      .then((model) => parseSequelizePrettier(model));
+      {
+        replacements: {
+          userId,
+          companyId,
+          keyword: `%${keyword}%`,
+          limit: OFFSET_CONSTANT,
+          offset: OFFSET_CONSTANT * offset,
+        },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
     return allData;
   };
 
