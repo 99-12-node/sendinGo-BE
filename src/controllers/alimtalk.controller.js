@@ -42,6 +42,7 @@ module.exports = class AlimtalkController {
           groupId,
           clientId,
           talkTemplateId,
+          talkContentId,
           useLink,
           ...talkContentReq
         } = data;
@@ -56,6 +57,7 @@ module.exports = class AlimtalkController {
           groupId,
           clientId,
           talkTemplateId,
+          talkContentId,
           ...talkContentData,
         });
         result.push(createdData);
