@@ -93,8 +93,8 @@ module.exports = class AlimtalkSendService {
       });
 
     return {
-      talkContentId: updatedTalkContent.talkContentId,
-      clientId: updatedTalkContent.clientId,
+      talkContentId: existTalkContent.talkContentId,
+      clientId: existTalkContent.clientId,
       groupId: existGroup.groupId,
       talkTemplateId: existTalkTemplate.talkTemplateId,
     };
