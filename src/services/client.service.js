@@ -37,7 +37,24 @@ module.exports = class ClientService {
       throw new Conflict('중복된 클라이언트가 존재합니다.');
     }
 
-    const createClient = await this.clientRepository.createClient({
+    // 미지정 그룹 존재 확인
+    const existDefaultGroup = await this.groupRepository.findDefaultGroup({
+      userId,
+      companyId,
+    });
+    // 미지정 그룹 있으면 클라이언트만 생성
+    if (existDefaultGroup) {
+      const createClient = await this.groupRepository.createClient({
+        userId,
+        companyId,
+      });
+      if (!createClient) {
+        throw new BadRequestError('클라이언트 등록에 실패하였습니다.');
+      }
+      return createClient;
+    }
+    // 미지정 그룹 없으면 클라이언트, 기본 그룹 동시 생성
+    const createClient = await this.clientRepository.createClientAndGroup({
       userId,
       companyId,
       clientName,
