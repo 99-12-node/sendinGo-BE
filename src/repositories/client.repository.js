@@ -29,11 +29,16 @@ module.exports = class ClientRepository {
           },
           { transaction: t }
         );
-        const defaultGrouop = await Groups.create(
+        const defaultGrouop = await Groups.findOne(
           {
-            groupName: '미지정',
-            userId: createClient.userId,
-            companyId: createClient.companyId,
+            where: {
+              [Op.and]: [
+                { userId: createClient.userId },
+                { companyId: createClient.companyId },
+                { groupName: '미지정' },
+              ],
+            },
+            attributes: ['groupName', 'groupId', 'userId', 'companyId'],
           },
           { transaction: t }
         );
