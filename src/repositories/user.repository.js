@@ -38,7 +38,7 @@ class UserRepository {
           { transaction: t }
         );
 
-        const defaultGrouop = await Groups.create(
+        const defaultGroup = await Groups.create(
           {
             groupName: '미지정',
             companyId: newUser.companyId,
@@ -47,7 +47,7 @@ class UserRepository {
           { transaction: t }
         );
 
-        return defaultGrouop;
+        return defaultGroup;
       });
       return result;
     } catch (e) {
@@ -87,7 +87,7 @@ class UserRepository {
           { transaction: t }
         );
 
-        const defaultGrouop = await Groups.create(
+        const defaultGroup = await Groups.create(
           {
             groupName: '미지정',
             companyId: newCompany.companyId,
@@ -96,7 +96,7 @@ class UserRepository {
           { transaction: t }
         );
 
-        return defaultGrouop;
+        return defaultGroup;
       });
       return result;
     } catch (e) {
