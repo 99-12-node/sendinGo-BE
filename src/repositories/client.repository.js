@@ -302,20 +302,15 @@ module.exports = class ClientRepository {
     return count;
   };
 
-  // clientId, groupId로 등록된 클라이언트 조회
-  getClientByClientIdAndGroupId = async ({
-    userId,
-    companyId,
-    groupId,
-    clientId,
-  }) => {
-    logger.info(`ClientRepository.getClientByClientIdAndGroupId Request`);
-    const client = await Clients.findOne({
+  // groupId로 등록된 클라이언트 조회
+  getClientsByGroupId = async ({ userId, companyId, groupId }) => {
+    logger.info(`ClientRepository.getClientsByGroupId Request`);
+    const client = await Clients.findAll({
       attributes: {
         exclude: ['userId', 'companyId', 'createdAt', 'updatedAt'],
       },
       where: {
-        [Op.and]: [{ userId }, { companyId }, { clientId }],
+        [Op.and]: [{ userId }, { companyId }],
       },
       include: {
         model: ClientGroups,
@@ -327,7 +322,7 @@ module.exports = class ClientRepository {
         },
       },
       raw: true,
-    }).then((model) => (model ? parseSequelizePrettier(model) : null));
+    }).then((model) => model.map(parseSequelizePrettier));
     return client;
   };
 };
