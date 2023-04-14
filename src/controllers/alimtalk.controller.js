@@ -75,14 +75,13 @@ module.exports = class AlimtalkController {
     logger.info(`AlimtalkController.getContentByClientId Request`);
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
-    const { groupId, clientIds } = req.body;
+    const { groupId } = req.body;
 
     try {
       const allData = await this.alimtalkSendService.getContentByClientIds({
         userId,
         companyId,
         groupId,
-        clientIds,
       });
 
       return res.status(200).json({ data: allData });
