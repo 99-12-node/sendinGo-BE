@@ -101,7 +101,7 @@ module.exports = class AlimtalkSendService {
   };
 
   //등록된 클라이언트 알림톡 전송 내용 조회
-  getContentByClientIds = async ({ userId, companyId, groupId, clientIds }) => {
+  getContentByClientIds = async ({ userId, companyId, groupId }) => {
     logger.info(`ClientService.getTalkContentsByClientId Request`);
 
     // 존재하는 그룹인지 확인
@@ -114,29 +114,21 @@ module.exports = class AlimtalkSendService {
     if (!existGroup) {
       throw new NotFoundError('그룹 조회에 실패하였습니다.');
     }
+    // 클라이언트 존재 확인
+    const clients = await this.clientRepository.getClientsByGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+
+    if (!clients) {
+      throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
+    }
 
     const results = [];
-    for (const clientId of clientIds) {
-      // 존재하는 클라이언트인지 확인
-      const existClient = await this.clientRepository.getClientByClientId({
-        userId,
-        companyId,
-        clientId,
-      });
-
-      if (!existClient) {
-        throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
-      }
-      const client = await this.clientRepository.getClientByClientIdAndGroupId({
-        userId,
-        companyId,
-        groupId,
-        clientId,
-      });
-      if (!client) {
-        throw new NotFoundError('클라이언트 조회에 실패하였습니다.');
-      }
-
+    for (const client of clients) {
+      const clientId = client.clientId;
+      // 해당 클라이언트의 전송 내용 확인
       const talkContent = await this.talkContentRepository.getContentByClientId(
         {
           userId,
@@ -145,10 +137,14 @@ module.exports = class AlimtalkSendService {
         }
       );
       if (!talkContent) {
-        throw new NotFoundError('전송 내용 조회에 실패하였습니다.');
+        // 알림톡 전송 내용 없는 경우, null로 생성하기
+        talkContent = await this.talkContentRepository.createTalkContent({
+          userId,
+          companyId,
+          clientId,
+        });
       }
-      const result = { client, talkContent };
-      results.push(result);
+      results.push({ client, talkContent });
     }
     return results;
   };
