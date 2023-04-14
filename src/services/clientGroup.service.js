@@ -16,7 +16,7 @@ module.exports = class ClientGroupService {
   }
   // ClientGroup 등록
   createClientGroup = async ({ userId, companyId, groupId, clientId }) => {
-    logger.info(`ClientGrouopService.createClientGroup Request`);
+    logger.info(`ClientGroupService.createClientGroup Request`);
 
     // 유저 확인
     const confirmClientId = await this.clientRepository.confirmUser({
@@ -58,6 +58,7 @@ module.exports = class ClientGroupService {
     if (existClientGroup) {
       throw new Conflict('이미 등록된 고객입니다.');
     }
+
     const clientGroupData = await this.clientGroupRepository.createClientGroup({
       userId,
       companyId,
@@ -69,17 +70,7 @@ module.exports = class ClientGroupService {
 
   // ClientGroup 대량등록
   createClientGroupBulk = async ({ userId, companyId, groupId, clientId }) => {
-    logger.info(`ClientGrouopService.createClientGroupBulk Request`);
-
-    // 존재하는 groupId 인지 확인
-    const existGroup = await this.groupRepository.findGroupId({
-      userId,
-      companyId,
-      groupId,
-    });
-    if (!existGroup) {
-      throw new NotFoundError('그룹 조회에 실패했습니다.');
-    }
+    logger.info(`ClientGroupService.createClientGroupBulk Request`);
 
     // clientId 존재여부 확인
     const existClient = await this.clientRepository.getClientByClientId({
@@ -89,6 +80,25 @@ module.exports = class ClientGroupService {
     });
     if (!existClient) {
       throw new NotFoundError('클라이언트 조회에 실패했습니다.');
+    }
+
+    //미지정 그룹 여부 확인
+    if (groupId === 0 || groupId === '0') {
+      const defaultGroup = await this.groupRepository.findDefaultGroup({
+        userId,
+        companyId,
+      });
+      groupId = defaultGroup.groupId;
+    }
+
+    // 존재하는 groupId 인지 확인
+    const existGroup = await this.groupRepository.findGroupId({
+      userId,
+      companyId,
+      groupId,
+    });
+    if (!existGroup) {
+      throw new NotFoundError('그룹 조회에 실패했습니다.');
     }
 
     // 기존 등록 여부 확인
@@ -123,7 +133,7 @@ module.exports = class ClientGroupService {
     existGroupId,
     newGroupId,
   }) => {
-    logger.info(`ClientGrouopService.moveClientGroup Request`);
+    logger.info(`ClientGroupService.moveClientGroup Request`);
     const existClientGroup =
       await this.clientGroupRepository.getClientGroupById({
         userId,
@@ -221,7 +231,7 @@ module.exports = class ClientGroupService {
     groupName,
     groupDescription,
   }) => {
-    logger.info(`ClientGrouopService.createNewClientGroupBulk Request`);
+    logger.info(`ClientGroupService.createNewClientGroupBulk Request`);
 
     // 신규 그룹 생성
     const newGroup = await this.groupRepository.createGroup({
