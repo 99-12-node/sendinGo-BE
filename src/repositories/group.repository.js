@@ -78,7 +78,7 @@ module.exports = class GroupRepository {
     return deleteGroupData;
   };
 
-  //그룹 삭제시, 삭제할 groupId 있는지 찾아보기
+  //groupId 확인
   findGroupId = async ({ userId, companyId, groupId }) => {
     logger.info(`GroupRepository.findGroupId Request`);
     const findGroupData = await Groups.findOne({

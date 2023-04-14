@@ -4,7 +4,7 @@ const parseSequelizePrettier = require('../helpers/parse.sequelize');
 const { Op } = require('sequelize');
 
 // offset 기준 상수
-const OFFSET_CONSTANT = 14;
+const OFFSET_CONSTANT = 10;
 
 module.exports = class ClientRepository {
   constructor() {}
