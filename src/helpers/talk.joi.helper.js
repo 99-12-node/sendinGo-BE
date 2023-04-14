@@ -51,10 +51,6 @@ const talkJoiHelper = {
       groupId: Joi.number()
         .required()
         .error(new BadRequestError('올바르지 않은 요청입니다.')),
-      clientIds: Joi.array()
-        .items(Joi.number().required())
-        .required()
-        .error(new BadRequestError('올바르지 않은 요청입니다.')),
     });
     try {
       logger.info(`talkJoiHelper.clientContentReq Request`);
