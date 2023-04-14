@@ -38,7 +38,7 @@ module.exports = class TalkContentRepository {
     }
   };
 
-  // clientId, groupId로 등록된 클라이언트 조회
+  // clientId로 등록된 클라이언트 조회
   getContentByClientId = async ({ userId, companyId, clientId }) => {
     logger.info(`TalkContentRepository.getContentByClientId Request`);
     const client = await TalkContents.findOne({
