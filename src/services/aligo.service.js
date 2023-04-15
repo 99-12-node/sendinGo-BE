@@ -154,8 +154,8 @@ module.exports = class AligoService {
     logger.info(`AligoService.getAlimTalkDetailResult`);
     const params = new url.URLSearchParams({
       ...authParams,
-      page: page ?? 1,
-      limit: limit ?? 300,
+      page: 1,
+      limit: 300,
       mid,
     });
 
