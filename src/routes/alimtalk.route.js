@@ -13,15 +13,15 @@ router.use(controllerLogger);
  * @typedef {object} GetContentByClientIds
  * @property {number} groupId.required - 그룹Id
  * @property {number} clientId.required - 고객Id
- * @property {string} organizationName.required - 회사명
- * @property {string} orderNumber.required - 주문번호
- * @property {string} region.required - 지역구, 면
- * @property {string} regionDetail.required - 동, 리
- * @property {string} deliveryDate.required - 배송월일
- * @property {number} paymentPrice.required - 금액
- * @property {string} deliveryCompany.required - 택배회사명
- * @property {string} deliveryTime.required - 택배배송시간
- * @property {string} deliveryNumber.required - 송장번호
+ * @property {string} organizationName - 회사명
+ * @property {string} orderNumber - 주문번호
+ * @property {string} region - 지역구, 면
+ * @property {string} regionDetail - 동, 리
+ * @property {string} deliveryDate - 배송월일
+ * @property {number} paymentPrice - 금액
+ * @property {string} deliveryCompany - 택배회사명
+ * @property {string} deliveryTime - 택배배송시간
+ * @property {string} deliveryNumber - 송장번호
  * @property {number} talkContentId.required
  * @property {number} talkTemplateId.required
  */
@@ -50,13 +50,13 @@ router.use(controllerLogger);
 /**
  * Request.parameter.StartDate type
  * @typedef {object} StartDate
- * @property {string} startdate.required - 조회 시작일
+ * @property {string} startdate - 조회 시작일
  */
 
 /**
  * Request.parameter.EndDate type
  * @typedef {object} EndDate
- * @property {string} enddate.required - 조회 종료일
+ * @property {string} enddate - 조회 종료일
  */
 
 /**
@@ -296,8 +296,8 @@ router.post('/sends/response', alimtalkController.saveSendAlimTalkResponse);
  * @summary 알림톡 전송 결과 목록(리스트) 조회
  * @tags Talk
  * @param {number} GroupId.query.required
- * @param {string} StartDate.query.required
- * @param {string} EndDate.query.required
+ * @param {string} StartDate.query
+ * @param {string} EndDate.query
  * @return {object<Response>} 200 - Success response
  * @return {object<Response>} 400 - Bad request response
  * @example response - 200 - 전송결과 조회 성공
