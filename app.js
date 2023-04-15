@@ -15,7 +15,7 @@ const port = process.env.PORT;
 
 expressJSDocSwagger(app)(options);
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 app.use(cookieparser());
 
 app.use(
