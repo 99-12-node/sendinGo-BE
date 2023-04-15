@@ -20,7 +20,23 @@ const authParams = {
   token: process.env.ALIGO_TOKEN,
 };
 
-const COMPANY = 'sendigo';
+// 상수
+const RESULT_LIST_PAGE = 1;
+const RESULT_LIST_LIMIT = 200;
+const DETAIL_LIST_PAGE = 1;
+const DETAIL_LIST_LIMIT = 300;
+
+const TIME_ZONE = 9 * 60 * 60 * 1000; // 9시간
+const BEFORE_TODAY = 5 * 24 * 60 * 60 * 1000; // 5일
+const today = Date.now() + TIME_ZONE; // 한국 현지 시각
+const formatToday = new Date(today)
+  .toISOString()
+  .slice(0, 10)
+  .replace(/-/g, ''); // yyyymmdd
+const formatStartDate = new Date(today - BEFORE_TODAY)
+  .toISOString()
+  .slice(0, 10)
+  .replace(/-/g, ''); // yyyymmdd
 
 module.exports = class AligoService {
   constructor() {}
@@ -100,22 +116,10 @@ module.exports = class AligoService {
   getAlimTalkResult = async ({ page, limit, startdate, enddate }) => {
     logger.info(`AligoService.getAlimTalkResult`);
 
-    const TIME_ZONE = 9 * 60 * 60 * 1000; // 9시간
-    const BEFORE_TODAY = 5 * 24 * 60 * 60 * 1000; // 5일
-    const today = Date.now() + TIME_ZONE; // 한국 현지 시각
-    const formatToday = new Date(today)
-      .toISOString()
-      .slice(0, 10)
-      .replace(/-/g, ''); // yyyymmdd
-    const formatStartDate = new Date(today - BEFORE_TODAY)
-      .toISOString()
-      .slice(0, 10)
-      .replace(/-/g, ''); // yyyymmdd
-
     const params = new url.URLSearchParams({
       ...authParams,
-      page: page ?? 1,
-      limit: limit ?? 100,
+      page: page ?? RESULT_LIST_PAGE,
+      limit: limit ?? RESULT_LIST_LIMIT,
       startdate: startdate ?? formatStartDate,
       enddate: enddate ?? formatToday, // 현재시각을 기본값,
     });
@@ -154,8 +158,8 @@ module.exports = class AligoService {
     logger.info(`AligoService.getAlimTalkDetailResult`);
     const params = new url.URLSearchParams({
       ...authParams,
-      page: 1,
-      limit: 300,
+      page: DETAIL_LIST_PAGE,
+      limit: DETAIL_LIST_LIMIT,
       mid,
     });
 

@@ -10,6 +10,8 @@ const {
 const { logger } = require('../middlewares/logger');
 const { Op } = require('sequelize');
 
+const HOURLY_LIMIT = 12;
+
 class StatisticsRepository {
   constructor() {}
 
@@ -127,6 +129,7 @@ class StatisticsRepository {
       where: { [Op.and]: [{ userId }, { companyId }] },
       group: 'createdAt',
       order: [['createdAt']],
+      limit: HOURLY_LIMIT,
     });
     return hourlyStatistics;
   };
