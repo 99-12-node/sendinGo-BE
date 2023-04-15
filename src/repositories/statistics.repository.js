@@ -6,12 +6,13 @@ const {
   Groups,
   TalkSends,
   TalkClickResults,
-  sequelize,
 } = require('../db/models');
 const { logger } = require('../middlewares/logger');
 const { Op } = require('sequelize');
 
 const HOURLY_LIMIT = 12;
+const endDate = new Date();
+const startDate = new Date(endDate - HOURLY_LIMIT * 60 * 60 * 1000);
 
 class StatisticsRepository {
   constructor() {}
@@ -127,19 +128,15 @@ class StatisticsRepository {
   getHourlyStatistic = async ({ userId, companyId }) => {
     logger.info(`StatisticsRepository.getHourlyStatistic Request`);
     const hourlyStatistics = await HourlyStatistics.findAll({
-      where: { [Op.and]: [{ userId }, { companyId }] },
-      attributes: [
-        'hourlyStatisticsId',
-        'totalClientCount',
-        'totalGroupCount',
-        'accumulateSuccessRatio',
-        'accumulateClickRatio',
-        'hourlyStatisticsId',
-        (sequelize.fn('DISTINCT', sequelize.col('createdAt')), 'createdAt'),
-      ],
-      // group: 'createdAt',
+      where: {
+        [Op.and]: [
+          { userId },
+          { companyId },
+          { createdAt: { [Op.between]: [startDate, endDate] } },
+        ],
+      },
+      group: 'createdAt',
       order: [['createdAt']],
-      limit: HOURLY_LIMIT,
     });
     return hourlyStatistics;
   };
