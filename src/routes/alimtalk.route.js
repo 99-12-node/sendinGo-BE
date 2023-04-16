@@ -33,36 +33,12 @@ router.use(controllerLogger);
  */
 
 /**
- * Request.parameter.TalkTemplateId type
- * @typedef {object} TalkTemplateId
- * @property {number} talkTemplateId.required - 템플릿Id
- */
-
-/**
  * Request.parameter.SendTalk type
  * @typedef {object} SendTalk
  * @property {number} talkContentId.required - 메시지Id
  * @property {number} clientId.required - 고객Id
  * @property {number} talkTemplateId.required - 템플릿Id
  * @property {number} groupId.required - 그룹Id
- */
-
-/**
- * Request.parameter.StartDate type
- * @typedef {object} StartDate
- * @property {string} startdate - 조회 시작일
- */
-
-/**
- * Request.parameter.EndDate type
- * @typedef {object} EndDate
- * @property {string} enddate - 조회 종료일
- */
-
-/**
- * Request.parameter.TalkSendId type
- * @typedef {object} TalkSendId
- * @property {number} talkSendId.required - 전송Id
  */
 
 /**
@@ -295,9 +271,9 @@ router.post('/sends/response', alimtalkController.saveSendAlimTalkResponse);
  * GET /talk/results/list
  * @summary 알림톡 전송 결과 목록(리스트) 조회
  * @tags Talk
- * @param {number} GroupId.query.required
- * @param {string} StartDate.query
- * @param {string} EndDate.query
+ * @param {number} groupId.query.required
+ * @param {string} startDate.query
+ * @param {string} endDate.query
  * @return {object<Response>} 200 - Success response
  * @return {object<Response>} 400 - Bad request response
  * @example response - 200 - 전송결과 조회 성공
