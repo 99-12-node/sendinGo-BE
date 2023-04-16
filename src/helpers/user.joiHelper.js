@@ -41,6 +41,7 @@ const JoiHelper = {
 
       companyName: Joi.string()
         .required()
+        .regex(/^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]){1,50}$/)
         .error(new BadRequestError('회사이름 입력란을 다시 확인해주세요.')),
 
       companyNumber: Joi.string()
@@ -139,6 +140,7 @@ const JoiHelper = {
 
       companyName: Joi.string()
         .required()
+        .regex(/^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]){1,50}$/)
         .error(new BadRequestError('회사이름 입력란을 다시 확인해주세요.')),
 
       companyNumber: Joi.string()
