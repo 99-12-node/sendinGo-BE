@@ -68,6 +68,9 @@ module.exports = class GroupService {
     if (!findGroupData) {
       throw new NotFoundError('그룹 삭제에 실패하였습니다.');
     }
+    if (findGroupData.groupName === '미지정') {
+      throw new BadRequestError('미지정 그룹은 삭제할 수 없습니다.');
+    }
     if (findGroupData.userId !== userId) {
       throw new ForbiddenError('접근 권한이 없습니다.');
     }
