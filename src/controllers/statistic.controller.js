@@ -30,9 +30,7 @@ module.exports = class StatisticController {
           .status(200)
           .json({ data: new CurrentStatisticsDto(newStatistic) });
       }
-      return res
-        .status(200)
-        .json({ data: new CurrentStatisticsDto(statisticData) });
+      return res.status(200).json({ data: statisticData });
     } catch (error) {
       next(error);
     }
