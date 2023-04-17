@@ -5,14 +5,14 @@ const statisticsService = new StatisticsService();
 
 const { logger } = require('../middlewares/logger');
 require('dotenv').config();
-const { INSTANCE_ID } = prcess.env ?? '';
 
 module.exports = async (req, res, next) => {
   const { userId } = res.locals.user;
   const { companyId } = res.locals.company;
 
   try {
-    if (INSTANCE_ID === 'log') logger.info(`utils createStatistics`);
+    if (parseInt(process.env.INSTANCE_ID) === 0)
+      logger.info(`utils createStatistics`);
 
     const statisticJob = `companyId:${companyId}:userId:${userId}`;
     const HOURLYRULE = '0 0 * * * *'; // 주기 : 매시 정각
