@@ -16,26 +16,32 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.TalkSends, {
         targetKey: 'talkSendId',
         foreignKey: 'talkSendId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.Users, {
         targetKey: 'userId',
         foreignKey: 'userId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.Users, {
         targetKey: 'companyId',
         foreignKey: 'companyId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.Groups, {
         targetKey: 'groupId',
         foreignKey: 'groupId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.Clients, {
         targetKey: 'clientId',
         foreignKey: 'clientId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.TalkContents, {
         targetKey: 'talkContentId',
         foreignKey: 'talkContentId',
+        onDelete: 'CASCADE',
       });
     }
   }
