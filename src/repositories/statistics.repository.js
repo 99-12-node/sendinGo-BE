@@ -1,6 +1,7 @@
 const {
   HourlyStatistics,
   DailyStatistics,
+  WeeklyStatistics,
   Users,
   Clients,
   Groups,
@@ -10,9 +11,11 @@ const {
 const { logger } = require('../middlewares/logger');
 const { Op } = require('sequelize');
 
-const HOURLY_LIMIT = 12;
-const endDate = new Date();
-const startDate = new Date(endDate - HOURLY_LIMIT * 60 * 60 * 1000);
+const LIMIT = 12;
+const ENDDATE = new Date();
+const HOURLY_STARTDATE = new Date(ENDDATE - LIMIT * 60 * 60 * 1000);
+const DAILY_STARTDATE = new Date(ENDDATE - LIMIT * 24 * 60 * 60 * 1000);
+const WEEKLY_STARTDATE = new Date(ENDDATE - LIMIT * 7 * 24 * 60 * 60 * 1000);
 
 class StatisticsRepository {
   constructor() {}
@@ -114,6 +117,15 @@ class StatisticsRepository {
     return newDailyStatistics;
   };
 
+  // 주별 통계 저장
+  createWeeklyStatistics = async ({ ...statisticsFields }) => {
+    logger.info(`StatisticsRepository.createWeeklyStatistics Request`);
+    const newWeeklyStatistics = await WeeklyStatistics.create({
+      ...statisticsFields,
+    });
+    return newWeeklyStatistics;
+  };
+
   // 가장 최신 시간별 통계 조회
   getLatestHourlyStatistic = async ({ userId, companyId }) => {
     logger.info(`StatisticsRepository.createDaliyStatistics Request`);
@@ -132,13 +144,47 @@ class StatisticsRepository {
         [Op.and]: [
           { userId },
           { companyId },
-          { createdAt: { [Op.between]: [startDate, endDate] } },
+          { createdAt: { [Op.between]: [HOURLY_STARTDATE, ENDDATE] } },
         ],
       },
       group: 'createdAt',
       order: [['createdAt']],
     });
     return hourlyStatistics;
+  };
+
+  // 일별 통계 조회
+  getDailyStatistic = async ({ userId, companyId }) => {
+    logger.info(`StatisticsRepository.getDailyStatistic Request`);
+    const dailyStatistics = await DailyStatistics.findAll({
+      where: {
+        [Op.and]: [
+          { userId },
+          { companyId },
+          { createdAt: { [Op.between]: [DAILY_STARTDATE, ENDDATE] } },
+        ],
+      },
+      group: 'createdAt',
+      order: [['createdAt']],
+    });
+    return dailyStatistics;
+  };
+
+  // 주별 통계 조회
+  getWeeklyStatistic = async ({ userId, companyId }) => {
+    logger.info(`StatisticsRepository.getWeeklyStatistic Request`);
+    const weeklyStatistics = await WeeklyStatistics.findAll({
+      where: {
+        [Op.and]: [
+          { userId },
+          { companyId },
+          { createdAt: { [Op.between]: [WEEKLY_STARTDATE, ENDDATE] } },
+        ],
+      },
+      group: 'createdAt',
+      order: [['createdAt']],
+    });
+    return weeklyStatistics;
   };
 }
 
