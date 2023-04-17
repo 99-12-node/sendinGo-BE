@@ -11,7 +11,8 @@ module.exports = async (req, res, next) => {
   const { companyId } = res.locals.company;
 
   try {
-    logger.info(`utils createStatistics`);
+    if (parseInt(process.env.INSTANCE_ID) === 0)
+      logger.info(`utils createStatistics`);
 
     const statisticJob = `companyId:${companyId}:userId:${userId}`;
     const HOURLYRULE = '0 0 * * * *'; // 주기 : 매시 정각
