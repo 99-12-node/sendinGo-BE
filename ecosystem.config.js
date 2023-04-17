@@ -7,7 +7,7 @@ module.exports = {
       name: 'sendingo-app',
       script: './app.js',
       instance_var: 'INSTANCE_ID',
-      instances: 1,
+      instances: 2,
       exec_mode: 'cluster',
       min_uptime: 5000,
       max_restart: 5,
