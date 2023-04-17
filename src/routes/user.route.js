@@ -3,7 +3,7 @@ const router = express.Router();
 const JoiHelper = require('../helpers/user.joiHelper.js');
 const UserController = require('../controllers/user.controller');
 const authMiddleWare = require('../middlewares/auth.middleware');
-const createStatistic = require('../utils/statistic.schedule');
+
 const userController = new UserController();
 const { controllerLogger } = require('../middlewares/logger.middleware.js');
 
@@ -202,7 +202,6 @@ router.post('/login', JoiHelper.loginCheck, userController.loginUser);
 router.get(
   '/:userId',
   authMiddleWare,
-  createStatistic,
   JoiHelper.userIdAndRequestIdCheck,
   userController.getUser
 );
