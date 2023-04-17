@@ -16,18 +16,22 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Clients, {
         targetKey: 'clientId',
         foreignKey: 'clientId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.Groups, {
         targetKey: 'groupId',
         foreignKey: 'groupId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.Users, {
         targetKey: 'userId',
         foreignKey: 'userId',
+        onDelete: 'CASCADE',
       });
       this.belongsTo(models.Users, {
         targetKey: 'companyId',
         foreignKey: 'companyId',
+        onDelete: 'CASCADE',
       });
     }
   }
@@ -55,6 +59,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Users',
           key: 'userId',
         },
+        onDelete: 'CASCADE',
       },
       companyId: {
         type: DataTypes.INTEGER,
@@ -63,6 +68,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Users',
           key: 'companyId',
         },
+        onDelete: 'CASCADE',
       },
       clientId: {
         type: DataTypes.INTEGER,
@@ -71,6 +77,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Clients',
           key: 'clientId',
         },
+        onDelete: 'CASCADE',
       },
       groupId: {
         type: DataTypes.INTEGER,
@@ -79,6 +86,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Groups',
           key: 'groupId',
         },
+        onDelete: 'CASCADE',
       },
       msgid: {
         type: DataTypes.INTEGER,

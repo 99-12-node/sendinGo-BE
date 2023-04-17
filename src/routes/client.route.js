@@ -114,7 +114,7 @@ router.post(
  * GET /clients
  * @summary 클라이언트 조회
  * @tags Clients
- * @param {number} Index.query.required
+ * @param {number} index.query.required
  * @return {object<Response>} 200 - Success response
  * @return {object<Response>} 404 - Not found
  * @example response - 200 - 클라이언트 조회 성공
@@ -151,7 +151,7 @@ router.get(
  * @summary 그룹별 클라이언트 조회
  * @tags Clients
  * @param {number} groupId.path.required - groupId Request parameter
- * @param {number} Index.query.required
+ * @param {number} index.query.required
  * @return {object<Response>} 200 - Success response
  * @return {object<Response>} 404 - Not found
  * @example response - 200 - 그룹별 클라이언트 조회 성공
