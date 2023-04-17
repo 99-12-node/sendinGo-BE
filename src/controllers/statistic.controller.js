@@ -52,4 +52,38 @@ module.exports = class StatisticController {
       next(error);
     }
   };
+
+  // 일별 통계 조회
+  getDailyStatistic = async (req, res, next) => {
+    logger.info(`StatisticController.getDailyStatistic Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+
+    try {
+      const statisticDataList = await this.statisticService.getDailyStatistic({
+        userId,
+        companyId,
+      });
+      return res.status(200).json({ data: statisticDataList });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // 일별 통계 조회
+  getWeeklyStatistic = async (req, res, next) => {
+    logger.info(`StatisticController.getWeeklyStatistic Request`);
+    const { userId } = res.locals.user;
+    const { companyId } = res.locals.company;
+
+    try {
+      const statisticDataList = await this.statisticService.getWeeklyStatistic({
+        userId,
+        companyId,
+      });
+      return res.status(200).json({ data: statisticDataList });
+    } catch (error) {
+      next(error);
+    }
+  };
 };

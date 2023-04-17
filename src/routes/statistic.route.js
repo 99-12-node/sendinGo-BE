@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middlewares/auth.middleware');
-const JoiHelper = require('../helpers/joi.Helper');
 
 const StatisticController = require('../controllers/statistic.controller');
 const statisticController = new StatisticController();
@@ -72,5 +71,71 @@ router.get('/current', authMiddleware, statisticController.getCurrentStatistic);
  * @security Authorization
  */
 router.get('/hourly', authMiddleware, statisticController.getHourlyStatistic);
+
+/**
+ * GET /statistics/daily
+ * @summary 일별 통계 정보 조회
+ * @tags Statistics
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 401 - Unauthorized response
+ * @example response - 200 - 조회 성공
+ * {
+ *  "data": [
+ *   {
+ *     "totalClientCount": 10,
+ *     "totalGroupCount": 3,
+ *     "accumulateSuccessRatio": 100,
+ *     "accumulateClickRatio": 9.375,
+ *     "createdAt": "2023-04-10T00:00:03.000Z"
+ *   },
+ *   {
+ *     "totalClientCount": 1,
+ *     "totalGroupCount": 0,
+ *     "accumulateSuccessRatio": 0,
+ *     "accumulateClickRatio": 0,
+ *     "createdAt": "2023-04-03T00:00:00.000Z"
+ *   }
+ *  ]
+ * }
+ * @example response - 401 - 인증 자격 증명 실패
+ * {
+ *     "message": "토큰에 해당하는 사용자 또는 소속이 존재하지 않습니다"
+ * }
+ * @security Authorization
+ */
+router.get('/daily', authMiddleware, statisticController.getDailyStatistic);
+
+/**
+ * GET /statistics/weekly
+ * @summary 주별 통계 정보 조회
+ * @tags Statistics
+ * @return {object<Response>} 200 - Success response
+ * @return {object<Response>} 401 - Unauthorized response
+ * @example response - 200 - 조회 성공
+ * {
+ *  "data": [
+ *   {
+ *     "totalClientCount": 10,
+ *     "totalGroupCount": 3,
+ *     "accumulateSuccessRatio": 100,
+ *     "accumulateClickRatio": 9.375,
+ *     "createdAt": "2023-04-10T00:00:03.000Z"
+ *   },
+ *   {
+ *     "totalClientCount": 1,
+ *     "totalGroupCount": 0,
+ *     "accumulateSuccessRatio": 0,
+ *     "accumulateClickRatio": 0,
+ *     "createdAt": "2023-04-03T00:00:00.000Z"
+ *   }
+ *  ]
+ * }
+ * @example response - 401 - 인증 자격 증명 실패
+ * {
+ *     "message": "토큰에 해당하는 사용자 또는 소속이 존재하지 않습니다"
+ * }
+ * @security Authorization
+ */
+router.get('/weekly', authMiddleware, statisticController.getWeeklyStatistic);
 
 module.exports = router;
