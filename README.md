@@ -1,6 +1,6 @@
 # ✨센딩고(SendinGo) | 쉽고 빠른 알림톡 대량 발송 서비스
 
-# 👉[SendinGo 사용해보기][sendingo-link]
+### 👉[SendinGo 사용해보기][sendingo-link]
 
 [sendingo-link]: https://www.sendingo.site/ 'SendinGo 바로가기!'
 
