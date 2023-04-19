@@ -22,12 +22,12 @@ const authParams = {
 
 // 상수
 const RESULT_LIST_PAGE = 1;
-const RESULT_LIST_LIMIT = 200;
+const RESULT_LIST_LIMIT = 400;
 const DETAIL_LIST_PAGE = 1;
-const DETAIL_LIST_LIMIT = 300;
+const DETAIL_LIST_LIMIT = 400;
 
 const TIME_ZONE = 9 * 60 * 60 * 1000; // 9시간
-const BEFORE_TODAY = 5 * 24 * 60 * 60 * 1000; // 5일
+const BEFORE_TODAY = 7 * 24 * 60 * 60 * 1000; // 7일
 const today = Date.now() + TIME_ZONE; // 한국 현지 시각
 const formatToday = new Date(today)
   .toISOString()
