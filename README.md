@@ -59,8 +59,8 @@
 ![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=Jest&logoColor=white)
 <img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=for-the-badge&logo=JSON Web Tokens&logoColor=white">
 <img src="https://img.shields.io/badge/-winston-green?style=for-the-badge&logo=winston&logoColor=white"/>&nbsp;
-<img src="https://img.shields.io/badge/-amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>&nbsp;
 <br>
+<img src="https://img.shields.io/badge/-amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>&nbsp;
 <img src="https://img.shields.io/badge/-redis-red?style=for-the-badge&logo=redis&logoColor=white"/>&nbsp;
 <img src="https://img.shields.io/badge/-amazoncloudwatch-FF4F8B?style=for-the-badge&logo=amazoncloudwatch&logoColor=white"/>&nbsp;
 <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
