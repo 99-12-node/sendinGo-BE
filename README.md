@@ -62,10 +62,12 @@
 <br>
 <img src="https://img.shields.io/badge/-amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>&nbsp;
 <img src="https://img.shields.io/badge/-redis-red?style=for-the-badge&logo=redis&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-AWS ElastiCache-2962FF?style=for-the-badge&logo=AWS ElastiCache&logoColor=white"/>&nbsp;
 <img src="https://img.shields.io/badge/-amazoncloudwatch-FF4F8B?style=for-the-badge&logo=amazoncloudwatch&logoColor=white"/>&nbsp;
 <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/githubactions-2088FF.svg?style=for-the-badge&logo=githubactions&logoColor=white">
 <img src="https://img.shields.io/badge/-amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-AWS CodeDeploy-FF4F8B?style=for-the-badge&logo=AWS CodeDeploy&logoColor=white"/>&nbsp;
 <br>
 <img src="https://img.shields.io/badge/-sequelize-blue?style=for-the-badge&logo=Sequelize&logoColor=white"/>&nbsp;
 <img src="https://img.shields.io/badge/-mysql-blue?style=for-the-badge&logo=Mysql&logoColor=white"/>&nbsp;
