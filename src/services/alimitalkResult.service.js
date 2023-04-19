@@ -37,6 +37,13 @@ module.exports = class AlimtalkResultService {
           sendState,
           sendDate,
         });
+      // 클릭 건수 카운팅
+      const clickCount =
+        await this.talkClickRepository.getClickCountByGroupAndSendId({
+          groupId,
+          talkSendId: existTalkSend.talkSendId,
+        });
+
       // 업데이트된 TalkSend 반환
       const updatedTalkSend =
         await this.talkSendRepository.getTalkSendByMidAndGroup({
@@ -45,7 +52,9 @@ module.exports = class AlimtalkResultService {
           companyId,
           groupId,
         });
-      return updatedTalkSend;
+      return updatedTalkSend
+        ? { ...updatedTalkSend, ccnt: clickCount }
+        : updatedTalkSend;
     }
   };
 
