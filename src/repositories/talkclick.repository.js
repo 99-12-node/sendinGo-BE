@@ -71,4 +71,23 @@ module.exports = class TalkClickRepository {
     });
     return talkClick;
   };
+
+  // groupId, talkSendId로 클릭 리스트 조회
+  getClickListByGroupAndSendId = async ({ groupId, talkSendId }) => {
+    logger.info(`TalkClickRepository.getClickListByGroupAndSendId Request`);
+    const talkClickList = await TalkClickResults.findAll({
+      where: { groupId, talkSendId },
+      raw: true,
+    });
+    return talkClickList;
+  };
+
+  // groupId, talkSendId로 클릭 건수 조회
+  getClickCountByGroupAndSendId = async ({ groupId, talkSendId }) => {
+    logger.info(`TalkClickRepository.getClickCountByGroupAndSendId Request`);
+    const talkClickCount = await TalkClickResults.count({
+      where: { groupId, talkSendId },
+    });
+    return talkClickCount;
+  };
 };

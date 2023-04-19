@@ -37,6 +37,13 @@ module.exports = class AlimtalkResultService {
           sendState,
           sendDate,
         });
+      // 클릭 건수 카운팅
+      const clickCount =
+        await this.talkClickRepository.getClickCountByGroupAndSendId({
+          groupId,
+          talkSendId: existTalkSend.talkSendId,
+        });
+
       // 업데이트된 TalkSend 반환
       const updatedTalkSend =
         await this.talkSendRepository.getTalkSendByMidAndGroup({
@@ -45,7 +52,9 @@ module.exports = class AlimtalkResultService {
           companyId,
           groupId,
         });
-      return updatedTalkSend;
+      return updatedTalkSend
+        ? { ...updatedTalkSend, ccnt: clickCount }
+        : updatedTalkSend;
     }
   };
 
@@ -86,7 +95,6 @@ module.exports = class AlimtalkResultService {
             talkResultDetailId: existTalkResult.talkResultDetailId,
           });
         existTalkResult.isClicked = talkClick ? CLICKED : UNCLICKED;
-        existTalkResult.clickDevice = talkClick ? talkClick.clickDevice : null;
         existTalkResult.clickCreatedAt = talkClick
           ? talkClick.createdAt.toLocaleString('ko-KR')
           : null;
@@ -137,7 +145,6 @@ module.exports = class AlimtalkResultService {
             talkResultDetailId: talkResultData.talkResultDetailId,
           });
         talkResultData.isClicked = talkClick ? CLICKED : UNCLICKED;
-        talkResultData.clickDevice = talkClick ? talkClick.clickDevice : null;
         talkResultData.clickCreatedAt = talkClick
           ? talkClick.createdAt.toLocaleString('ko-KR')
           : null;
