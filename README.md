@@ -1,4 +1,4 @@
-# ✨센딩고(SendinGo) | 쉽고 빠른 알림톡 대량 발송 서비스
+# ✨SendinGo | 쉽고 빠른 알림톡 대량 발송 서비스
 
 ### 👉[SendinGo 사용해보기][sendingo-link]
 
@@ -6,7 +6,7 @@
 
 ### 🛠 Architecture
 
----
+## ![sending-서비스-아키텍처 jpg](https://user-images.githubusercontent.com/121853931/233131984-3a66adee-8880-41f5-8691-820c0f2c397e.jpg)
 
 ### ⭐ **주요 기능**
 
@@ -66,7 +66,7 @@
 <img src="https://img.shields.io/badge/-amazon cloudwatch-5BA745?style=for-the-badge&logo=amazon cloudwatch&logoColor=white"/>&nbsp;
 <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/githubactions-2088FF.svg?style=for-the-badge&logo=githubactions&logoColor=white">
-<img src="https://img.shields.io/badge/-amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-amazons3-EB001B?style=for-the-badge&logo=amazons3&logoColor=white"/>&nbsp;
 <img src="https://img.shields.io/badge/-AWS CodeDeploy-5BA745?style=for-the-badge&logo=AWS CodeDeploy&logoColor=white"/>&nbsp;
 <br>
 <img src="https://img.shields.io/badge/-sequelize-blue?style=for-the-badge&logo=Sequelize&logoColor=white"/>&nbsp;
@@ -75,6 +75,13 @@
 
 <br>
 
-### 2. ERD
+<details>
+<summary>ERD 보기</summary>
+<div markdown="1">
+
+![sendinGo-ERD (1)](https://user-images.githubusercontent.com/121853931/233146073-8f975088-f2a6-49ff-8f45-256fd7efc81e.png)
+
+</div>
+</details>
 
 # 참조문서
