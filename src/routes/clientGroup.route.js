@@ -52,7 +52,7 @@ router.use(controllerLogger);
 
 /**
  * POST /batch/clients/{clientId}/groups/{groupId}
- * @summary 클라이언트 그룹 추가/해제
+ * @summary 클라이언트 그룹 추가
  * @tags ClientGroups
  * @param {number} clientId.path.required
  * @param {number} groupId.path.required
@@ -60,14 +60,11 @@ router.use(controllerLogger);
  * @return {object<Response>} 200 - Success response
  * @return {object<Response>} 400 - Bad request response
  * @return {object<Response>} 404 - Not found response
+ * @return {object<Response>} 409 - Conflict response
  * @example response - 201 - 그룹 추가 성공
  * {
  *     "message": "그룹 추가가 완료되었습니다.",
  *     "groupId": 3
- * }
- * @example response - 200 - 그룹 해제 성공
- * {
- *     "message": "그룹 해제가 완료되었습니다."
  * }
  * @example response - 404 - 그룹 조회 실패
  * {
@@ -77,10 +74,14 @@ router.use(controllerLogger);
  * {
  *     "message": "존재하지 않는 고객입니다."
  * }
+ * @example response - 409 - 그룹내 클라이언트 중복
+ * {
+ *     "message": "이미 등록된 고객입니다."
+ * }
  * @security Authorization
  */
 
-// 클라이언트 기존 그룹에 추가 및 해제
+// 클라이언트 기존 그룹에 추가
 router.post(
   '/clients/:clientId/groups/:groupId',
   authMiddleware,
@@ -154,7 +155,7 @@ router.post(
 
 /**
  * POST /batch/groups/{groupId}
- * @summary 대량 클라이언트 기존 그룹 추가/해제
+ * @summary 대량 클라이언트 기존 그룹 추가
  * @tags ClientGroups
  * @param {number} groupId.path.required
  * @param {ClientIds} request.body.required
@@ -166,10 +167,6 @@ router.post(
  * {
  *      "message": "그룹 추가가 완료되었습니다.",
  *      "groupId" : 1
- * }
- * @example response - 200 - 그룹 해제 성공
- * {
- *     "message": "그룹 해제가 완료되었습니다."
  * }
  * @example response - 400 - 입력값 요청 오류
  * {
@@ -185,7 +182,7 @@ router.post(
  * }
  * @security Authorization
  */
-// 대량 클라이언트 기존 그룹에 추가 및 해제
+// 대량 클라이언트 기존 그룹에 추가
 router.post(
   '/groups/:groupId',
   authMiddleware,
@@ -196,7 +193,7 @@ router.post(
 
 /**
  * POST /batch/groups
- * @summary 대량 클라이언트 신규 그룹 추가/해제
+ * @summary 대량 클라이언트 신규 그룹 추가
  * @tags ClientGroups
  * @param {AddClients} request.body.required
  * @return {object<Response>} 201 - Success response
@@ -217,7 +214,7 @@ router.post(
  * }
  * @security Authorization
  */
-// 대량 클라이언트 신규 그룹에 추가 및 해제
+// 대량 클라이언트 신규 그룹에 추가
 router.post(
   '/groups',
   authMiddleware,
