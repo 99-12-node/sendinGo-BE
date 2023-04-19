@@ -5,6 +5,9 @@ const TalkSendRepository = require('../repositories/talksend.repository');
 const TalkContentRepository = require('../repositories/talkcontent.repository');
 const TalkClickRepository = require('../repositories/talkclick.repository');
 
+const CLICKED = '클릭';
+const UNCLICKED = '클릭 안함';
+
 module.exports = class AlimtalkResultService {
   constructor() {
     this.talkSendRepository = new TalkSendRepository();
@@ -55,9 +58,9 @@ module.exports = class AlimtalkResultService {
   }) => {
     logger.info(`AlimtalkResultService.saveTalkResultDetail`);
 
+    const { msgid } = result;
     const { talkSendId, clientId, groupId, talkContentId, talkTemplateId } =
       talkSendData;
-    const { msgid } = result;
 
     const existTalkResult =
       await this.talkResultRepository.getTalkResultByMsgId({
@@ -77,6 +80,16 @@ module.exports = class AlimtalkResultService {
             companyId,
           });
         existTalkResult.buttonContent = buttonTalkContent.useLink;
+        // 클릭정보 가져오기
+        const talkClick =
+          await this.talkClickRepository.getClickInfoByResultDetailId({
+            talkResultDetailId: existTalkResult.talkResultDetailId,
+          });
+        existTalkResult.isClicked = talkClick ? CLICKED : UNCLICKED;
+        existTalkResult.clickDevice = talkClick ? talkClick.clickDevice : null;
+        existTalkResult.clickCreatedAt = talkClick
+          ? talkClick.createdAt.toLocaleString('ko-KR')
+          : null;
       }
       return existTalkResult;
     } else {
@@ -118,6 +131,16 @@ module.exports = class AlimtalkResultService {
             companyId,
           });
         talkResult.buttonContent = buttonTalkContent.useLink;
+        // 클릭정보 가져오기
+        const talkClick =
+          await this.talkClickRepository.getClickInfoByResultDetailId({
+            talkResultDetailId: talkResultData.talkResultDetailId,
+          });
+        talkResultData.isClicked = talkClick ? CLICKED : UNCLICKED;
+        talkResultData.clickDevice = talkClick ? talkClick.clickDevice : null;
+        talkResultData.clickCreatedAt = talkClick
+          ? talkClick.createdAt.toLocaleString('ko-KR')
+          : null;
       }
       return talkResult;
     }
