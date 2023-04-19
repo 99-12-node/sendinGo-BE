@@ -40,7 +40,7 @@ module.exports = class AlimtalkResultService {
         await this.talkSendRepository.updateTalkSendResult({
           mid,
           msgCount,
-          ccnt: existTalkSend.talkTemplateId === 4 ? clickCount : null,
+          ccnt: existTalkSend.talkTemplateId === 4 ? clickCount.length : null,
           msgContent,
           sendState,
           sendDate,

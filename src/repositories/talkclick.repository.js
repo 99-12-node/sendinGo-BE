@@ -87,6 +87,7 @@ module.exports = class TalkClickRepository {
     logger.info(`TalkClickRepository.getClickCountByGroupAndSendId Request`);
     const talkClickCount = await TalkClickResults.count({
       where: { groupId, talkSendId },
+      group: ['talkResultDetailId'],
     });
     return talkClickCount;
   };
