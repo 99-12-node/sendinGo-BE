@@ -29,19 +29,21 @@ module.exports = class AlimtalkResultService {
 
     // 존재하는 경우에만 해당 전송 결과 데이터 업데이트
     if (existTalkSend) {
-      const updatedDataCount =
-        await this.talkSendRepository.updateTalkSendResult({
-          mid,
-          msgCount,
-          msgContent,
-          sendState,
-          sendDate,
-        });
       // 클릭 건수 카운팅
       const clickCount =
         await this.talkClickRepository.getClickCountByGroupAndSendId({
           groupId,
           talkSendId: existTalkSend.talkSendId,
+        });
+
+      const updatedDataCount =
+        await this.talkSendRepository.updateTalkSendResult({
+          mid,
+          msgCount,
+          ccnt: existTalkSend.talkTemplateId === 4 ? clickCount : null,
+          msgContent,
+          sendState,
+          sendDate,
         });
 
       // 업데이트된 TalkSend 반환
@@ -52,9 +54,7 @@ module.exports = class AlimtalkResultService {
           companyId,
           groupId,
         });
-      return updatedTalkSend
-        ? { ...updatedTalkSend, ccnt: clickCount }
-        : updatedTalkSend;
+      return updatedTalkSend;
     }
   };
 
