@@ -62,4 +62,13 @@ module.exports = class TalkClickRepository {
     const value = await redisGet(trackingUUID);
     return JSON.parse(value);
   };
+
+  // resultDetailId로 클릭 정보 조회
+  getClickInfoByResultDetailId = async ({ talkResultDetailId }) => {
+    logger.info(`TalkClickRepository.getClickInfoByResultDetailId Request`);
+    const talkClick = await TalkClickResults.findOne({
+      where: { talkResultDetailId },
+    });
+    return talkClick;
+  };
 };
