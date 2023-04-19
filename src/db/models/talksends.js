@@ -77,6 +77,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
+      ccnt: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       msgContent: {
         type: DataTypes.STRING,
         allowNull: true,

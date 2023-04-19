@@ -33,6 +33,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
+      ccnt: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       msgContent: {
         type: Sequelize.STRING,
         allowNull: true,
