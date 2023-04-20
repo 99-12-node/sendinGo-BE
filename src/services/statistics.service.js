@@ -113,7 +113,7 @@ class StatisticsService {
   generateDailyStatistic = async () => {
     logger.info(`StatisticsService.generateDailyStatistic Request`);
     try {
-      const allUsers = this.userRepository.getAllUsers();
+      const allUsers = await this.userRepository.getAllUsers();
 
       for (const user of allUsers) {
         const { userId, companyId } = user;
@@ -141,7 +141,7 @@ class StatisticsService {
   generateWeeklyStatistic = async ({ userId, companyId }) => {
     logger.info(`StatisticsService.generateWeeklyStatistic Request`);
     try {
-      const allUsers = this.userRepository.getAllUsers();
+      const allUsers = await this.userRepository.getAllUsers();
 
       for (const user of allUsers) {
         const { userId, companyId } = user;
