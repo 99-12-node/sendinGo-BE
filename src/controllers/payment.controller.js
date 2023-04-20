@@ -12,7 +12,7 @@ module.exports = class PaymentController {
     logger.info(`PaymentController.createPayment Request`);
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
-    const { name, ...paymentData } = res.body;
+    const { name, ...paymentData } = req.body;
 
     try {
       const result = await this.paymentService.createPayment({
@@ -35,11 +35,12 @@ module.exports = class PaymentController {
     logger.info(`PaymentController.getPaymentsByUser Request`);
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
-    const paramsUserId = res.params.userId;
-
-    if (userId !== paramsUserId) throw ForbiddenError('권한이 없습니다.');
+    const paramsUserId = req.params.userId;
 
     try {
+      if (userId !== parseInt(paramsUserId))
+        throw new ForbiddenError('권한이 없습니다.');
+
       const result = await this.paymentService.getPaymentsByUser({
         userId,
         companyId,
