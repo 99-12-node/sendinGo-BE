@@ -7,6 +7,7 @@ const alimtalkRouter = require('./alimtalk.route');
 const groupRouter = require('./group.route');
 const clientGroupRouter = require('./clientGroup.route');
 const statisticRouter = require('./statistic.route');
+const paymentRouter = require('./payment.route');
 
 const { routerLogger } = require('../middlewares/logger.middleware.js');
 
@@ -18,6 +19,7 @@ router.use('/users', [userRouter]);
 router.use('/groups', [groupRouter]);
 router.use('/batch', [clientGroupRouter]);
 router.use('/statistics', [statisticRouter]);
+router.use('/payments', [paymentRouter]);
 
 /**
  * GET /
