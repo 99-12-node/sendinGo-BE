@@ -91,8 +91,7 @@
 ## 🔥이슈 및 트러블슈팅
 
 <details>
-<summary><b>[BE]외부 알림톡 API와의 연동을 위한 비즈니스 로직 설계</b></summary>
-    
+<summary><b>[BE]외부 알림톡 API와의 연동을 위한 비즈니스 로직 설계</b></summary> <br/>
     
 > **요구사항**
 
