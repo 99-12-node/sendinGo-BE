@@ -16,7 +16,7 @@ module.exports = class PaymentService {
       ...paymentData,
     });
     if (!newPayment) {
-      throw new BadRequestError('결제 내역 생성에 실패하였습니다.');
+      throw new new BadRequestError('결제 내역 생성에 실패하였습니다.')();
     }
 
     return newPayment;
