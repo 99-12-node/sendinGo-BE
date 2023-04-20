@@ -56,7 +56,7 @@
 | 설연주 | https://github.com/Ryeonjoo       | 고객 단건 CRUD, 그룹 CRUD, 고객-그룹 CRUD, Swagger                            |
 | 이승운 | https://github.com/Leeseungwoon12 | 회원가입, 로그인                                                              |
 
-### 🛠 Tools
+## 🛠 Tools
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
