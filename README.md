@@ -19,11 +19,12 @@
 ## ⭐ **주요 기능**
 
 <details>
-<summary><b>## **엑셀 파일 업로드 - 고객등록**</b></summary>
+<summary><b>엑셀 파일 업로드 - 고객등록</b></summary>
 
 - 엑셀 파일로 업로드하여 다량 고객 등록
 - 원하는 템플릿 내용 설정
 - 템플릿 파일에서 행 데이터 선택 삭제
+
   ![다건고객 업로드](https://user-images.githubusercontent.com/121853931/233329503-9fe0b0a4-5894-46d9-8177-bfaf580f2e92.gif)
 
 </details>
