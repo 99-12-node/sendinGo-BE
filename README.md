@@ -6,11 +6,13 @@
 
 [sendingo-link]: https://www.sendingo.site/ 'SendinGo 바로가기!'
 
-## <br>
+<br>
 
-### 🛠 Architecture
+---
 
-## ![sending-서비스-아키텍처 jpg](https://user-images.githubusercontent.com/121853931/233131984-3a66adee-8880-41f5-8691-820c0f2c397e.jpg)
+## 🛠 Architecture
+
+![sending-서비스-아키텍처 jpg](https://user-images.githubusercontent.com/121853931/233131984-3a66adee-8880-41f5-8691-820c0f2c397e.jpg)
 
 ---
 
