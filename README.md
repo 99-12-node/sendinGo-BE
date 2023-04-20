@@ -8,12 +8,9 @@
 
 ## <br>
 
-[기술 스택](#🛠 Tools)
+[목차](#contents)
 
-#🛠 Tools
-[Move Text](#index-text)
-
-## #Index Text
+## 🛠 [Tools](#tools)
 
 ## 🛠 Tools
 
