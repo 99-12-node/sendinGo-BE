@@ -16,6 +16,8 @@
 
 ### [ERD](#sendingo-erd)
 
+### [Architecture](#sending-서비스-아키텍처)
+
 ## 🛠 Tools
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
@@ -87,7 +89,6 @@
 
 </div>
 </details>
-
 
 ---
 
