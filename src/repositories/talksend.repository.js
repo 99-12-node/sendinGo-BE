@@ -37,6 +37,7 @@ module.exports = class TalkSendRepository {
   updateTalkSendResult = async ({
     mid,
     msgCount,
+    ccnt,
     msgContent,
     sendState,
     sendDate,
@@ -45,6 +46,7 @@ module.exports = class TalkSendRepository {
     const updatedTalkSends = await TalkSends.update(
       {
         msgCount,
+        ccnt,
         msgContent,
         sendState,
         sendDate,
@@ -72,6 +74,7 @@ module.exports = class TalkSendRepository {
         'companyId',
         'groupId',
         'talkContentId',
+        'talkTemplateId',
       ],
       include: [
         {
@@ -95,7 +98,7 @@ module.exports = class TalkSendRepository {
           : [{ mid }],
       },
       attributes: {
-        // 필요 컬럼: talkSendId, mid, scnt, fcnt, msgCount, sendState, sendDate, groupId, groupName,
+        // 필요 컬럼: talkSendId, mid, scnt, fcnt, ccnt, msgCount, sendState, sendDate, groupId, groupName,
         exclude: [
           'code',
           'mid',

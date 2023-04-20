@@ -62,4 +62,33 @@ module.exports = class TalkClickRepository {
     const value = await redisGet(trackingUUID);
     return JSON.parse(value);
   };
+
+  // resultDetailId로 클릭 정보 조회
+  getClickInfoByResultDetailId = async ({ talkResultDetailId }) => {
+    logger.info(`TalkClickRepository.getClickInfoByResultDetailId Request`);
+    const talkClick = await TalkClickResults.findOne({
+      where: { talkResultDetailId },
+    });
+    return talkClick;
+  };
+
+  // groupId, talkSendId로 클릭 리스트 조회
+  getClickListByGroupAndSendId = async ({ groupId, talkSendId }) => {
+    logger.info(`TalkClickRepository.getClickListByGroupAndSendId Request`);
+    const talkClickList = await TalkClickResults.findAll({
+      where: { groupId, talkSendId },
+      raw: true,
+    });
+    return talkClickList;
+  };
+
+  // groupId, talkSendId로 클릭 건수 조회
+  getClickCountByGroupAndSendId = async ({ groupId, talkSendId }) => {
+    logger.info(`TalkClickRepository.getClickCountByGroupAndSendId Request`);
+    const talkClickCount = await TalkClickResults.count({
+      where: { groupId, talkSendId },
+      group: ['talkResultDetailId'],
+    });
+    return talkClickCount;
+  };
 };

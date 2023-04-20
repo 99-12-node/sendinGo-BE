@@ -133,6 +133,13 @@ class UserRepository {
     await Users.destroy({ where: { userId } });
     return;
   };
+
+  // 모든 회원 리스트 조회
+  getAllUsers = async () => {
+    logger.info(`UserRepository.getAllUsersAndCompnaies Request`);
+    const usersAndCompanys = await Users.findAll({ raw: true });
+    return usersAndCompanys;
+  };
 }
 
 module.exports = UserRepository;
