@@ -50,11 +50,14 @@
 
 ## 👨‍👩‍👧 작업 구성원
 
-| 이름   | 깃허브                            | 역할                                                                          |
-| ------ | --------------------------------- | ----------------------------------------------------------------------------- |
-| 남혜민 | https://github.com/minenam        | 고객 대량 생성 및 다건 발송, 통계, 템플릿, 알림톡 전송 및 결과, 트랙킹, CI/CD |
-| 설연주 | https://github.com/Ryeonjoo       | 고객 단건 CRUD, 그룹 CRUD, 고객-그룹 CRUD, Swagger                            |
-| 이승운 | https://github.com/Leeseungwoon12 | 회원가입, 로그인                                                              |
+| 역할       | 이름   | 분담                                                                                 | 깃허브                            |
+| ---------- | ------ | ------------------------------------------------------------------------------------ | --------------------------------- |
+| BE(리더)   | 남혜민 | 고객 대량 생성 및 다건 발송, 통계, 템플릿, 알림톡 전송 및 결과, 트랙킹, CI/CD        | https://github.com/minenam        |
+| BE         | 설연주 | 고객 단건 CRUD, 그룹 CRUD, 고객-그룹 CRUD, Swagger                                   | https://github.com/Ryeonjoo       |
+| BE         | 이승운 | 회원가입, 로그인                                                                     | https://github.com/Leeseungwoon12 |
+| FE(부리더) | 김영현 | 고객 대량 생성, 알림톡 전송 및 결과, 템플릿 미리보기, 회원가입 및 로그인 개편, CI/CD | https://github.com/0hyeon         |
+| FE         | 장은빈 | 고객 단건 CRUD, 그룹 CRUD 고객-그룹 관리, 통계                                       | https://github.com/EUNBINs        |
+| FE         | 양진규 | 회원가입, 로그인, 설문조사, UT                                                       | https://github.com/jjolraman      |
 
 ## 🛠 Tools
 
