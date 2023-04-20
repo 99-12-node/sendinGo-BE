@@ -12,32 +12,14 @@ module.exports = class PaymentController {
     logger.info(`PaymentController.createPayment Request`);
     const { userId } = res.locals.user;
     const { companyId } = res.locals.company;
-    const paymentData = res.body;
+    const { name, ...paymentData } = res.body;
 
     try {
-      const {
-        success,
-        imp_uid,
-        merchant_uid,
-        name,
-        paid_amount,
-        paid_at,
-        pay_method,
-        pg_provider,
-        status,
-      } = paymentData;
       const result = await this.paymentService.createPayment({
         userId,
         companyId,
-        isSuccess: success,
-        impUid: imp_uid,
-        merchatUid: merchant_uid,
+        ...paymentData,
         paidName: name,
-        paidAmount: paid_amount,
-        paidAt: paid_at,
-        payMethod: pay_method,
-        pgProvider: pg_provider,
-        status,
       });
       if (!result) {
         return res.status(400).json({ message: '결제에 실패하였습니다.' });
