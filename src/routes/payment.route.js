@@ -9,6 +9,6 @@ router.use(controllerLogger);
 
 router.post('/', authMiddleware, paymentController.createPayment);
 
-router.get('/:userId', authMiddleware, paymentController.getPaymentByUser);
+router.get('/:userId', authMiddleware, paymentController.getPaymentsByUser);
 
 module.exports = router;
