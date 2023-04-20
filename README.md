@@ -10,11 +10,11 @@
 
 [목차](#contents)
 
-## 🛠 [Tools](#tools)
+## [Tools](#tools)
 
-## ⭐ [주요기능](#주요 기능)
+## [주요기능](#주요 기능)
 
-## [ERD 보기](#ERD 보기)
+## [ERD](#ERD 보기)
 
 ## 🛠 Tools
 
