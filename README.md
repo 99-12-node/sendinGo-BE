@@ -6,17 +6,54 @@
 
 [sendingo-link]: https://www.sendingo.site/ 'SendinGo 바로가기!'
 
+---
+
+## [목차](#contents)
+
+### [Tools](#-tools)
+
+### [주요기능](#주요-기능)
+
+### [ERD](#sendingo-erd)
+
+### [Architecture](#sending-서비스-아키텍처)
+
+### [이슈 및 트러블슈팅](#이슈-트러블슈팅)
+
+### [작업 구성원](#-작업-구성원)</br>
+
+---
+
+## 🛠 Tools<a name="-tools"></a>
+
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
+<img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+<img src="https://img.shields.io/badge/-axios-black?style=for-the-badge&logo=axios&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-Nginx-green?style=for-the-badge&logo=Nginx&logoColor=white">
+![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=Jest&logoColor=white)
+<img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=for-the-badge&logo=JSON Web Tokens&logoColor=white">
+<img src="https://img.shields.io/badge/-winston-green?style=for-the-badge&logo=winston&logoColor=white"/>&nbsp;
+<br>
+<img src="https://img.shields.io/badge/-amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-redis-red?style=for-the-badge&logo=redis&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-AWS ElastiCache-2962FF?style=for-the-badge&logo=AWS ElastiCache&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-amazon cloudwatch-5BA745?style=for-the-badge&logo=amazon cloudwatch&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/githubactions-2088FF.svg?style=for-the-badge&logo=githubactions&logoColor=white">
+<img src="https://img.shields.io/badge/-amazons3-EB001B?style=for-the-badge&logo=amazons3&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-AWS CodeDeploy-5BA745?style=for-the-badge&logo=AWS CodeDeploy&logoColor=white"/>&nbsp;
+<br>
+<img src="https://img.shields.io/badge/-sequelize-blue?style=for-the-badge&logo=Sequelize&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-mysql-blue?style=for-the-badge&logo=Mysql&logoColor=white"/>&nbsp;
+<img src="https://img.shields.io/badge/-amazonrds-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white"/>&nbsp;
+
 <br>
 
 ---
 
-## 🛠 Architecture
-
-![sending-서비스-아키텍처 jpg](https://user-images.githubusercontent.com/121853931/233131984-3a66adee-8880-41f5-8691-820c0f2c397e.jpg)
-
----
-
-## ⭐ **주요 기능**
+## ⭐ **주요 기능**<a name="주요-기능"></a>
 
 - ## **엑셀 파일 업로드 - 고객등록** <br>
 
@@ -48,49 +85,30 @@
 
 ---
 
-## 👨‍👩‍👧 작업 구성원
-
-| 역할       | 이름   | 분담                                                                                 | 깃허브                            |
-| ---------- | ------ | ------------------------------------------------------------------------------------ | --------------------------------- |
-| BE(리더)   | 남혜민 | 고객 대량 생성 및 다건 발송, 통계, 템플릿, 알림톡 전송 및 결과, 트랙킹, CI/CD        | https://github.com/minenam        |
-| BE         | 설연주 | 고객 단건 CRUD, 그룹 CRUD, 고객-그룹 CRUD, Swagger                                   | https://github.com/Ryeonjoo       |
-| BE         | 이승운 | 회원가입, 로그인                                                                     | https://github.com/Leeseungwoon12 |
-| FE(부리더) | 김영현 | 고객 대량 생성, 알림톡 전송 및 결과, 템플릿 미리보기, 회원가입 및 로그인 개편, CI/CD | https://github.com/0hyeon         |
-| FE         | 장은빈 | 고객 단건 CRUD, 그룹 CRUD 고객-그룹 관리, 통계                                       | https://github.com/EUNBINs        |
-| FE         | 양진규 | 회원가입, 로그인, 설문조사, UT                                                       | https://github.com/jjolraman      |
-
-## 🛠 Tools
-
-![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
-<img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
-<img src="https://img.shields.io/badge/-axios-black?style=for-the-badge&logo=axios&logoColor=white"/>&nbsp;
-<img src="https://img.shields.io/badge/-Nginx-green?style=for-the-badge&logo=Nginx&logoColor=white">
-![Jest](https://img.shields.io/badge/Jest-C21325?style=for-the-badge&logo=Jest&logoColor=white)
-<img src="https://img.shields.io/badge/JSON Web Tokens-000000?style=for-the-badge&logo=JSON Web Tokens&logoColor=white">
-<img src="https://img.shields.io/badge/-winston-green?style=for-the-badge&logo=winston&logoColor=white"/>&nbsp;
-<br>
-<img src="https://img.shields.io/badge/-amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"/>&nbsp;
-<img src="https://img.shields.io/badge/-redis-red?style=for-the-badge&logo=redis&logoColor=white"/>&nbsp;
-<img src="https://img.shields.io/badge/-AWS ElastiCache-2962FF?style=for-the-badge&logo=AWS ElastiCache&logoColor=white"/>&nbsp;
-<img src="https://img.shields.io/badge/-amazon cloudwatch-5BA745?style=for-the-badge&logo=amazon cloudwatch&logoColor=white"/>&nbsp;
-<img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
-<img src="https://img.shields.io/badge/githubactions-2088FF.svg?style=for-the-badge&logo=githubactions&logoColor=white">
-<img src="https://img.shields.io/badge/-amazons3-EB001B?style=for-the-badge&logo=amazons3&logoColor=white"/>&nbsp;
-<img src="https://img.shields.io/badge/-AWS CodeDeploy-5BA745?style=for-the-badge&logo=AWS CodeDeploy&logoColor=white"/>&nbsp;
-<br>
-<img src="https://img.shields.io/badge/-sequelize-blue?style=for-the-badge&logo=Sequelize&logoColor=white"/>&nbsp;
-<img src="https://img.shields.io/badge/-mysql-blue?style=for-the-badge&logo=Mysql&logoColor=white"/>&nbsp;
-<img src="https://img.shields.io/badge/-amazonrds-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white"/>&nbsp;
-
-<br>
-
-## 🔥이슈 및 트러블슈팅
+## 📝SendinGo ERD<a name="sendingo-erd"></a>
 
 <details>
-<summary><b>[BE]외부 알림톡 API와의 연동을 위한 비즈니스 로직 설계</b></summary>
-  
+<summary>ERD 보기</summary></br>
+<div markdown="1">
+
+![sendinGo-ERD (1)](https://user-images.githubusercontent.com/121853931/233146073-8f975088-f2a6-49ff-8f45-256fd7efc81e.png)
+
+</div>
+</details>
+
+---
+
+## 🛠 Architecture<a name="sending-서비스-아키텍처"></a>
+
+![sending-서비스-아키텍처 jpg](https://user-images.githubusercontent.com/121853931/233131984-3a66adee-8880-41f5-8691-820c0f2c397e.jpg)
+
+---
+
+## 🔥이슈 및 트러블슈팅<a name="이슈-트러블슈팅"></a>
+
+<details>
+<summary><b>[BE]외부 알림톡 API와의 연동을 위한 비즈니스 로직 설계</b></summary> <br/>
+    
 > **요구사항**
 
 - 고객이 전송 버튼을 누르면, 외부 알림톡 전송 API 에 요청을 보내야 함
@@ -117,7 +135,7 @@
 </details>
 
 <details>
-<summary><b>[BE]버튼 클릭으로 트래킹</b></summary>
+<summary><b>[BE]버튼 클릭으로 트래킹</b></summary><br/>
   
 > **요구사항**
 
@@ -142,7 +160,7 @@
 </details>
 
 <details>
-<summary><b>[BE]배포 자동화</b></summary>
+<summary><b>[BE]배포 자동화</b></summary><br/>
   
 > **요구사항**
 
@@ -160,7 +178,7 @@
 
 </details>
 <details>
-<summary><b>[BE]그룹에 속하지 않은 고객관리</b></summary>
+<summary><b>[BE]그룹에 속하지 않은 고객관리</b></summary><br/>
   
 > **문제사항**
 
@@ -186,11 +204,13 @@
 
 ---
 
-<details>
-<summary>ERD 보기</summary>
-<div markdown="1">
+## 👨‍👩‍👧 작업 구성원<a name="-작업-구성원"></a>
 
-![sendinGo-ERD (1)](https://user-images.githubusercontent.com/121853931/233146073-8f975088-f2a6-49ff-8f45-256fd7efc81e.png)
-
-</div>
-</details>
+| 역할       | 이름   | 분담                                                                                 | 깃허브                            |
+| ---------- | ------ | ------------------------------------------------------------------------------------ | --------------------------------- |
+| BE(리더)   | 남혜민 | 고객 대량 생성 및 다건 발송, 통계, 템플릿, 알림톡 전송 및 결과, 트랙킹, CI/CD        | https://github.com/minenam        |
+| BE         | 설연주 | 고객 단건 CRUD, 그룹 CRUD, 고객-그룹 CRUD, Swagger                                   | https://github.com/Ryeonjoo       |
+| BE         | 이승운 | 회원가입, 로그인                                                                     | https://github.com/Leeseungwoon12 |
+| FE(부리더) | 김영현 | 고객 대량 생성, 알림톡 전송 및 결과, 템플릿 미리보기, 회원가입 및 로그인 개편, CI/CD | https://github.com/0hyeon         |
+| FE         | 장은빈 | 고객 단건 CRUD, 그룹 CRUD 고객-그룹 관리, 통계                                       | https://github.com/EUNBINs        |
+| FE         | 양진규 | 회원가입, 로그인, 설문조사, UT                                                       | https://github.com/jjolraman      |
