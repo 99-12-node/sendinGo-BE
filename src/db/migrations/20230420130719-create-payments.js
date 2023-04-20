@@ -15,7 +15,7 @@ module.exports = {
           allowNull: false,
           type: Sequelize.STRING,
         },
-        isSucces: {
+        isSuccess: {
           allowNull: false,
           type: Sequelize.BOOLEAN,
         },
