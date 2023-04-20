@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.STRING,
       },
+      isSucces: {
+        allowNull: false,
+        type: DataTypes.BOOLEAN,
+      },
       status: {
         allowNull: false,
         type: DataTypes.STRING,
@@ -54,6 +58,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       impUid: {
+        allowNull: true,
+        type: DataTypes.STRING,
+      },
+      pgTid: {
         allowNull: true,
         type: DataTypes.STRING,
       },

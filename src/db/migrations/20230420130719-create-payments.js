@@ -15,6 +15,10 @@ module.exports = {
           allowNull: false,
           type: Sequelize.STRING,
         },
+        isSucces: {
+          allowNull: false,
+          type: Sequelize.BOOLEAN,
+        },
         status: {
           allowNull: false,
           type: Sequelize.STRING,
@@ -36,6 +40,10 @@ module.exports = {
           type: Sequelize.STRING,
         },
         impUid: {
+          allowNull: true,
+          type: Sequelize.STRING,
+        },
+        pgTid: {
           allowNull: true,
           type: Sequelize.STRING,
         },
