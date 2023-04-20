@@ -12,7 +12,9 @@
 
 ## ![sending-서비스-아키텍처 jpg](https://user-images.githubusercontent.com/121853931/233131984-3a66adee-8880-41f5-8691-820c0f2c397e.jpg)
 
-### ⭐ **주요 기능**
+---
+
+⭐ **주요 기능**
 
 - ## **엑셀 파일 업로드 - 고객등록** <br>
 
