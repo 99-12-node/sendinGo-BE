@@ -6,7 +6,7 @@
 
 [sendingo-link]: https://www.sendingo.site/ 'SendinGo 바로가기!'
 
-## <br>
+---
 
 ## [목차](#contents)
 
