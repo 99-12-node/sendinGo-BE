@@ -119,7 +119,7 @@
 </details>
 
 <details>
-<summary><b>[BE]버튼 클릭으로 트래킹</b></summary>
+<summary><b>[BE]버튼 클릭으로 트래킹</b></summary><br/>
   
 > **요구사항**
 
@@ -144,7 +144,7 @@
 </details>
 
 <details>
-<summary><b>[BE]배포 자동화</b></summary>
+<summary><b>[BE]배포 자동화</b></summary><br/>
   
 > **요구사항**
 
@@ -162,7 +162,7 @@
 
 </details>
 <details>
-<summary><b>[BE]그룹에 속하지 않은 고객관리</b></summary>
+<summary><b>[BE]그룹에 속하지 않은 고객관리</b></summary><br/>
   
 > **문제사항**
 
