@@ -18,6 +18,10 @@
 
 ### [Architecture](#sending-서비스-아키텍처)
 
+### [이슈 및 트러블슈팅](#이슈-트러블슈팅)
+
+---
+
 ## 🛠 Tools<a name="-tools"></a>
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
@@ -98,7 +102,7 @@
 
 ---
 
-## 🔥이슈 및 트러블슈팅
+## 🔥이슈 및 트러블슈팅<a name="이슈-트러블슈팅"></a>
 
 <details>
 <summary><b>[BE]외부 알림톡 API와의 연동을 위한 비즈니스 로직 설계</b></summary> <br/>
