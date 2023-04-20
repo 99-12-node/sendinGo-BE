@@ -16,7 +16,16 @@
 
 ### [ERD](#sendingo-erd)
 
-### SendinGo ERD <a name="sendingo-erd"></a>
+### [SendinGo ERD](#sendingo-erd)
+
+<details>
+<summary>ERD 보기</summary>
+<div markdown="1">
+
+![sendinGo-ERD (1)](https://user-images.githubusercontent.com/121853931/233146073-8f975088-f2a6-49ff-8f45-256fd7efc81e.png)
+
+</div>
+</details>
 
 ## 🛠 Tools
 
