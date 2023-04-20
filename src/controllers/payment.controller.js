@@ -1,6 +1,6 @@
-const { BadRequestError, ForbiddenError } = require('../exceptions/errors');
+const { ForbiddenError } = require('../exceptions/errors');
 const { logger } = require('../middlewares/logger');
-const PaymentService = require('../services/paymeny.service');
+const PaymentService = require('../services/payment.service');
 
 module.exports = class PaymentController {
   constructor() {
@@ -17,9 +17,9 @@ module.exports = class PaymentController {
 
     try {
       const result = await this.paymentService.createPayment({
-        ...paymentData,
         userId,
         companyId,
+        ...paymentData,
       });
       if (!result) {
         return res.status(400).json({ message: '결제에 실패하였습니다.' });
