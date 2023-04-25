@@ -333,7 +333,7 @@ module.exports = class AlimtalkController {
         const talkResultDetail =
           await this.alimtalkResultService.saveTalkResultDetail({
             result: results[i],
-            talkSendData: talkSendDatas[i],
+            talkSendData: talkSendDatas[0],
             userId,
             companyId,
           });
