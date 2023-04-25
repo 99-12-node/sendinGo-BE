@@ -58,11 +58,11 @@ module.exports = class TalkSendRepository {
   };
 
   //mid로 전송 내용 존재 조회
-  getExistTalkSendByMid = async ({ mid, userId, companyId }) => {
+  getExistTalkSendByMid = async ({ mid, groupId, userId, companyId }) => {
     logger.info(`TalkSendRepository.getExistTalkSendByMid Request`);
     const talkSend = await TalkSends.findOne({
       where: {
-        [Op.and]: [{ mid }, { userId }, { companyId }],
+        [Op.and]: [{ mid }, { userId }, { companyId }, { groupId }],
       },
       attributes: [
         'talkSendId',
@@ -142,5 +142,14 @@ module.exports = class TalkSendRepository {
       raw: true,
     }).then((model) => (model ? model.map(parseSequelizePrettier) : []));
     return talkSend;
+  };
+
+  // 그룹리스트 - 클릭건수 합산
+  getTalkSendClickCountByMid = async ({ mid, userId, companyId }) => {
+    logger.info(`TalkSendRepository.getTalkSendClickCountByMid Request`);
+    const talkSendClickCount = await TalkSends.sum('ccnt', {
+      where: { [Op.and]: [{ mid }, { userId }, { companyId }] },
+    });
+    return talkSendClickCount;
   };
 };
