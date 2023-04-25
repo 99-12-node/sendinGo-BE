@@ -193,7 +193,7 @@ router.post(
 router.get('/templates', authMiddleware, alimtalkController.getTemplatesList);
 
 /**
- * GET /talk/templates/:talkTemplateId
+ * GET /talk/templates/{talkTemplateId}
  * @summary 템플릿 상세 조회
  * @tags Talk
  * @param {number} talkTemplateId.path.required
@@ -312,7 +312,7 @@ router.get(
 router.post('/results/list/save', alimtalkController.saveSendAlimTalkResult);
 
 /**
- * GET /talk/results/detail/:talkSendId
+ * GET /talk/results/detail/{talkSendId}
  * @summary 알림톡 전송 결과 상세 조회
  * @tags Talk
  * @param {number} talkSendId.path.required
