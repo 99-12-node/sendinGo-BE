@@ -148,6 +148,7 @@ class StatisticsRepository {
         ],
       },
       group: 'createdAt',
+      limit: LIMIT,
       order: [['createdAt']],
     });
     return hourlyStatistics;
