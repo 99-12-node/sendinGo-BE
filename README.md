@@ -14,7 +14,7 @@
 
 ### [주요기능](#주요-기능)
 
-### [ERD](#sendingo-erd)
+### [ERD & API Doc](#sendingo-erd-and-api)
 
 ### [Architecture](#sending-서비스-아키텍처)
 
@@ -85,13 +85,22 @@
 
 ---
 
-## 📝SendinGo ERD<a name="sendingo-erd"></a>
+## 📝SendinGo ERD 및 API<a name="sendingo-erd-and-api"></a>
 
 <details>
 <summary>ERD 보기</summary></br>
 <div markdown="1">
 
 ![sendinGo-ERD (1)](https://user-images.githubusercontent.com/121853931/233146073-8f975088-f2a6-49ff-8f45-256fd7efc81e.png)
+
+</div>
+</details>
+
+<details>
+<summary>API 명세서 보기</summary></br>
+<div markdown="1">
+
+[Swagger API Document](https://app.swaggerhub.com/apis/sendingo.site/sendinGo/1.0.0)
 
 </div>
 </details>
